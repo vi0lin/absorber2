@@ -1,0 +1,50 @@
+[
+    {
+        "id": "s_dmg",
+        "name": "Small damage boost",
+        "desc": "Adds one damage",
+        "gain": {
+            "dmg": 1
+        }
+    },
+    {
+        "id": "s_life",
+        "name": "Small health boost",
+        "desc": "Adds five life",
+        "gain": {
+            "life": 5
+        }
+    },
+    {
+        "id": "s_speed",
+        "name": "Small speed boost",
+        "desc": "Adds 100 speed",
+        "gain": {
+            "speed": -100
+        }
+    },
+    {
+        "id": "s_magic",
+        "name": "Small magic boost",
+        "desc": "Adds five magic",
+        "gain": {
+            "magic": 5
+        }
+    },
+    {
+        "id": "s_regen",
+        "desc": "Adds 0.1 regeneration",
+        "name": "Small regeneration boost",
+        "gain": {
+            "regeneration": 0.1
+        }
+    },
+    {
+        "id": "s_recovery",
+        "desc": "Adds 2 recovery",
+        "name": "Small recovery boost",
+        "gain": {
+            "recovery": 2
+        }
+    }
+]

@@ -1,0 +1,102 @@
+[
+    {
+        "id": "block",
+        "desc": "Ammount of total damage reduction",
+        "form": "damage = damage - block"
+    },
+    {
+        "id": "dmg",
+        "desc": "Ammount of damage",
+        "form": "damage = damage"
+    },
+    {
+        "id": "speed",
+        "desc": "Ammount needs to be reached to start the turn",
+        "form": "turn = currentspeed>=speed"
+    },
+    {
+        "id": "magic",
+        "desc": "Magic is used to calculate non physical attacks",
+        "form": "poison = magic / 3"
+    },
+    {
+        "id": "life",
+        "desc": "Maximum Ammount of Health. Player dies if dropped to 0",
+        "form": "death = life<=0"
+    },
+    {
+        "id": "regeneration",
+        "desc": "Health restored every turn",
+        "form": "health = health + regeneration"
+    },
+    {
+        "id": "recovery",
+        "desc": "Health restored every second outsite the fight",
+        "form": "health = health + regeneration + recovery"
+    },
+    {
+        "id": "lifesteal",
+        "desc": "Percentage of life restored after every attack",
+        "form": "health = dmg * lifesteal / 100"
+    },
+    {
+        "id": "crit",
+        "desc": "Percentage of getting a critical attack. Critical attacks doubles the Damage",
+        "form": "dmg = dmg * 2"
+    },
+    {
+        "id": "supercrit",
+        "desc": "Percentage of getting a super critical attack. Super critical attacks quadruples the Damage. Can only occur if crits.",
+        "form": "dmg = dmg * 4"
+    },
+    {
+        "id": "megacrit",
+        "desc": "Percentage of getting a mega critical attack. Mega critical attacks eightfolds the Damage. Can only occur if super crits.",
+        "form": "dmg = dmg * 8"
+    },
+    {
+        "id": "poison",
+        "desc": "Damages the Enemy on his turn. ",
+        "form": "dmg = magic / 4"
+    },
+    {
+        "id": "fire",
+        "desc": "Damages the Enemy on his turn. ",
+        "form": "dmg = magic / 3"
+    },
+    {
+        "id": "slow",
+        "desc": "chance to slow down the speed progress of the enemy.",
+        "form": "speedprogress = speedprogress - 10"
+    },
+    {
+        "id": "stun",
+        "desc": "chance to stun the enemy.",
+        "form": "stun = stun"
+    },
+    {
+        "id": "silence",
+        "desc": "chance to silence the enemy. Silenced enemys can't use stun, crit or DoT",
+        "form": "silence = silence"
+    },
+    {
+        "id": "dodge",
+        "desc": "chance to completly nullify the enemys damage",
+        "form": "dodge = dodge"
+    },
+    {
+        "id": "double",
+        "desc": "chance to hit an enemy twice",
+        "form": "dmg = (dmg * crit) * 2"
+    },
+    {
+        "id": "instakill",
+        "desc": "chance to kill an enemy instant",
+        "form": "enemy life = -1"
+    },
+    {
+        "id": "prestige",
+        "desc": "times you have finished the game",
+        "form": "prestige = flying eye killed"
+    }
+]

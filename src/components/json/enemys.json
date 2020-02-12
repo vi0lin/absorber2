@@ -1,0 +1,629 @@
+[
+    {
+        "id": "bat",
+        "name": "Bat",
+        "boss": false,
+        "max": 100,
+        "life": 2,
+        "clife": 2,
+        "regeneration": 0,
+        "speed": 1000,
+        "cspeed": 0,
+        "dmg": 0.3,
+        "effects": {
+            "lifesteal": 50
+        },
+        "gain": {
+            "effects": {
+                "lifesteal": 0.02
+            },
+            "dmg": 0.02,
+            "speed": 2,
+            "life": -0.01
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "evil_spirit",
+        "name": "Evil Spirit",
+        "boss": false,
+        "max": 300,
+        "life": 1,
+        "clife": 1,
+        "regeneration": 0,
+        "speed": 1900,
+        "cspeed": 0,
+        "dmg": 1,
+        "magic": 0,
+        "chance": {
+            "dodge": 50,
+            "silence": 100,
+            "crit": 50,
+            "supercrit": 50,
+            "megacrit": 50
+        },
+        "gain": {
+            "speed": 0.1,
+            "chance": {
+                "crit": 0.01,
+                "dodge": 0.005,
+                "supercrit": 0.005,
+                "megacrit": 0.001
+            }
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "blue_slime",
+        "name": "Blue Slime",
+        "boss": false,
+        "max": 100,
+        "life": 5,
+        "clife": 5,
+        "regeneration": 0.2,
+        "speed": 2000,
+        "cspeed": 0,
+        "dmg": 0.5,
+        "chance": {
+            "crit": 50
+        },
+        "gain": {
+            "chance": {
+                "crit": 0.2
+            },
+            "dmg": 0.01,
+            "speed": 1,
+            "life": 0.01
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "snake",
+        "name": "Snake",
+        "boss": false,
+        "max": 100,
+        "life": 6,
+        "clife": 6,
+        "regeneration": 0,
+        "speed": 1500,
+        "cspeed": 0,
+        "dmg": 0.8,
+        "magic": 2,
+        "chance": {
+            "poison": 50
+        },
+        "gain": {
+            "chance": {
+                "poison": 0.2
+            },
+            "speed": 3
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "turtle",
+        "name": "Turtle",
+        "boss": false,
+        "max": 100,
+        "life": 10,
+        "clife": 10,
+        "speed": 3000,
+        "cspeed": 0,
+        "regeneration": 1,
+        "dmg": 1,
+        "gain": {
+            "life": 0.2,
+            "regeneration": 0.02,
+            "speed": -1
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "vampire",
+        "name": "Vampire",
+        "boss": true,
+        "max": 1,
+        "life": 30,
+        "clife": 30,
+        "speed": 2500,
+        "cspeed": 0,
+        "regeneration": 0,
+        "dmg": 2,
+        "effects": {
+            "lifesteal": 100
+        },
+        "gain": {
+            "effects": {
+                "lifesteal": 8
+            }
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "boar",
+        "name": "Boar",
+        "boss": false,
+        "max": 100,
+        "life": 15,
+        "clife": 15,
+        "regeneration": 0.4,
+        "speed": 2500,
+        "cspeed": 0,
+        "dmg": 2,
+        "magic": 0,
+        "chance": {
+            "stun": 10
+        },
+        "gain": {
+            "speed": 1,
+            "life": 0.04
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "red_slime",
+        "name": "Red Slime",
+        "boss": false,
+        "max": 100,
+        "life": 15,
+        "clife": 15,
+        "regeneration": 0.6,
+        "speed": 2000,
+        "cspeed": 0,
+        "dmg": 1.5,
+        "chance": {
+            "crit": 75,
+            "supercrit": 25
+        },
+        "gain": {
+            "chance": {
+                "supercrit": 0.1
+            },
+            "dmg": 0.01,
+            "speed": 1,
+            "life": 0.01
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "goblin",
+        "name": "Goblin",
+        "boss": false,
+        "max": 100,
+        "life": 10,
+        "clife": 10,
+        "regeneration": 0,
+        "speed": 1300,
+        "cspeed": 0,
+        "dmg": 1.8,
+        "magic": 0,
+        "effects": {
+            "block": 1
+        },
+        "chance": {
+            "poison": 10,
+            "crit": 10
+        },
+        "gain": {
+            "effects": {
+                "block": 0.02
+            },
+            "recovery": 0.02
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "fire_elementar",
+        "name": "Fire Elementar",
+        "boss": false,
+        "max": 100,
+        "life": 20,
+        "clife": 20,
+        "regeneration": 0,
+        "speed": 1800,
+        "cspeed": 0,
+        "dmg": 2,
+        "magic": 5,
+        "chance": {
+            "stun": 20,
+            "fire": 50
+        },
+        "gain": {
+            "chance": {
+                "stun": 0.02,
+                "fire": 0.2
+            },
+            "magic": 0.02
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "hydra",
+        "name": "Hydra",
+        "boss": true,
+        "max": 1,
+        "life": 40,
+        "clife": 40,
+        "speed": 2100,
+        "cspeed": 0,
+        "regeneration": 3,
+        "dmg": 1,
+        "magic": 12,
+        "chance": {
+            "fire": 100
+        },
+        "resistence": {
+            "fire": 100
+        },
+        "gain": {
+            "chance": {
+                "fire": 10
+            },
+            "magic": 2
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "oger",
+        "name": "Ogre",
+        "boss": false,
+        "max": 10,
+        "life": 30,
+        "clife": 30,
+        "regeneration": 5,
+        "speed": 5000,
+        "cspeed": 0,
+        "dmg": 6,
+        "magic": 0,
+        "chance": {
+            "stun": 50
+        },
+        "gain": {
+            "chance": {
+                "stun": 0.5
+            },
+            "life": 1,
+            "recovery": 0.1,
+            "speed": -10
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "thief",
+        "name": "Thief",
+        "boss": false,
+        "max": 100,
+        "life": 15,
+        "clife": 15,
+        "regeneration": 0,
+        "speed": 500,
+        "cspeed": 0,
+        "dmg": 0.5,
+        "magic": 0,
+        "chance": {
+            "double": 75,
+            "dodge": 100
+        },
+        "gain": {
+            "chance": {
+                "double": 0.1,
+                "dodge": 0.05
+            },
+            "speed": 4
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "spider",
+        "name": "Spider",
+        "boss": false,
+        "max": 100,
+        "life": 8,
+        "clife": 8,
+        "regeneration": 0,
+        "speed": 900,
+        "cspeed": 0,
+        "dmg": 1.5,
+        "magic": 10,
+        "chance": {
+            "slow": 35,
+            "crit": 20,
+            "poison": 50
+        },
+        "gain": {
+            "chance": {
+                "slow": 0.1
+            },
+            "magic": 0.2
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "yellow_slime",
+        "name": "Yellow Slime",
+        "boss": false,
+        "max": 100,
+        "life": 20,
+        "clife": 20,
+        "regeneration": 1.6,
+        "speed": 2000,
+        "cspeed": 0,
+        "dmg": 3.5,
+        "chance": {
+            "crit": 100,
+            "supercrit": 50,
+            "megacrit": 25
+        },
+        "gain": {
+            "chance": {
+                "megacrit": 0.05
+            },
+            "dmg": 0.01,
+            "speed": 1,
+            "life": 0.01
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "iron_golem",
+        "name": "Iron Golem",
+        "boss": true,
+        "max": 1,
+        "life": 40,
+        "clife": 40,
+        "speed": 2500,
+        "cspeed": 0,
+        "regeneration": 0,
+        "dmg": 8,
+        "effects": {
+            "block": 6
+        },
+        "chance": {
+            "fire": 20,
+            "crit": 40
+        },
+        "gain": {
+            "effects": {
+                "block": 2
+            }
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "water_elementar",
+        "name": "Water Elementar",
+        "boss": false,
+        "max": 100,
+        "life": 30,
+        "clife": 10,
+        "regeneration": 3,
+        "speed": 1500,
+        "cspeed": 0,
+        "dmg": 4,
+        "chance": {
+            "crit": 50,
+            "supercrit": 20,
+            "megacrit": 5,
+            "silence": 60
+        },
+        "effects": {
+            "block": 4
+        },
+        "gain": {
+            "regeneration": 0.03,
+            "speed": 2,
+            "dmg": 0.05
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "wind_elementar",
+        "name": "Wind Elementar",
+        "boss": false,
+        "max": 100,
+        "life": 10,
+        "clife": 10,
+        "regeneration": 0,
+        "speed": 1000,
+        "cspeed": 0,
+        "dmg": 3.5,
+        "chance": {
+            "crit": 50,
+            "supercrit": 20,
+            "megacrit": 5,
+            "dodge": 60,
+            "silence": 10
+        },
+        "effects": {
+            "block": 3
+        },
+        "gain": {
+            "chance": {
+                "dodge": 0.1
+            },
+            "speed": 2,
+            "dmg": 0.05
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "assasin",
+        "name": "Assasin",
+        "boss": false,
+        "max": 20,
+        "life": 20,
+        "clife": 10,
+        "regeneration": 0,
+        "speed": 1000,
+        "cspeed": 0,
+        "dmg": 8,
+        "magic": 20,
+        "chance": {
+            "dodge": 60,
+            "silence": 70,
+            "instakill": 20,
+            "poison": 100
+        },
+        "effects": {
+            "block": 4
+        },
+        "gain": {
+            "chance": {
+                "instakill": 0.1,
+                "silence": 0.75,
+                "regeneration": -0.5
+            }
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    },
+    {
+        "id": "chulthuluseye",
+        "name": "Flying Eye",
+        "boss": true,
+        "max": 1,
+        "life": 120,
+        "clife": 120,
+        "speed": 2500,
+        "cspeed": 0,
+        "regeneration": 10,
+        "dmg": 18,
+        "magic": 50,
+        "effects": {
+            "block": 6
+        },
+        "chance": {
+            "fire": 30,
+            "crit": 50,
+            "supercrit": 25,
+            "megacrit": 10,
+            "poison": 30,
+            "dodge": 35,
+            "silence": 50,
+            "slow": 100
+        },
+        "gain": {
+            "life": 20
+        },
+        "status": {
+            "slow": 0,
+            "poison": 0,
+            "stun": 0,
+            "fire": 0,
+            "silence": 0
+        }
+    }
+]
