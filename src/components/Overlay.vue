@@ -1,6 +1,10 @@
 <template>
   <div>
-    <img v-if="this.background!=''" class="bc" :src="require('@/assets/'+this.background+'.png')" />
+    <img
+      v-if="this.background!=''"
+      class="bc"
+      :src="require('@/assets/icons/'+this.background+'.png')"
+    />
     <div class="overlay" :style="'background-color:' +this.color">
       <div class="box" :style="'left:'+this.place">
         <div style="font-size: 30px;">{{text}}</div>

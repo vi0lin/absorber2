@@ -18,7 +18,7 @@
             ref="eimage"
             v-if="item.id"
             class="image"
-            :src="require('@/assets/'+item.id+'.png')"
+            :src="require('@/assets/enemys/'+item.id+'.png')"
             :alt="item.name"
           />
           <span
@@ -37,7 +37,7 @@
             v-for="(value, key) in this.$parent.$parent.enemy.status"
           >
             {{value}}
-            <img class="icon" :src="require('@/assets/'+key+'.png')" :alt="key" />
+            <img class="icon" :src="require('@/assets/buffs/'+key+'.png')" :alt="key" />
           </div>
         </div>
       </div>
@@ -56,10 +56,11 @@ import {
   checkTurn,
   absorbEnemy,
   respawn,
-  animateObject,
-  checkSpeed,
-  checkPlayerDeath
+  checkPlayerDeath,
+  checkCleared
 } from "./functions.js";
+
+import { displayEnemyStats } from "./displayfunc.js";
 
 export default {
   components: {
@@ -80,145 +81,33 @@ export default {
   },
   methods: {
     filtred(f) {
-      let fil = JSON.parse(JSON.stringify(f));
-      delete fil.cspeed;
-      delete fil.clife;
-      delete fil.name;
-      delete fil.id;
-      delete fil.boss;
-      delete fil.max;
-      delete fil.status;
-
-      let out = "";
-      for (let thing in fil) {
-        if (thing != "effects" && thing != "chance" && thing != "gain") {
-          if (fil[thing] > 0) {
-            out += "<div>" + thing + ": " + fil[thing] + "</div>";
-          }
-        } else if (thing == "effects") {
-          out += "<i>Effects:</i>";
-          for (let e in fil.effects) {
-            out +=
-              "<div style='margin-left:10px'>" +
-              e +
-              ": " +
-              fil.effects[e] +
-              "</div>";
-          }
-        } else if (thing == "chance") {
-          out += "<i>Chance:</i>";
-          for (let e in fil.chance) {
-            out +=
-              "<div style='margin-left:10px'>" +
-              e +
-              ": " +
-              fil.chance[e] +
-              "</div>";
-          }
-        } else if (thing == "gain") {
-          out += "<hr/><i>Absorb:</i>";
-          for (let n in fil.gain) {
-            if (n != "effects" && n != "chance") {
-              out +=
-                "<div style='margin-left:10px'>" +
-                n +
-                ": " +
-                fil.gain[n] +
-                "</div>";
-            } else if (n == "chance") {
-              out += "<div style='margin-left:10px'><i>Chance:</i></div>";
-              for (let ab in fil.gain.chance) {
-                out +=
-                  "<div style='margin-left:20px'>" +
-                  ab +
-                  ":" +
-                  fil.gain.chance[ab] +
-                  "</div>";
-              }
-            } else if (n == "effects") {
-              out += "<div style='margin-left:10px'><i>Effects:</i></div>";
-              for (let ab in fil.gain.effects) {
-                out +=
-                  "<div style='margin-left:20px'>" +
-                  ab +
-                  ":" +
-                  fil.gain.effects[ab] +
-                  "</div>";
-              }
-            }
-          }
-        }
-      }
-
-      return out;
+      return displayEnemyStats(f);
     },
     getLog(l) {
-      return l.slice(-7).reverse();
+      return l.slice(-10).reverse();
+    },
+    exit() {
+      this.$parent.$parent.enemy = null;
     }
   },
   mounted() {
     this.$parent.$parent.recovery = false;
     let player = this.$parent.$parent.player,
       enemy = this.item,
-      el = this,
       arr = this.dmgind,
       log = player.log,
       enemyimage = this.$refs.eimage.classList,
-      kong = this.$parent.$parent.kongregate;
+      kong = this.$parent.$parent.kongregate,
+      disfi = this.$parent.$parent.displayfinish;
 
     player.lastenemy = enemy.id;
 
-    //Player Turn
     this.timer2 = setInterval(() => {
-      if (checkSpeed(player)) {
-        checkTurn(player, enemy, arr, log, enemyimage);
-
-        if (checkPlayerDeath(player, log, enemy)) {
-          el.$parent.$parent.enemy = null;
-        }
-        //enemy death
-        if (enemy.clife <= 0) {
-          absorbEnemy(
-            player,
-            enemy,
-            log,
-            kong,
-            enemyimage,
-            this.$parent.$parent.displayfinish
-          );
-          respawn(enemy);
-          if (player.counter[enemy.id] >= enemy.max) {
-            el.$parent.$parent.enemy = null;
-          }
-        }
-      }
+      checkTurn(player, enemy, arr, log, enemyimage, kong, disfi, this.exit);
     }, 100);
 
-    //Enemy turn
     this.timer1 = setInterval(() => {
-      if (checkSpeed(enemy)) {
-        checkTurn(enemy, player, arr, log, enemyimage);
-
-        //enemy death
-        if (enemy.clife <= 0) {
-          absorbEnemy(
-            player,
-            enemy,
-            log,
-            kong,
-            enemyimage,
-            this.$parent.$parent.displayfinish
-          );
-          respawn(enemy);
-          if (player.counter[enemy.id] >= enemy.max) {
-            el.$parent.$parent.enemy = null;
-          }
-        }
-        //player death
-        if (checkPlayerDeath(player, log, enemy)) {
-          el.$parent.$parent.enemy = null;
-        }
-      }
+      checkTurn(enemy, player, arr, log, enemyimage, kong, disfi, this.exit);
     }, 100);
   },
   beforeDestroy() {

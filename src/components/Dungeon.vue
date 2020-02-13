@@ -3,7 +3,7 @@
     <div v-show="this.$parent.enemy==null">
       <div @click="autofight()" class="auto" :class="{autofight:this.$parent.player.auto}">
         Autofight
-        <img class="icons" :src="require('@/assets/auto.png')" alt="auto" />
+        <img class="icons" :src="require('@/assets/icons/auto.png')" alt="auto" />
       </div>
       <div class="flex">
         <div
@@ -11,7 +11,7 @@
           @click="selectEnemy(value)"
           class="kiste"
           :key="key"
-          v-for="(value, key) in this.enemys"
+          v-for="(value, key) in getPrestigeEnemys(this.enemys)"
         >
           <div>
             {{getcount(value.id)}} / {{value.max}}
@@ -19,7 +19,7 @@
             <img
               v-if="value.id"
               class="image"
-              :src="require('@/assets/'+value.id+'.png')"
+              :src="require('@/assets/enemys/'+value.id+'.png')"
               :alt="value.name"
             />
             <br />
@@ -31,7 +31,7 @@
     </div>
     <button class="back" v-show="this.$parent.enemy!=null" @click="selectEnemy(null)">
       Exit
-      <img class="icons" :src="require('@/assets/door.png')" alt="back" />
+      <img class="icons" :src="require('@/assets/icons/door.png')" alt="back" />
     </button>
     <Fight v-if="this.$parent.enemy!=null" :item="this.$parent.enemy" />
   </div>
@@ -41,6 +41,7 @@
 import e from "./json/enemys.json";
 import Fight from "./Fight.vue";
 import Tooltip from "./Tooltip.vue";
+import { respawn } from "./functions";
 
 export default {
   components: { Fight, Tooltip },
@@ -50,34 +51,34 @@ export default {
     };
   },
   methods: {
-    checkready(t) {
-      if (t == null) {
-        return false;
-      }
-      return this.$parent.player.counter[t.id] >= t.max;
+    checkready(a) {
+      return null != a && this.$parent.player.counter[a.id] >= a.max;
     },
     autofight() {
       this.$parent.player.auto = !this.$parent.player.auto;
     },
+    getPrestigeEnemys(en) {
+      let el = this;
+      return en.filter(function(x) {
+        if (x.prestige != null) {
+          return el.$parent.player.prestige >= x.prestige;
+        }
+        return true;
+      });
+    },
     selectEnemy(t) {
       if (!this.checkready(t)) {
         this.$parent.enemy = t;
-        if (this.$parent.enemy != null) {
-          this.$parent.enemy.clife = this.$parent.enemy.life;
-          this.$parent.enemy.cspeed = 0;
-          this.$parent.enemy.status.poison = 0;
-          this.$parent.enemy.status.fire = 0;
-          this.$parent.enemy.status.stun = 0;
-          this.$parent.enemy.status.silence = 0;
-        } else {
-          this.$parent.player.auto = false;
-        }
+
+        this.$parent.enemy != null
+          ? respawn(this.$parent.enemy)
+          : (this.$parent.player.auto = false);
       }
     },
     getcount(t) {
-      if (this.$parent.player.counter[t] == undefined) {
-        this.$parent.player.counter[t] = 0;
-      }
+      this.$parent.player.counter[t] == null &&
+        (this.$parent.player.counter[t] = 0);
+
       return this.$parent.player.counter[t];
     }
   }

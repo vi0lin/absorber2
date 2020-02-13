@@ -54,7 +54,7 @@
 
     <button class="reset" @click="openreset">
       Reset
-      <img class="icons" :src="require('@/assets/reset.png')" alt="reset" />
+      <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
     </button>
   </div>
 </template>
@@ -77,40 +77,44 @@ export default {
   },
   methods: {
     openreset() {
-      this.$parent.$refs.ov.$data.text = "Are you sure you want to reset?";
-      this.$parent.$refs.ov.$data.obj = [
+      let ov = this.$parent.$refs.ov.$data;
+      ov.text = "Are you sure you want to reset?";
+      ov.obj = [
         { text: "yes", func: this.$parent.hardreset },
         { text: "no", func: this.closereset }
       ];
-      this.$parent.$refs.ov.$data.img = "reset";
+      ov.img = "icons/reset";
       this.$parent.overlay = true;
     },
     closereset() {
       this.$parent.overlay = false;
     },
-    displayeffect(v) {
-      let out = "";
-      if (this.$parent.player.effects[v] > 0) {
-        out += v + ": " + this.$parent.player.effects[v];
-      }
-      return out;
+    displayeffect(a) {
+      let b = "";
+      return (
+        0 < this.$parent.player.effects[a] &&
+          (b += a + ": " + this.$parent.player.effects[a]),
+        b
+      );
     },
-    displayechance(v) {
-      let out = "";
-      if (this.$parent.player.chance[v] > 0) {
-        out += v + ": " + this.$parent.player.chance[v] + "%";
-      }
-      return out;
+    displayechance(a) {
+      let b = "";
+      return (
+        0 < this.$parent.player.chance[a] &&
+          (b += a + ": " + this.$parent.player.chance[a] + "%"),
+        b
+      );
     },
-    displayescore(v) {
-      let out = "";
-      if (this.$parent.player.highscore[v] > 0) {
-        out += v + ": " + this.$parent.player.highscore[v];
-      }
-      return out;
+    displayescore(a) {
+      let b = "";
+      return (
+        0 < this.$parent.player.highscore[a] &&
+          (b += a + ": " + this.$parent.player.highscore[a]),
+        b
+      );
     },
-    displayeskills(v) {
-      return choiseslist.find(x => x.id === v).name;
+    displayeskills(a) {
+      return choiseslist.find(b => b.id === a).name;
     },
     show(p) {
       let pl = JSON.parse(JSON.stringify(p));

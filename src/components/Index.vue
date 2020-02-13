@@ -4,23 +4,14 @@
       <div>
         <button :class="{ active: this.active=='dungeon' }" @click="openTab('dungeon')" class="btn">
           Dungeon
-          <img class="icons" :src="require('@/assets/cave.png')" alt="dungeon" />
-        </button>
-        <button
-          hidden
-          :class="{ active: this.active=='skills' }"
-          @click="openTab('skills')"
-          class="btn"
-        >
-          Skills
-          <span v-show="this.player.sp>0">({{this.player.sp}})</span>
+          <img class="icons" :src="require('@/assets/icons/cave.png')" alt="dungeon" />
         </button>
         <button :class="{ active: this.active=='stats' }" @click="openTab('stats')" class="btn">
-          <img class="icons" :src="require('@/assets/hero.png')" alt="stats" />
+          <img class="icons" :src="require('@/assets/icons/hero.png')" alt="stats" />
           Stats
         </button>
         <button :class="{ active: this.active=='log' }" @click="openTab('log')" class="btn">
-          <img class="icons" :src="require('@/assets/log.png')" alt="log" />
+          <img class="icons" :src="require('@/assets/icons/log.png')" alt="log" />
           Log
         </button>
         <div class="time">{{gettime(player.time)}}</div>
@@ -28,13 +19,12 @@
       <div>
         <Stats v-show="this.active == 'stats'" />
         <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
-        <Skills v-show="this.active == 'skills'" />
         <Log v-show="this.active == 'log'" />
       </div>
     </div>
     <div class="flexy">
       <div v-show="value>0" class="kiste" :key="key" v-for="(value, key) in this.player.status">
-        <img class="icon" :src="require('@/assets/'+key+'.png')" :alt="key" />
+        <img class="icon" :src="require('@/assets/buffs/'+key+'.png')" :alt="key" />
         <span class="itext">{{value}}</span>
       </div>
     </div>
@@ -52,57 +42,26 @@
 <script>
 import p from "./json/player.js";
 import Stats from "./Stats.vue";
-import Skills from "./Skills.vue";
 import Dungeon from "./Dungeon.vue";
 import Log from "./Log.vue";
 import Progressbar from "./Progressbar.vue";
 import Overlay from "./Overlay.vue";
 
 import choiseslist from "./json/choises.json";
+import { RoundAll } from "./displayfunc";
+import { respawn } from "./functions.js";
 
-kongregateAPI.loadAPI();
+try {
+  kongregateAPI.loadAPI();
+} catch {}
 
 export default {
-  components: { Stats, Dungeon, Skills, Progressbar, Log, Overlay },
+  components: { Stats, Dungeon, Progressbar, Log, Overlay },
   watch: {
     player: {
       deep: true,
       handler(e) {
-        this.player.life = Math.round((e.life + Number.EPSILON) * 100) / 100;
-        this.player.clife = Math.round((e.clife + Number.EPSILON) * 100) / 100;
-        this.player.speed = Math.round((e.speed + Number.EPSILON) * 100) / 100;
-
-        this.player.dmg = Math.round((e.dmg + Number.EPSILON) * 100) / 100;
-        this.player.magic = Math.round((e.magic + Number.EPSILON) * 100) / 100;
-        this.player.regeneration =
-          Math.round((e.regeneration + Number.EPSILON) * 100) / 100;
-
-        this.player.recovery =
-          Math.round((e.recovery + Number.EPSILON) * 100) / 100;
-        this.player.effects.lifesteal =
-          Math.round((e.effects.lifesteal + Number.EPSILON) * 100) / 100;
-        this.player.effects.block =
-          Math.round((e.effects.block + Number.EPSILON) * 100) / 100;
-        this.player.chance.crit =
-          Math.round((e.chance.crit + Number.EPSILON) * 100) / 100;
-        this.player.chance.instakill =
-          Math.round((e.chance.instakill + Number.EPSILON) * 100) / 100;
-        this.player.chance.stun =
-          Math.round((e.chance.stun + Number.EPSILON) * 100) / 100;
-        this.player.chance.poison =
-          Math.round((e.chance.poison + Number.EPSILON) * 100) / 100;
-        this.player.chance.fire =
-          Math.round((e.chance.fire + Number.EPSILON) * 100) / 100;
-        this.player.chance.double =
-          Math.round((e.chance.double + Number.EPSILON) * 100) / 100;
-        this.player.chance.dodge =
-          Math.round((e.chance.dodge + Number.EPSILON) * 100) / 100;
-        this.player.chance.supercrit =
-          Math.round((e.chance.supercrit + Number.EPSILON) * 100) / 100;
-        this.player.chance.megacrit =
-          Math.round((e.chance.megacrit + Number.EPSILON) * 100) / 100;
-        this.player.chance.slow =
-          Math.round((e.chance.slow + Number.EPSILON) * 100) / 100;
+        RoundAll(e, this.player);
       }
     }
   },
@@ -119,98 +78,96 @@ export default {
   },
   methods: {
     recalculate(pl) {
-      this.player = JSON.parse(JSON.stringify(p));
-      this.player.counter = pl.counter;
-      this.player.auto = pl.auto;
-      this.player.prestige = pl.prestige;
-      this.player.skills = pl.skills;
-      this.player.lastenemy = pl.lastenemy;
-      this.player.time = pl.time;
-      this.player.version = pl.version;
-      this.player.name = pl.name;
-      this.player.tutorial = pl.tutorial;
-      this.player.highscore = pl.highscore;
+      let player = {};
+      player = JSON.parse(JSON.stringify(p));
+      player.counter = pl.counter;
+      player.auto = pl.auto;
 
-      for (let score in this.player.highscore) {
-        if (this.player.highscore[score] > 0) {
-          try {
-            kong.stats.submit(score, this.player.highscore[score]);
-          } catch {}
-        }
+      if (pl.prestige != null) {
+        player.prestige = pl.prestige;
       }
 
-      for (let s in this.player.skills) {
-        let skill = choiseslist.find(x => x.id === this.player.skills[s]);
-        for (let thing in skill.gain) {
-          this.player[thing] += skill.gain[thing];
-        }
+      player.skills = pl.skills;
+      player.lastenemy = pl.lastenemy;
+      player.time = pl.time;
+      player.version = pl.version;
+      player.name = pl.name;
+      player.tutorial = pl.tutorial;
+      player.highscore = pl.highscore;
+
+      for (let a in player.highscore)
+        if (0 < player.highscore[a])
+          this.kongregate != undefined &&
+            this.kongregate.stats.submit(a, player.highscore[a]);
+
+      for (let a in player.skills) {
+        let b = choiseslist.find(b => b.id === player.skills[a]);
+        for (let a in b.gain) player[a] += b.gain[a];
       }
 
-      for (let en in this.player.counter) {
-        for (let i = 0; i < this.player.counter[en]; i++) {
-          let t = this.$refs.dun.enemys.find(x => x.id === en);
-          if (t != undefined) {
-            for (let g in t.gain) {
-              if (g != "effects" && g != "chance" && g != "speed") {
-                this.player[g] += t.gain[g];
-              } else if (g == "speed") {
-                this.player[g] -= t.gain[g];
-              } else if (g == "effects") {
-                for (let ef in t.gain.effects) {
-                  this.player.effects[ef] += t.gain.effects[ef];
-                }
-              } else if (g == "chance") {
-                for (let ef in t.gain.chance) {
-                  this.player.chance[ef] += t.gain.chance[ef];
-                }
-              }
-            }
-          }
-        }
-      }
+      for (let a in player.counter)
+        for (let b, c = 0; c < player.counter[a]; c++)
+          if (((b = this.$refs.dun.enemys.find(b => b.id === a)), null != b))
+            for (let a in b.gain)
+              if ("effects" != a && "chance" != a && "speed" != a)
+                player[a] += b.gain[a];
+              else if ("speed" == a) player[a] -= b.gain[a];
+              else if ("effects" == a)
+                for (let a in b.gain.effects)
+                  player.effects[a] == null
+                    ? (player.effects[a] = b.gain.effects[a])
+                    : (player.effects[a] += b.gain.effects[a]);
+              else if ("chance" == a)
+                for (let a in b.gain.chance)
+                  player.chance[a] == null
+                    ? (player.chance[a] = b.gain.chance[a])
+                    : (player.chance[a] += b.gain.chance[a]);
 
       try {
         if (!this.kongregate.services.isGuest()) {
-          this.player.name = this.kongregate.services.getUsername();
+          player.name = this.kongregate.services.getUsername();
         }
       } catch {}
+      this.player = player;
+      respawn(this.player);
     },
     openTab(t) {
       this.active = t;
     },
     tutorial() {
+      let ov = this.$refs.ov.$data;
       switch (this.player.tutorial) {
         case 0:
           this.overlay = true;
-          this.$refs.ov.$data.text = "Welcome";
-          this.$refs.ov.$data.img = "blue_slime";
-          this.$refs.ov.$data.obj = [{ text: "next", func: this.tutorial }];
+          ov.text = "Welcome";
+          ov.img = "enemys/blue_slime";
+          ov.obj = [{ text: "next", func: this.tutorial }];
           break;
         case 1:
-          this.$refs.ov.$data.img = "";
-          this.$refs.ov.$data.text = "Killing Enemys will steal their stats..";
-          this.$refs.ov.$data.color = "rgba(0, 0, 0, 0)";
-          this.$refs.ov.$data.background = "tut";
-          this.$refs.ov.$data.obj = [{ text: "next", func: this.tutorial }];
+          ov.img = "";
+          ov.text = "Killing Enemys will steal their stats..";
+          ov.color = "rgba(0, 0, 0, 0)";
+          ov.background = "tut";
+          ov.obj = [{ text: "next", func: this.tutorial }];
           break;
 
         case 2:
-          this.$refs.ov.$data.text = "and add them to yours";
-          this.$refs.ov.$data.background = "tut2";
+          ov.text = "and add them to yours";
+          ov.background = "tut2";
           break;
 
         case 3:
-          this.$refs.ov.$data.text = "the goal is to kill the flying eye";
-          this.$refs.ov.$data.place = "30%";
-          this.$refs.ov.$data.img = "chulthuluseye";
-          this.$refs.ov.$data.color = "rgba(0, 0, 0, 0.4)";
-          this.$refs.ov.$data.background = "";
+          ov.text = "the goal is to kill the flying eye";
+          ov.place = "30%";
+          ov.img = "enemys/chulthuluseye";
+          ov.color = "rgba(0, 0, 0, 0.4)";
+          ov.background = "";
           break;
 
         case 4:
-          this.$refs.ov.$data.text = "have fun playing";
-          this.$refs.ov.$data.img = "bat";
-          this.$refs.ov.$data.obj = [{ text: "start", func: this.tutorial }];
+          ov.text = "have fun playing";
+          ov.img = "enemys/bat";
+          ov.obj = [{ text: "start", func: this.tutorial }];
           break;
 
         case 5:
@@ -223,18 +180,16 @@ export default {
       this.player.tutorial++;
     },
     displayfinish() {
-      if (this.player.prestige <= this.player.skills.length) {
-        this.player.prestige++;
-      }
-      this.overlay = true;
-      this.$refs.ov.$data.place = "20%";
-      this.$refs.ov.$data.text = "You finished the game!";
-      this.$refs.ov.$data.img = "finish";
+      let ov = this.$refs.ov.$data,
+        player = this.player;
 
-      let obj = [{ text: "continue", func: this.continue }];
-      let filtred = choiseslist.filter(
-        x => this.player.skills.indexOf(x.id) == -1
-      );
+      player.prestige <= player.skills.length && player.prestige++;
+
+      let obj = [{ text: "continue", func: this.continue }],
+        filtred = choiseslist.filter(
+          x => this.player.skills.indexOf(x.id) == -1
+        );
+
       for (let c in filtred) {
         obj.push({
           text: filtred[c].name,
@@ -242,11 +197,14 @@ export default {
         });
       }
 
-      if (obj.length < 2) {
-        obj.push({ text: "hardreset", func: this.hardreset });
-      }
+      obj.length < 2 && obj.push({ text: "hardreset", func: this.hardreset });
 
-      this.$refs.ov.$data.obj = obj;
+      ov.place = "20%";
+      ov.text = "You finished the game!";
+      ov.img = "icons/finish";
+      ov.obj = obj;
+
+      this.overlay = true;
     },
     hardreset() {
       this.recalculate(JSON.parse(JSON.stringify(p)));
@@ -270,28 +228,17 @@ export default {
       this.player.skills.push(s.id);
       this.reset();
     },
-    gettime(t) {
-      var sec_num = parseInt(t, 10);
-      var hours = Math.floor(sec_num / 3600);
-      var minutes = Math.floor((sec_num - hours * 3600) / 60);
-      var seconds = sec_num - hours * 3600 - minutes * 60;
-
-      if (hours < 10) {
-        hours = "0" + hours;
-      }
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      if (seconds < 10) {
-        seconds = "0" + seconds;
-      }
-      if (hours > 0) {
-        return hours + ":" + minutes + ":" + seconds;
-      }
-      if (minutes > 0) {
-        return minutes + ":" + seconds;
-      }
-      return seconds;
+    gettime(a) {
+      var b = parseInt(a, 10),
+        c = Math.floor(b / 3600),
+        d = Math.floor((b - 3600 * c) / 60),
+        e = b - 3600 * c - 60 * d;
+      return (
+        10 > c && (c = "0" + c),
+        10 > d && (d = "0" + d),
+        10 > e && (e = "0" + e),
+        0 < c ? c + ":" + d + ":" + e : 0 < d ? d + ":" + e : e
+      );
     }
   },
   mounted() {
@@ -302,26 +249,23 @@ export default {
       });
     } catch {}
 
-    if (localStorage.getItem("saveGame") != null) {
-      let test = JSON.parse(localStorage.getItem("saveGame"));
-      if (test.version == p.version && test.version != undefined) {
-        this.recalculate(test);
-      } else {
-        for (let thin in p) {
-          if (test[thin] == undefined) {
-            test[thin] = p[thin];
-          }
+    if (null != localStorage.getItem("saveGame")) {
+      let a = JSON.parse(localStorage.getItem("saveGame"));
+      if (a.version == p.version && a.version != null) {
+        this.recalculate(a);
+      } else
+        for (let b in p) {
+          null == a[b] && (a[b] = p[b]);
         }
-      }
     }
 
-    if (this.player.tutorial <= 0) {
-      this.tutorial();
-    }
+    1 == this.player.counter.chulthuluseye &&
+      0 == this.player.prestige &&
+      this.player.prestige++;
 
-    if (this.player.prestige > this.player.skills.length) {
-      this.displayfinish();
-    }
+    0 >= this.player.tutorial && this.tutorial();
+
+    this.player.prestige > this.player.skills.length && this.displayfinish();
 
     setInterval(() => {
       localStorage.setItem("saveGame", JSON.stringify(this.player));
@@ -333,33 +277,30 @@ export default {
 
     this.htimer = setInterval(() => {
       if (this.recovery) {
-        this.player.status.poison = 0;
-        this.player.status.fire = 0;
-        this.player.status.stun = 0;
-        this.player.status.slow = 0;
-        this.player.status.silence = 0;
+        let pl = this.player;
 
-        if (
-          this.player.clife + this.player.recovery + this.player.regeneration <=
-          this.player.life
-        ) {
-          if (this.player.clife < 0) {
-            this.player.clife = this.player.recovery + this.player.regeneration;
-          } else {
-            this.player.clife +=
-              this.player.recovery + this.player.regeneration;
-          }
+        pl.status = {
+          poison: 0,
+          fire: 0,
+          stun: 0,
+          slow: 0,
+          silence: 0,
+          rot: 0,
+          bleed: 0,
+          bury: 0
+        };
+
+        if (pl.clife + pl.recovery + pl.regeneration <= pl.life) {
+          pl.clife < 0
+            ? (pl.clife = pl.recovery + pl.regeneration)
+            : (pl.clife += pl.recovery + pl.regeneration);
         } else {
-          this.player.clife = this.player.life;
-          if (this.player.auto) {
-            for (let en in this.$refs.dun.enemys) {
-              let e = this.$refs.dun.enemys[en];
-              if (e.id == this.player.lastenemy) {
-                if (this.player.counter[e.id] < e.max) {
-                  this.enemy = e;
-                }
-              }
-            }
+          pl.clife = pl.life;
+          if (pl.auto) {
+            for (let e of this.$refs.dun.enemys)
+              e.id == pl.lastenemy &&
+                pl.counter[e.id] < e.max &&
+                (this.enemy = e);
           }
         }
       }

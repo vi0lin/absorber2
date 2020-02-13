@@ -17,7 +17,7 @@
     {
         "id": "magic",
         "desc": "Magic is used to calculate non physical attacks",
-        "form": "poison = magic / 3"
+        "form": "magic = magic"
     },
     {
         "id": "life",
@@ -56,12 +56,12 @@
     },
     {
         "id": "poison",
-        "desc": "Damages the Enemy on his turn. ",
+        "desc": "Damages the Enemy on his turn.",
         "form": "dmg = magic / 4"
     },
     {
         "id": "fire",
-        "desc": "Damages the Enemy on his turn. ",
+        "desc": "Damages the Enemy on his turn.",
         "form": "dmg = magic / 3"
     },
     {
@@ -97,6 +97,26 @@
     {
         "id": "prestige",
         "desc": "times you have finished the game",
-        "form": "prestige = flying eye killed"
+        "form": "prestige = last boss killed"
+    },
+    {
+        "id": "precision",
+        "desc": "lowers the chance of enemys dodge",
+        "form": "hit = dodge - precision"
+    },
+    {
+        "id": "rot",
+        "desc": "rotten enemys can't use regeneration",
+        "form": "regeneration = 0"
+    },
+    {
+        "id": "bleed",
+        "desc": "Damages the Enemy on his turn. ",
+        "form": "dmg = physical_dmg / 10"
+    },
+    {
+        "id": "reflect",
+        "desc": "Returns a percentage of damage to the enemy",
+        "form": "dmg = dmg * reflect / 100"
     }
 ]

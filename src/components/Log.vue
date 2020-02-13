@@ -8,7 +8,7 @@
 export default {
   methods: {
     getLog(l) {
-      return l.slice(-40).reverse();
+      return l.slice(-60).reverse();
     }
   }
 };
