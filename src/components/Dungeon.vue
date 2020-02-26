@@ -14,7 +14,7 @@
           v-for="(value, key) in getPrestigeEnemys(this.enemys)"
         >
           <div>
-            {{getcount(value.id)}} / {{value.max}}
+            {{getcount(value.id)}} / {{getLast(value.max,$parent.player.prestige)}}
             <br />
             <img
               v-if="value.id"
@@ -41,7 +41,7 @@
 import e from "./json/enemys.json";
 import Fight from "./Fight.vue";
 import Tooltip from "./Tooltip.vue";
-import { respawn } from "./functions";
+import { respawn, getLast } from "./functions";
 
 export default {
   components: { Fight, Tooltip },
@@ -51,8 +51,15 @@ export default {
     };
   },
   methods: {
+    getLast(j, p) {
+      return getLast(j, p);
+    },
     checkready(a) {
-      return null != a && this.$parent.player.counter[a.id] >= a.max;
+      return (
+        null != a &&
+        this.$parent.player.counter[a.id] >=
+          getLast(a.max, this.$parent.player.prestige)
+      );
     },
     autofight() {
       this.$parent.player.auto = !this.$parent.player.auto;

@@ -36,7 +36,7 @@
       :speed="true"
       :ab="true"
     />
-    <Overlay ref="ov" v-show="this.overlay" />
+    <Overlay :skilltree="false" ref="ov" v-show="this.overlay" />
   </div>
 </template>
 <script>
@@ -309,7 +309,7 @@ export default {
           if (pl.auto) {
             for (let e of this.$refs.dun.enemys)
               e.id == pl.lastEnemy &&
-                pl.counter[e.id] < e.max &&
+                pl.counter[e.id] < getLast(e.max, pl.prestige) &&
                 (this.enemy = e);
           }
         }

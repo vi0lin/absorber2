@@ -461,6 +461,14 @@ function checkStunTurn(a) {
 }
 
 function checkCleared(a, b, d) {
-    a.counter[b.id] >= b.max &&
+    a.counter[b.id] >= getLast(b.max, a.prestige) &&
         d();
+}
+
+export function getLast(j, p) {
+    if (p >= j.length) {
+        return j[j.length - 1];
+    } else {
+        return j[p];
+    }
 }

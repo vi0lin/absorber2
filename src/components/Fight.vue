@@ -10,7 +10,7 @@
         <div>
           <div
             style="text-align:center"
-          >{{this.$parent.$parent.player.counter[item.id]}}/{{this.$parent.$parent.enemy.max}}</div>
+          >{{this.$parent.$parent.player.counter[item.id]}}/{{getLast(this.$parent.$parent.enemy.max,this.$parent.$parent.player.prestige)}}</div>
           <div class="name">{{item.name}}</div>
         </div>
         <div style="width:200px">
@@ -58,7 +58,8 @@ import {
   absorbEnemy,
   respawn,
   checkPlayerDeath,
-  checkCleared
+  checkCleared,
+  getLast
 } from "./functions.js";
 
 import { displayEnemyStats } from "./displayfunc.js";
@@ -82,6 +83,9 @@ export default {
     };
   },
   methods: {
+    getLast(j, p) {
+      return getLast(j, p);
+    },
     filtred(f) {
       return displayEnemyStats(f);
     },
