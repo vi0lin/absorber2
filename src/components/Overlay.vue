@@ -1,26 +1,43 @@
 <template>
   <div>
-    <img
-      v-if="this.background!=''"
-      class="bc"
-      :src="require('@/assets/icons/'+this.background+'.png')"
-    />
-    <div class="overlay" :style="'background-color:' +this.color">
-      <div class="box" :style="'left:'+this.place">
-        <div style="font-size: 30px;">{{text}}</div>
-        <div>
-          <img width="200px;" v-if="this.img!=''" :src="require('@/assets/'+this.img+'.png')" />
-        </div>
-        <div class="flex">
-          <div class="btn" :key="k" v-for="(thing,k) in obj" @click="thing.func">{{thing.text}}</div>
+    <div v-show="!skilltree">
+      <img
+        v-if="this.background!=''"
+        class="bc"
+        :src="require('@/assets/icons/'+this.background+'.png')"
+      />
+      <div class="overlay" :style="'background-color:' +this.color">
+        <div class="box" :style="'left:'+this.place">
+          <div style="font-size: 30px;">{{text}}</div>
+          <div>
+            <img width="200px;" v-if="this.img!=''" :src="require('@/assets/'+this.img+'.png')" />
+          </div>
+          <div class="flex">
+            <div class="btn" :key="k" v-for="(thing,k) in obj" @click="thing.func">
+              <div>{{thing.text}}</div>
+              <TextToolTip :item="thing.desc" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div v-show="skilltree">skilltree</div>
   </div>
 </template>
 
 <script>
+import TextToolTip from "./TextToolTip.vue";
+
 export default {
+  components: {
+    TextToolTip
+  },
+  props: {
+    skilltree: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       text: "",

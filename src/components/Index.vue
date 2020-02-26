@@ -41,6 +41,7 @@
 </template>
 <script>
 import p from "./json/player.js";
+import ep from "./json/playerempty.js";
 import Stats from "./Stats.vue";
 import Dungeon from "./Dungeon.vue";
 import Log from "./Log.vue";
@@ -50,6 +51,7 @@ import Overlay from "./Overlay.vue";
 import choiseslist from "./json/choises.json";
 import { RoundAll } from "./displayfunc";
 import { respawn } from "./functions.js";
+import { log, kong } from "./gloabals.js";
 
 try {
   kongregateAPI.loadAPI();
@@ -88,22 +90,19 @@ export default {
       }
 
       player.skills = pl.skills;
-      player.lastenemy = pl.lastenemy;
+      player.lastEnemy = pl.lastEnemy;
       player.time = pl.time;
       player.version = pl.version;
       player.name = pl.name;
       player.tutorial = pl.tutorial;
       player.highscore = pl.highscore;
+      player.log = pl.log;
 
       for (let a in player.highscore)
         if (0 < player.highscore[a])
-          this.kongregate != undefined &&
+          try {
             this.kongregate.stats.submit(a, player.highscore[a]);
-
-      for (let a in player.skills) {
-        let b = choiseslist.find(b => b.id === player.skills[a]);
-        for (let a in b.gain) player[a] += b.gain[a];
-      }
+          } catch {}
 
       for (let a in player.counter)
         for (let b, c = 0; c < player.counter[a]; c++)
@@ -111,8 +110,11 @@ export default {
             for (let a in b.gain)
               if ("effects" != a && "chance" != a && "speed" != a)
                 player[a] += b.gain[a];
-              else if ("speed" == a) player[a] -= b.gain[a];
-              else if ("effects" == a)
+              else if ("speed" == a) {
+                if (player[a] >= 100) {
+                  player[a] -= b.gain[a];
+                }
+              } else if ("effects" == a)
                 for (let a in b.gain.effects)
                   player.effects[a] == null
                     ? (player.effects[a] = b.gain.effects[a])
@@ -122,6 +124,13 @@ export default {
                   player.chance[a] == null
                     ? (player.chance[a] = b.gain.chance[a])
                     : (player.chance[a] += b.gain.chance[a]);
+
+      for (let a in player.skills) {
+        let b = choiseslist.find(b => b.id === player.skills[a]);
+        for (let a in b.gain) {
+          player[a] += b.gain[a];
+        }
+      }
 
       try {
         if (!this.kongregate.services.isGuest()) {
@@ -145,7 +154,7 @@ export default {
           break;
         case 1:
           ov.img = "";
-          ov.text = "Killing Enemys will steal their stats..";
+          ov.text = "Killing Enemies will steal their stats..";
           ov.color = "rgba(0, 0, 0, 0)";
           ov.background = "tut";
           ov.obj = [{ text: "next", func: this.tutorial }];
@@ -193,11 +202,10 @@ export default {
       for (let c in filtred) {
         obj.push({
           text: filtred[c].name,
-          func: () => this.addskill(filtred[c])
+          func: () => this.addskill(filtred[c]),
+          desc: filtred[c].desc
         });
       }
-
-      obj.length < 2 && obj.push({ text: "hardreset", func: this.hardreset });
 
       ov.place = "20%";
       ov.text = "You finished the game!";
@@ -207,13 +215,13 @@ export default {
       this.overlay = true;
     },
     hardreset() {
-      this.recalculate(JSON.parse(JSON.stringify(p)));
+      this.recalculate(JSON.parse(JSON.stringify(ep)));
       this.overlay = false;
     },
     reset() {
       let pres = this.player.prestige;
       let skills = this.player.skills;
-      this.player = JSON.parse(JSON.stringify(p));
+      this.player = JSON.parse(JSON.stringify(ep));
       this.player.tutorial = 6;
       this.player.prestige = pres;
       this.player.skills = skills;
@@ -265,7 +273,8 @@ export default {
 
     0 >= this.player.tutorial && this.tutorial();
 
-    this.player.prestige > this.player.skills.length && this.displayfinish();
+    this.player.log = log;
+    this.kongregate = kong;
 
     setInterval(() => {
       localStorage.setItem("saveGame", JSON.stringify(this.player));
@@ -287,7 +296,8 @@ export default {
           silence: 0,
           rot: 0,
           bleed: 0,
-          bury: 0
+          bury: 0,
+          stim: 0
         };
 
         if (pl.clife + pl.recovery + pl.regeneration <= pl.life) {
@@ -298,7 +308,7 @@ export default {
           pl.clife = pl.life;
           if (pl.auto) {
             for (let e of this.$refs.dun.enemys)
-              e.id == pl.lastenemy &&
+              e.id == pl.lastEnemy &&
                 pl.counter[e.id] < e.max &&
                 (this.enemy = e);
           }

@@ -29,7 +29,7 @@ var player = {
         "necromant": -1
     },
     "tutorial": 0,
-    "prestige": 0,
+    "prestige": 0
 }
 
 export default player;

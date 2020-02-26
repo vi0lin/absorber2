@@ -1,0 +1,11 @@
+[
+    {
+        "id": "s_dmg",
+        "name": "Small damage boost",
+        "desc": "Adds one damage",
+        "gain": {
+            "dmg": 1
+        },
+        "open": {}
+    }
+]

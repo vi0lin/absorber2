@@ -214,7 +214,7 @@
     },
     {
         "id": "fire_elementar",
-        "name": "Fire Elementar",
+        "name": "Fire Elemental",
         "boss": false,
         "max": 300,
         "life": 20,
@@ -250,9 +250,6 @@
         "dmg": 1,
         "magic": 12,
         "chance": {
-            "fire": 100
-        },
-        "resistence": {
             "fire": 100
         },
         "gain": {
@@ -302,7 +299,7 @@
         "magic": 0,
         "chance": {
             "double": 75,
-            "dodge": 30,
+            "dodge": 25,
             "crit": 20,
             "supercrit": 5
         },
@@ -461,7 +458,7 @@
             "crit": 50,
             "supercrit": 20,
             "megacrit": 5,
-            "dodge": 60,
+            "dodge": 50,
             "silence": 10
         },
         "effects": {
@@ -478,7 +475,7 @@
     },
     {
         "id": "assasin",
-        "name": "Assasin",
+        "name": "Assassin",
         "boss": false,
         "max": 20,
         "life": 20,
@@ -489,7 +486,7 @@
         "dmg": 8,
         "magic": 20,
         "chance": {
-            "dodge": 60,
+            "dodge": 50,
             "silence": 70,
             "instakill": 20,
             "poison": 100
@@ -611,14 +608,14 @@
         "regeneration": 5,
         "speed": 1100,
         "cspeed": 0,
-        "dmg": 20,
+        "dmg": 30,
         "magic": 0,
         "chance": {
             "rot": 100,
             "crit": 20,
             "supercrit": 10,
             "bleed": 20,
-            "bury": 100
+            "bury": 50
         },
         "effects": {
             "lifesteal": 30
@@ -665,7 +662,7 @@
     },
     {
         "id": "necromant",
-        "name": "Necromant",
+        "name": "Necromancer",
         "prestige": 1,
         "boss": true,
         "max": 1,
@@ -685,10 +682,10 @@
             "poison": 10,
             "fire": 10,
             "stun": 20,
-            "rescurrect": 10
+            "resurrect": 10
         },
         "effects": {
-            "block": 20
+            "block": 30
         },
         "gain": {
             "recovery": 2,
@@ -696,8 +693,156 @@
             "life": 10,
             "dmg": -5,
             "chance": {
-                "rescurrect": 10
+                "resurrect": 10
             }
+        },
+        "status": {}
+    },
+    {
+        "id": "jellyfish",
+        "name": "Jellyfish",
+        "prestige": 2,
+        "boss": false,
+        "max": 180,
+        "life": 120,
+        "clife": 120,
+        "regeneration": 10,
+        "speed": 500,
+        "cspeed": 0,
+        "dmg": 18,
+        "magic": 200,
+        "chance": {
+            "poison": 70,
+            "stun": 30
+        },
+        "effects": {
+            "block": 30
+        },
+        "gain": {
+            "chance": {
+                "poison": 0.1,
+                "stun": 0.05
+            },
+            "dmg": 0.5
+        },
+        "status": {}
+    },
+    {
+        "id": "hedgehog",
+        "name": "Hedgehog",
+        "prestige": 2,
+        "boss": false,
+        "max": 160,
+        "life": 150,
+        "clife": 150,
+        "regeneration": 15,
+        "speed": 600,
+        "cspeed": 0,
+        "dmg": 20,
+        "magic": 0,
+        "effects": {
+            "block": 55,
+            "reflect": 30
+        },
+        "gain": {
+            "effects": {
+                "reflect": 0.05
+            }
+        },
+        "status": {}
+    },
+    {
+        "id": "klez",
+        "name": "Klez",
+        "prestige": 2,
+        "boss": false,
+        "max": 210,
+        "life": 150,
+        "clife": 150,
+        "regeneration": 0,
+        "speed": 600,
+        "cspeed": 0,
+        "dmg": 30,
+        "magic": 0,
+        "effects": {
+            "block": 55
+        },
+        "chance": {
+            "counter": 50,
+            "dodge": 50
+        },
+        "gain": {
+            "chance": {
+                "counter": 0.05
+            },
+            "effects": {
+                "block": 0.1
+            }
+        },
+        "status": {}
+    },
+    {
+        "id": "marine",
+        "name": "Space Soldier",
+        "prestige": 2,
+        "boss": false,
+        "max": 220,
+        "life": 150,
+        "clife": 150,
+        "regeneration": 0,
+        "speed": 200,
+        "cspeed": 0,
+        "dmg": 30,
+        "magic": 0,
+        "effects": {
+            "block": 55
+        },
+        "chance": {
+            "stim": 30
+        },
+        "gain": {
+            "speed": -1,
+            "chance": {
+                "stim": 0.1
+            },
+            "dmg": 0.1
+        },
+        "status": {}
+    },
+    {
+        "id": "darlek",
+        "name": "strange Robot",
+        "prestige": 2,
+        "boss": true,
+        "max": 1,
+        "life": 900,
+        "clife": 900,
+        "regeneration": 200,
+        "speed": 2000,
+        "cspeed": 0,
+        "dmg": 100,
+        "magic": 200,
+        "effects": {
+            "block": 100,
+            "reflect": 50,
+            "counter": 50
+        },
+        "chance": {
+            "bleed": 50,
+            "fire": 50,
+            "poison": 50,
+            "stim": 30,
+            "slow": 100,
+            "silence": 100,
+            "instakill": 10
+        },
+        "gain": {
+            "chance": {
+                "stim": 10,
+                "bleed": 10
+            },
+            "recovery": 10,
+            "life": 30
         },
         "status": {}
     }

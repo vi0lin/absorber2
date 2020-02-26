@@ -76,5 +76,6 @@ export function RoundAll(a, b) {
 
     b.recovery < 0 && (b.recovery = 1);
     b.regeneration < 0 && (b.regeneration = 0);
-    b.speed < 100 && (b.speed = 100)
+    b.life <= 0 && (b.life = 1);
+    b.speed < 110 && (b.speed = 110)
 }

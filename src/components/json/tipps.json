@@ -1,18 +1,18 @@
 [
     {
         "id": "block",
-        "desc": "Ammount of total damage reduction",
+        "desc": "Amount of total damage reduction",
         "form": "damage = damage - block"
     },
     {
         "id": "dmg",
-        "desc": "Ammount of damage",
+        "desc": "Amount of damage",
         "form": "damage = damage"
     },
     {
         "id": "speed",
-        "desc": "Ammount needs to be reached to start the turn",
-        "form": "turn = currentspeed>=speed"
+        "desc": "Amount needs to be reached to start the turn",
+        "form": "turn = currentSpeed>=speed"
     },
     {
         "id": "magic",
@@ -21,7 +21,7 @@
     },
     {
         "id": "life",
-        "desc": "Maximum Ammount of Health. Player dies if dropped to 0",
+        "desc": "Maximum Amount of Health. Player dies if dropped to 0",
         "form": "death = life<=0"
     },
     {
@@ -31,7 +31,7 @@
     },
     {
         "id": "recovery",
-        "desc": "Health restored every second outsite the fight",
+        "desc": "Health restored every second outside the fight",
         "form": "health = health + regeneration + recovery"
     },
     {
@@ -51,7 +51,7 @@
     },
     {
         "id": "megacrit",
-        "desc": "Percentage of getting a mega critical attack. Mega critical attacks eightfolds the Damage. Can only occur if super crits.",
+        "desc": "Percentage of getting a mega critical attack. Mega critical attacks eightfold the Damage. Can only occur if super crits.",
         "form": "dmg = dmg * 8"
     },
     {
@@ -66,47 +66,47 @@
     },
     {
         "id": "slow",
-        "desc": "chance to slow down the speed progress of the enemy.",
-        "form": "speedprogress = speedprogress - 10"
+        "desc": "Chance to slow down the speed progress of the enemy.",
+        "form": "speedProgress = speedProgress - 10"
     },
     {
         "id": "stun",
-        "desc": "chance to stun the enemy.",
+        "desc": "Chance to stun the enemy.",
         "form": "stun = stun"
     },
     {
         "id": "silence",
-        "desc": "chance to silence the enemy. Silenced enemys can't use stun, crit or DoT",
+        "desc": "Chance to silence the enemy. Silenced enemies can't use stun, crit or DoT",
         "form": "silence = silence"
     },
     {
         "id": "dodge",
-        "desc": "chance to completly nullify the enemys damage",
+        "desc": "Chance to completely nullify the enemies damage",
         "form": "dodge = dodge"
     },
     {
         "id": "double",
-        "desc": "chance to hit an enemy twice",
+        "desc": "Chance to hit an enemy twice",
         "form": "dmg = (dmg * crit) * 2"
     },
     {
         "id": "instakill",
-        "desc": "chance to kill an enemy instant",
+        "desc": "Chance to kill an enemy instant",
         "form": "enemy life = -1"
     },
     {
         "id": "prestige",
-        "desc": "times you have finished the game",
+        "desc": "Times you have finished the game",
         "form": "prestige = last boss killed"
     },
     {
         "id": "precision",
-        "desc": "lowers the chance of enemys dodge",
+        "desc": "Lowers the chance of enemies dodge",
         "form": "hit = dodge - precision"
     },
     {
         "id": "rot",
-        "desc": "rotten enemys can't use regeneration",
+        "desc": "Rotten enemies can't use regeneration",
         "form": "regeneration = 0"
     },
     {

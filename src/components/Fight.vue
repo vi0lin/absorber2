@@ -18,6 +18,7 @@
             ref="eimage"
             v-if="item.id"
             class="image"
+            id="enemy"
             :src="require('@/assets/enemys/'+item.id+'.png')"
             :alt="item.name"
           />
@@ -45,7 +46,7 @@
       <Progressbar :val="item.clife" :max="item.life" />
     </div>
     <div class="row3 box">
-      <div :key="key" v-for="(l,key) in getLog(this.$parent.$parent.player.log)" v-html="l"></div>
+      <div :key="key" v-for="(l,key) in getLog()" v-html="l"></div>
     </div>
   </div>
 </template>
@@ -61,6 +62,7 @@ import {
 } from "./functions.js";
 
 import { displayEnemyStats } from "./displayfunc.js";
+import { dmgind } from "./gloabals.js";
 
 export default {
   components: {
@@ -76,15 +78,15 @@ export default {
     return {
       timer1: null,
       timer2: null,
-      dmgind: []
+      dmgind: dmgind
     };
   },
   methods: {
     filtred(f) {
       return displayEnemyStats(f);
     },
-    getLog(l) {
-      return l.slice(-10).reverse();
+    getLog() {
+      return this.$parent.$parent.player.log.slice(-10).reverse();
     },
     exit() {
       this.$parent.$parent.enemy = null;
@@ -92,22 +94,20 @@ export default {
   },
   mounted() {
     this.$parent.$parent.recovery = false;
+
     let player = this.$parent.$parent.player,
       enemy = this.item,
-      arr = this.dmgind,
-      log = player.log,
-      enemyimage = this.$refs.eimage.classList,
-      kong = this.$parent.$parent.kongregate,
-      disfi = this.$parent.$parent.displayfinish;
+      disfi = this.$parent.$parent.displayfinish,
+      classlist = this.$refs.eimage.classList;
 
-    player.lastenemy = enemy.id;
+    player.lastEnemy = enemy.id;
 
     this.timer2 = setInterval(() => {
-      checkTurn(player, enemy, arr, log, enemyimage, kong, disfi, this.exit);
+      checkTurn(player, enemy, disfi, this.exit, classlist);
     }, 100);
 
     this.timer1 = setInterval(() => {
-      checkTurn(enemy, player, arr, log, enemyimage, kong, disfi, this.exit);
+      checkTurn(enemy, player, disfi, this.exit, classlist);
     }, 100);
   },
   beforeDestroy() {

@@ -56,6 +56,14 @@
       Reset
       <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
     </button>
+    <button
+      v-show="$parent.player.prestige>$parent.player.skills.length"
+      class="reset"
+      @click="$parent.displayfinish"
+    >
+      Prestige
+      <img class="icons" :src="require('@/assets/icons/star.png')" alt="reset" />
+    </button>
   </div>
 </template>
 
@@ -64,6 +72,7 @@ import j from "./json/player.js";
 import tipp from "./json/tipps.json";
 import Tooltip2 from "./Tooltip2.vue";
 import choiseslist from "./json/choises.json";
+import { debug } from "./gloabals.js";
 
 export default {
   components: { Tooltip2 },
@@ -78,7 +87,7 @@ export default {
   methods: {
     openreset() {
       let ov = this.$parent.$refs.ov.$data;
-      ov.text = "Are you sure you want to reset?";
+      ov.text = "Do you really want to wipe your save?";
       ov.obj = [
         { text: "yes", func: this.$parent.hardreset },
         { text: "no", func: this.closereset }
@@ -127,12 +136,13 @@ export default {
 
       delete pl.time;
       delete pl.auto;
+      delete pl.debug;
       delete pl.tutorial;
 
       delete pl.cspeed;
       delete pl.clife;
-      delete pl.lastenemy;
-      delete pl.resistence;
+      delete pl.lastEnemy;
+      delete pl.resistance;
       delete pl.version;
       delete pl.effects;
       delete pl.highscore;
@@ -191,5 +201,10 @@ export default {
 .icons {
   float: left;
   height: 32px;
+}
+
+.debugclass {
+  color: red;
+  background: lightgrey;
 }
 </style>
