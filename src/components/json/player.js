@@ -14,7 +14,6 @@ var player = {
     "effects": {},
     "counter": {},
     "skills": [],
-    "sp": 1,
     "status": {},
     "time": 0,
     "auto": false,
@@ -30,6 +29,8 @@ var player = {
     },
     "tutorial": 0,
     "prestige": 0,
+    "points": 0,
+    "go": false
 }
 
 export default player;

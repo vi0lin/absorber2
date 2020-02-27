@@ -1,11 +1,405 @@
 [
     {
-        "id": "s_dmg",
-        "name": "Small damage boost",
-        "desc": "Adds one damage",
-        "gain": {
-            "dmg": 1
-        },
-        "open": {}
+        "id": "s_dmg0",
+        "typ": "s_dmg",
+        "open": [
+            {
+                "id": "s_dmg1",
+                "typ": "s_dmg",
+                "open": [
+                    {
+                        "id": "s_dmg2",
+                        "typ": "s_dmg",
+                        "open": [
+                            {
+                                "id": "s_instakill0",
+                                "typ": "s_instakill",
+                                "open": [
+                                    {
+                                        "id": "s_silence0",
+                                        "typ": "s_silence",
+                                        "open": []
+                                    },
+                                    {
+                                        "id": "s_crit0",
+                                        "typ": "s_crit",
+                                        "open": [
+                                            {
+                                                "id": "s_scrit0",
+                                                "typ": "s_scrit",
+                                                "open": [
+                                                    {
+                                                        "id": "s_mcrit0",
+                                                        "typ": "s_mcrit",
+                                                        "open": [
+                                                            {
+                                                                "id": "m_crit0",
+                                                                "typ": "m_crit",
+                                                                "open": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "s_silence1",
+                                "typ": "s_silence",
+                                "open": [
+                                    {
+                                        "id": "s_instakill1",
+                                        "typ": "s_instakill",
+                                        "open": []
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "s_lifesteal0",
+                                "typ": "s_lifesteal",
+                                "open": [
+                                    {
+                                        "id": "s_lifesteal1",
+                                        "typ": "s_lifesteal",
+                                        "open": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "s_bleed1",
+                        "typ": "s_bleed",
+                        "open": [
+                            {
+                                "id": "s_dodge1",
+                                "typ": "s_dodge",
+                                "open": [
+                                    {
+                                        "id": "s_stun2",
+                                        "typ": "s_stun",
+                                        "open": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "s_dodge0",
+                        "typ": "s_dodge",
+                        "open": [
+                            {
+                                "id": "s_bleed2",
+                                "typ": "s_bleed",
+                                "open": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "s_crit0",
+                "typ": "s_crit",
+                "open": [
+                    {
+                        "id": "s_scrit0",
+                        "typ": "s_scrit",
+                        "open": [
+                            {
+                                "id": "s_mcrit0",
+                                "typ": "s_mcrit",
+                                "open": [
+                                    {
+                                        "id": "m_crit0",
+                                        "typ": "m_crit",
+                                        "open": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "s_magic0",
+        "typ": "s_magic",
+        "open": [
+            {
+                "id": "s_fire0",
+                "typ": "s_fire",
+                "open": [
+                    {
+                        "id": "s_fire1",
+                        "typ": "s_fire",
+                        "open": [
+                            {
+                                "id": "m_magic0",
+                                "typ": "m_magic",
+                                "open": []
+                            },
+                            {
+                                "id": "s_stun1",
+                                "typ": "s_stun",
+                                "open": [
+                                    {
+                                        "id": "s_resurrect0",
+                                        "typ": "s_resurrect",
+                                        "open": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "s_bury0",
+                        "typ": "s_bury",
+                        "open": [
+                            {
+                                "id": "s_bury1",
+                                "typ": "s_bury",
+                                "open": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "s_poison0",
+                "typ": "s_poison",
+                "open": [
+                    {
+                        "id": "s_poison1",
+                        "typ": "s_poison",
+                        "open": [
+                            {
+                                "id": "m_magic1",
+                                "typ": "m_magic",
+                                "open": []
+                            },
+                            {
+                                "id": "s_stun0",
+                                "typ": "s_stun",
+                                "open": []
+                            }
+                        ]
+                    },
+                    {
+                        "id": "s_rot0",
+                        "typ": "s_rot",
+                        "open": [
+                            {
+                                "id": "s_poison2",
+                                "typ": "s_poison",
+                                "open": [
+                                    {
+                                        "id": "s_rot1",
+                                        "typ": "s_rot",
+                                        "open": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "s_speed0",
+        "typ": "s_speed",
+        "open": [
+            {
+                "id": "s_stim0",
+                "typ": "s_stim",
+                "open": [
+                    {
+                        "id": "s_stim1",
+                        "typ": "s_stim",
+                        "open": []
+                    },
+                    {
+                        "id": "s_precision0",
+                        "typ": "s_precision",
+                        "open": []
+                    }
+                ]
+            },
+            {
+                "id": "s_speed1",
+                "typ": "s_speed",
+                "open": [
+                    {
+                        "id": "s_precision1",
+                        "typ": "s_precision",
+                        "open": [
+                            {
+                                "id": "s_double0",
+                                "typ": "s_double",
+                                "open": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "s_slow0",
+                "typ": "s_slow",
+                "open": [
+                    {
+                        "id": "s_slow1",
+                        "typ": "s_slow",
+                        "open": [
+                            {
+                                "id": "s_precision2",
+                                "typ": "s_precision",
+                                "open": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "s_precision3",
+                "typ": "s_precision",
+                "open": [
+                    {
+                        "id": "s_speed2",
+                        "typ": "s_speed",
+                        "open": [
+                            {
+                                "id": "s_double1",
+                                "typ": "s_double",
+                                "open": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "s_life0",
+        "typ": "s_life",
+        "open": [
+            {
+                "id": "s_life1",
+                "typ": "s_life",
+                "open": [
+                    {
+                        "id": "s_life2",
+                        "typ": "s_life",
+                        "open": [
+                            {
+                                "id": "s_life3",
+                                "typ": "s_life",
+                                "open": [
+                                    {
+                                        "id": "m_life0",
+                                        "typ": "m_life",
+                                        "open": [
+                                            {
+                                                "id": "s_block1",
+                                                "typ": "s_block",
+                                                "open": [
+                                                    {
+                                                        "id": "s_resurrect1",
+                                                        "typ": "s_resurrect",
+                                                        "open": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "s_recovery0",
+                                        "typ": "s_recovery",
+                                        "open": [
+                                            {
+                                                "id": "s_regen0",
+                                                "typ": "s_regen",
+                                                "open": [
+                                                    {
+                                                        "id": "m_recovery0",
+                                                        "typ": "m_recovery",
+                                                        "open": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "s_counter0",
+                                "typ": "s_counter",
+                                "open": [
+                                    {
+                                        "id": "s_block2",
+                                        "typ": "s_block",
+                                        "open": [
+                                            {
+                                                "id": "s_reflect0",
+                                                "typ": "s_reflect",
+                                                "open": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "s_regen1",
+                        "typ": "s_regen",
+                        "open": [
+                            {
+                                "id": "s_recovery0",
+                                "typ": "s_recovery",
+                                "open": [
+                                    {
+                                        "id": "m_regen0",
+                                        "typ": "m_regen",
+                                        "open": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "s_block0",
+                "typ": "s_block",
+                "open": [
+                    {
+                        "id": "s_reflect1",
+                        "typ": "s_reflect",
+                        "open": [
+                            {
+                                "id": "s_counter1",
+                                "typ": "s_counter",
+                                "open": [
+                                    {
+                                        "id": "s_stun3",
+                                        "typ": "s_stun",
+                                        "open": [
+                                            {
+                                                "id": "s_resurrect2",
+                                                "typ": "s_resurrect",
+                                                "open": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     }
 ]

@@ -36,7 +36,7 @@
       :speed="true"
       :ab="true"
     />
-    <Overlay :skilltree="false" ref="ov" v-show="this.overlay" />
+    <Overlay :skilltree="skilltree" ref="ov" v-show="this.overlay" />
   </div>
 </template>
 <script>
@@ -48,9 +48,10 @@ import Log from "./Log.vue";
 import Progressbar from "./Progressbar.vue";
 import Overlay from "./Overlay.vue";
 
+import skilltree from "./json/skilltree.json";
 import choiseslist from "./json/choises.json";
 import { RoundAll } from "./displayfunc";
-import { respawn } from "./functions.js";
+import { respawn, getLast, getNodeById, getLastBoss } from "./functions.js";
 import { log, kong } from "./gloabals.js";
 
 try {
@@ -75,7 +76,8 @@ export default {
       htimer: null,
       recovery: true,
       kongregate: null,
-      overlay: false
+      overlay: false,
+      skilltree: false
     };
   },
   methods: {
@@ -89,6 +91,7 @@ export default {
         player.prestige = pl.prestige;
       }
 
+      player.go = pl.go;
       player.skills = pl.skills;
       player.lastEnemy = pl.lastEnemy;
       player.time = pl.time;
@@ -97,6 +100,7 @@ export default {
       player.tutorial = pl.tutorial;
       player.highscore = pl.highscore;
       player.log = pl.log;
+      player.speed = 2500;
 
       for (let a in player.highscore)
         if (0 < player.highscore[a])
@@ -104,32 +108,79 @@ export default {
             this.kongregate.stats.submit(a, player.highscore[a]);
           } catch {}
 
-      for (let a in player.counter)
-        for (let b, c = 0; c < player.counter[a]; c++)
-          if (((b = this.$refs.dun.enemys.find(b => b.id === a)), null != b))
-            for (let a in b.gain)
-              if ("effects" != a && "chance" != a && "speed" != a)
+      for (let a in player.counter) {
+        for (let b, c = 0; c < player.counter[a]; c++) {
+          if (((b = this.$refs.dun.enemys.find(b => b.id === a)), null != b)) {
+            for (let a in b.gain) {
+              if ("effects" != a && "chance" != a && "speed" != a) {
                 player[a] += b.gain[a];
-              else if ("speed" == a) {
+              } else if ("speed" == a) {
                 if (player[a] >= 100) {
                   player[a] -= b.gain[a];
                 }
-              } else if ("effects" == a)
-                for (let a in b.gain.effects)
+              } else if ("effects" == a) {
+                for (let a in b.gain.effects) {
                   player.effects[a] == null
                     ? (player.effects[a] = b.gain.effects[a])
                     : (player.effects[a] += b.gain.effects[a]);
-              else if ("chance" == a)
-                for (let a in b.gain.chance)
+                }
+              } else if ("chance" == a) {
+                for (let a in b.gain.chance) {
                   player.chance[a] == null
                     ? (player.chance[a] = b.gain.chance[a])
                     : (player.chance[a] += b.gain.chance[a]);
-
-      for (let a in player.skills) {
-        let b = choiseslist.find(b => b.id === player.skills[a]);
-        for (let a in b.gain) {
-          player[a] += b.gain[a];
+                }
+              }
+            }
+          }
         }
+      }
+
+      for (let a of player.skills) {
+        let c = getNodeById(a, skilltree);
+
+        if (c == null) {
+          var index = player.skills.indexOf(a);
+          if (index !== -1) {
+            player.skills.splice(index, 1);
+          }
+        } else {
+          let b = choiseslist.find(b => b.id === c.typ);
+
+          for (let k in b.gain) {
+            switch (k) {
+              case "chance":
+                for (let t in b.gain.chance) {
+                  if (player.chance[t] != null) {
+                    player.chance[t] += b.gain.chance[t];
+                  } else {
+                    player.chance[t] = b.gain.chance[t];
+                  }
+                }
+                break;
+
+              case "effects":
+                for (let t in b.gain.effects) {
+                  if (player.effects[t] != null) {
+                    player.effects[t] += b.gain.effects[t];
+                  } else {
+                    player.effects[t] = b.gain.effects[t];
+                  }
+                }
+                break;
+
+              default:
+                player[k] += b.gain[k];
+                break;
+            }
+          }
+        }
+      }
+
+      player.points = player.prestige - player.skills.length;
+
+      if (player.counter[getLastBoss(player)] > 0) {
+        player.go = true;
       }
 
       try {
@@ -192,20 +243,10 @@ export default {
       let ov = this.$refs.ov.$data,
         player = this.player;
 
-      player.prestige <= player.skills.length && player.prestige++;
-
-      let obj = [{ text: "continue", func: this.continue }],
-        filtred = choiseslist.filter(
-          x => this.player.skills.indexOf(x.id) == -1
-        );
-
-      for (let c in filtred) {
-        obj.push({
-          text: filtred[c].name,
-          func: () => this.addskill(filtred[c]),
-          desc: filtred[c].desc
-        });
-      }
+      let obj = [
+        { text: "continue", func: this.continue },
+        { text: "prestige", func: this.reset }
+      ];
 
       ov.place = "20%";
       ov.text = "You finished the game!";
@@ -213,6 +254,9 @@ export default {
       ov.obj = obj;
 
       this.overlay = true;
+    },
+    getLast(j, p) {
+      return getLast(j, p);
     },
     hardreset() {
       this.recalculate(JSON.parse(JSON.stringify(ep)));
@@ -278,7 +322,7 @@ export default {
 
     setInterval(() => {
       localStorage.setItem("saveGame", JSON.stringify(this.player));
-    }, 5000);
+    }, 6000);
 
     setInterval(() => {
       this.player.time += 1;
@@ -307,10 +351,11 @@ export default {
         } else {
           pl.clife = pl.life;
           if (pl.auto) {
-            for (let e of this.$refs.dun.enemys)
-              e.id == pl.lastEnemy &&
-                pl.counter[e.id] < getLast(e.max, pl.prestige) &&
-                (this.enemy = e);
+            let last = this.$refs.dun.enemys.find(e => e.id == pl.lastEnemy);
+            let max = this.getLast(last.max, pl.prestige);
+            if (pl.counter[last.id] < max) {
+              this.enemy = last;
+            }
           }
         }
       }

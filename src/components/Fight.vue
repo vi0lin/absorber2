@@ -94,24 +94,28 @@ export default {
     },
     exit() {
       this.$parent.$parent.enemy = null;
+    },
+    won() {
+      this.$parent.$parent.player.prestige++;
+      this.$parent.$parent.player.points++;
+      this.$parent.$parent.player.go = true;
+      this.$parent.$parent.displayfinish();
     }
   },
   mounted() {
     this.$parent.$parent.recovery = false;
 
     let player = this.$parent.$parent.player,
-      enemy = this.item,
-      disfi = this.$parent.$parent.displayfinish,
       classlist = this.$refs.eimage.classList;
 
-    player.lastEnemy = enemy.id;
+    player.lastEnemy = this.item.id;
 
     this.timer2 = setInterval(() => {
-      checkTurn(player, enemy, disfi, this.exit, classlist);
+      checkTurn(player, this.item, this.won, this.exit, classlist);
     }, 100);
 
     this.timer1 = setInterval(() => {
-      checkTurn(enemy, player, disfi, this.exit, classlist);
+      checkTurn(this.item, player, this.won, this.exit, classlist);
     }, 100);
   },
   beforeDestroy() {

@@ -1,6 +1,10 @@
 <template>
   <transition name="fade">
-    <div v-show="show &&item!=null" class="wiste">{{item}}</div>
+    <div v-show="show &&item!=null" class="wiste">
+      <div class="title">{{title}}</div>
+      <hr v-show="title!=null" />
+      <div>{{item}}</div>
+    </div>
   </transition>
 </template>
 
@@ -8,6 +12,10 @@
 export default {
   props: {
     item: {
+      type: String,
+      required: false
+    },
+    title: {
       type: String,
       required: false
     }
@@ -67,6 +75,7 @@ export default {
 
 <style scoped>
 .wiste {
+  margin-left: 50px;
   padding: 10px;
   position: fixed;
   border: 1px solid black;
@@ -76,7 +85,9 @@ export default {
   min-width: 100px;
   width: 180px;
 }
-
+.title {
+  font-size: 20px;
+}
 .skiste {
   border: 1px solid black;
   background: red;

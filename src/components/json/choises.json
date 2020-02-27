@@ -8,11 +8,27 @@
         }
     },
     {
+        "id": "m_dmg",
+        "name": "Minor damage boost",
+        "desc": "Adds 3 damage",
+        "gain": {
+            "dmg": 3
+        }
+    },
+    {
         "id": "s_life",
         "name": "Small health boost",
         "desc": "Adds five life",
         "gain": {
             "life": 10
+        }
+    },
+    {
+        "id": "m_life",
+        "name": "Minor health boost",
+        "desc": "Adds 25 life",
+        "gain": {
+            "life": 25
         }
     },
     {
@@ -32,11 +48,27 @@
         }
     },
     {
+        "id": "m_magic",
+        "name": "minor magic boost",
+        "desc": "Adds 15 magic",
+        "gain": {
+            "magic": 15
+        }
+    },
+    {
         "id": "s_regen",
-        "desc": "Adds 0.1 regeneration",
+        "desc": "Adds 0.3 regeneration",
         "name": "Small regeneration boost",
         "gain": {
             "regeneration": 0.3
+        }
+    },
+    {
+        "id": "m_regen",
+        "desc": "Adds 1 regeneration",
+        "name": "Minor regeneration boost",
+        "gain": {
+            "regeneration": 1
         }
     },
     {
@@ -45,6 +77,234 @@
         "name": "Small recovery boost",
         "gain": {
             "recovery": 2
+        }
+    },
+    {
+        "id": "m_recovery",
+        "desc": "Adds 10 recovery",
+        "name": "Minor recovery boost",
+        "gain": {
+            "recovery": 10
+        }
+    },
+    {
+        "id": "s_instakill",
+        "desc": "Adds 0.5% instakill",
+        "name": "Small instakill boost",
+        "gain": {
+            "chance": {
+                "instakill": 0.5
+            }
+        }
+    },
+    {
+        "id": "s_silence",
+        "desc": "Adds 2% silence",
+        "name": "Small silence boost",
+        "gain": {
+            "chance": {
+                "silence": 2
+            }
+        }
+    },
+    {
+        "id": "s_crit",
+        "desc": "Adds 2% crit",
+        "name": "Small crit boost",
+        "gain": {
+            "chance": {
+                "crit": 2
+            }
+        }
+    },
+    {
+        "id": "m_crit",
+        "desc": "Adds 5% crit",
+        "name": "Minor crit boost",
+        "gain": {
+            "chance": {
+                "crit": 6
+            }
+        }
+    },
+    {
+        "id": "s_scrit",
+        "desc": "Adds 2% supercrit",
+        "name": "Small supercrit boost",
+        "gain": {
+            "chance": {
+                "supercrit": 2
+            }
+        }
+    },
+    {
+        "id": "s_double",
+        "desc": "Adds 5% double",
+        "name": "Small double boost",
+        "gain": {
+            "chance": {
+                "double": 5
+            }
+        }
+    },
+    {
+        "id": "s_mcrit",
+        "desc": "Adds 2% megacrit",
+        "name": "Small megacrit boost",
+        "gain": {
+            "chance": {
+                "megacrit": 2
+            }
+        }
+    },
+    {
+        "id": "s_lifesteal",
+        "desc": "Adds 5% lifesteal",
+        "name": "Small lifesteal boost",
+        "gain": {
+            "effects": {
+                "lifesteal": 5
+            }
+        }
+    },
+    {
+        "id": "s_bleed",
+        "desc": "Adds 5% bleed",
+        "name": "Small bleed boost",
+        "gain": {
+            "chance": {
+                "bleed": 5
+            }
+        }
+    },
+    {
+        "id": "s_stun",
+        "desc": "Adds 2% stun",
+        "name": "Small stun boost",
+        "gain": {
+            "chance": {
+                "stun": 2
+            }
+        }
+    },
+    {
+        "id": "s_dodge",
+        "desc": "Adds 2% dodge",
+        "name": "Small dodge boost",
+        "gain": {
+            "chance": {
+                "dodge": 2
+            }
+        }
+    },
+    {
+        "id": "s_fire",
+        "desc": "Adds 5% fire",
+        "name": "Small fire boost",
+        "gain": {
+            "chance": {
+                "fire": 5
+            }
+        }
+    },
+    {
+        "id": "s_poison",
+        "desc": "Adds 5% poison",
+        "name": "Small poison boost",
+        "gain": {
+            "chance": {
+                "poison": 5
+            }
+        }
+    },
+    {
+        "id": "s_resurrect",
+        "desc": "Adds 2% resurrect",
+        "name": "Small resurrect boost",
+        "gain": {
+            "chance": {
+                "resurrect": 2
+            }
+        }
+    },
+    {
+        "id": "s_bury",
+        "desc": "Adds 2% bury",
+        "name": "Small bury boost",
+        "gain": {
+            "chance": {
+                "bury": 2
+            }
+        }
+    },
+    {
+        "id": "s_rot",
+        "desc": "Adds 5% rot",
+        "name": "Small rot boost",
+        "gain": {
+            "chance": {
+                "rot": 5
+            }
+        }
+    },
+    {
+        "id": "s_stim",
+        "desc": "Adds 5% stim",
+        "name": "Small stim boost",
+        "gain": {
+            "chance": {
+                "stim": 5
+            }
+        }
+    },
+    {
+        "id": "s_precision",
+        "desc": "Adds 5 precision",
+        "name": "Small precision boost",
+        "gain": {
+            "effects": {
+                "precision": 5
+            }
+        }
+    },
+    {
+        "id": "s_block",
+        "desc": "Adds 1 block",
+        "name": "Small block boost",
+        "gain": {
+            "effects": {
+                "block": 1
+            }
+        }
+    },
+    {
+        "id": "s_counter",
+        "desc": "Adds 5% counter",
+        "name": "Small counter boost",
+        "gain": {
+            "chance": {
+                "counter": 5
+            }
+        }
+    },
+    {
+        "id": "s_reflect",
+        "desc": "Adds 2% reflect",
+        "name": "Small reflect boost",
+        "gain": {
+            "effects": {
+                "reflect": 2
+            }
+        }
+    },
+    {
+        "id": "s_slow",
+        "desc": "Adds 5% slow",
+        "name": "Small slow boost",
+        "gain": {
+            "chance": {
+                "slow": 5
+            }
         }
     }
 ]

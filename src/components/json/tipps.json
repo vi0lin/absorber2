@@ -118,5 +118,20 @@
         "id": "reflect",
         "desc": "Returns a percentage of damage to the enemy",
         "form": "dmg = dmg * reflect / 100"
+    },
+    {
+        "id": "sspeed",
+        "desc": "Saved Speed. Used if reached the 110 Speed limit",
+        "form": "if speed>110 start saving"
+    },
+    {
+        "id": "points",
+        "desc": "Used to buy Skills",
+        "form": "1 Point = 1 Skill"
+    },
+    {
+        "id": "counter",
+        "desc": "Chance to Attack the Enemy while getting attacked",
+        "form": "counter = counter"
     }
 ]

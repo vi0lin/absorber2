@@ -4,29 +4,42 @@
     <div class="flex">
       <div class="kiste">
         <div :key="key" v-for="(value, key) in show(this.$parent.player)">
-          <span>{{key}}: {{value}}</span>
-          <Tooltip2 :item="key" />
+          <div style="margin:5px" class="flex">
+            <div>
+              <img class="icon" v-if="key" :src="require('@/assets/skills/'+key+'.png')" />
+              <span>{{value}}</span>
+            </div>
+            <Tooltip2 :item="key" />
+          </div>
         </div>
       </div>
       <div class="kiste">
         <span>Chances</span>
         <div
-          style="margin-left:10px"
+          style="margin:5px"
           :key="key+value"
           v-for="(key,value) in this.$parent.player.chance"
+          class="flex"
         >
-          <div v-html="displayechance(value)"></div>
+          <div>
+            <span>{{key}}</span>
+            <img class="icon" v-if="value" :src="require('@/assets/skills/'+value+'.png')" />
+          </div>
           <Tooltip2 :item="value" />
         </div>
       </div>
       <div class="kiste">
         <span>Effects</span>
         <div
-          style="margin-left:10px"
+          style="margin:5px"
           :key="key+value"
           v-for="(key,value) in this.$parent.player.effects"
+          class="flex"
         >
-          <div v-html="displayeffect(value)"></div>
+          <div>
+            <span>{{key}}</span>
+            <img class="icon" v-if="value" :src="require('@/assets/skills/'+value+'.png')" />
+          </div>
           <Tooltip2 :item="value" />
         </div>
       </div>
@@ -39,15 +52,17 @@
           v-html="displayescore(value)"
         ></div>
       </div>
-      <div class="kiste">
-        <span>Skills</span>
-        <div
-          style="margin-left:10px"
-          :key="key+value"
-          v-for="(key,value ) in this.$parent.player.skills"
-        >
-          <div>{{displayeskills(key)}}</div>
-          <Tooltip2 :item="key" />
+      <div class="kiste fux">
+        <span style="width:200px;line-height:20px">Skills</span>
+        <div :key="key+value" v-for="(key,value) in this.$parent.player.skills">
+          <div>
+            <img
+              style="margin:5px"
+              class="icon"
+              :src="require('@/assets/skills/'+displayeskills(key)+'.png')"
+            />
+            <TextToolTip :title="displayeskills2(key).name" :item="displayeskills2(key).desc" />
+          </div>
         </div>
       </div>
     </div>
@@ -56,13 +71,13 @@
       Reset
       <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
     </button>
-    <button
-      v-show="$parent.player.prestige>$parent.player.skills.length"
-      class="reset"
-      @click="$parent.displayfinish"
-    >
+    <button v-show="$parent.player.go" class="reset" @click="$parent.displayfinish">
       Prestige
       <img class="icons" :src="require('@/assets/icons/star.png')" alt="reset" />
+    </button>
+    <button v-show="$parent.player.prestige>0" class="reset" @click="this.openskilltree">
+      Skills
+      <img class="icons" :src="require('@/assets/icons/skills.png')" alt="skills" />
     </button>
   </div>
 </template>
@@ -71,11 +86,12 @@
 import j from "./json/player.js";
 import tipp from "./json/tipps.json";
 import Tooltip2 from "./Tooltip2.vue";
+import TextToolTip from "./TextToolTip.vue";
 import choiseslist from "./json/choises.json";
 import { debug } from "./gloabals.js";
 
 export default {
-  components: { Tooltip2 },
+  components: { Tooltip2, TextToolTip },
   data() {
     return {
       pl: null,
@@ -123,7 +139,18 @@ export default {
       );
     },
     displayeskills(a) {
-      return choiseslist.find(b => b.id === a).name;
+      a = a.substring(0, a.length - 1);
+      let t = choiseslist.find(b => b.id === a).id;
+      return t.substring(2);
+    },
+    displayeskills2(a) {
+      a = a.substring(0, a.length - 1);
+      let t = choiseslist.find(b => b.id === a);
+      return t;
+    },
+    openskilltree() {
+      this.$parent.skilltree = true;
+      this.$parent.overlay = true;
     },
     show(p) {
       let pl = JSON.parse(JSON.stringify(p));
@@ -131,7 +158,8 @@ export default {
       delete pl.name;
       delete pl.status;
       delete pl.counter;
-      delete pl.sp;
+      delete pl.go;
+
       delete pl.skills;
 
       delete pl.time;
@@ -155,6 +183,13 @@ export default {
 </script>
 
 <style scoped>
+.icon {
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
 .faker {
   background: grey;
   border: none;
@@ -166,12 +201,14 @@ export default {
   cursor: default;
   font-family: "MedievalSharp", cursive;
 }
+
 .flex {
   flex-wrap: wrap;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
 }
+
 .kiste {
   clear: both;
   padding: 10px;
@@ -179,6 +216,7 @@ export default {
   margin: 5px;
   border: 1px solid black;
   background-color: whitesmoke;
+  min-width: 100px;
 }
 
 .reset {
@@ -194,6 +232,12 @@ export default {
   cursor: pointer;
 }
 
+.fux {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 200px;
+}
 .reset:hover {
   background: #c0c0c0;
 }

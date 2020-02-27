@@ -276,7 +276,7 @@ export function checkTurn(target, attacker, disfi, exit, classlist) {
 function checkCounter(target, attacker) {
     if (attacker.chance != null) {
         if (checkChance(attacker.chance.counter, "counter")) {
-            checkCrit(0, target, attacker, 0)
+            checkCrit(1, target, attacker, 0)
             log.push(`<div>${attacker.name} countered the attack</div>`)
         }
     }
@@ -383,28 +383,42 @@ function checkEnemyDeath(target, attacker, func, res, classlist) {
     target.counter[attacker.id]++;
 
     if (attacker.boss) {
-        target.sp++;
         target.highscore[attacker.id] = target.time;
         log.push(`<div>${attacker.name} was killed in ${target.time}</div>`)
 
         try { kong.stats.submit(attacker.id, target.time); } catch{ }
 
 
-        let lastBoss = "chulthuluseye"
-        if (target.prestige == 0) {
-            lastBoss = "chulthuluseye"
-        } else if (target.prestige == 1) {
-            lastBoss = "necromant"
-        } else if (target.prestige == 2) {
-            lastBoss = "darlek"
-        }
+        let lastBoss = getLastBoss(target);
 
-        (attacker.id == lastBoss) && func();
+        attacker.id == lastBoss && func();
+
     } else {
         log.push(`<div>${target.name} killed  ${attacker.name}</div>`);
     }
     respawn(attacker);
     checkCleared(target, attacker, res)
+}
+
+export function getLastBoss(t) {
+    let lastBoss = "chulthuluseye"
+
+    switch (t.prestige) {
+        case 0:
+            lastBoss = "chulthuluseye"
+            break;
+        case 1:
+            lastBoss = "necromant"
+            break;
+        case 2:
+            lastBoss = "darlek"
+            break;
+
+        default:
+            lastBoss = "darlek"
+            break;
+    }
+    return lastBoss
 }
 
 function checkDeath(target, attacker, func, res, classlist) {
@@ -472,3 +486,52 @@ export function getLast(j, p) {
         return j[p];
     }
 }
+
+export function getParentById(id, node) {
+    var reduce = [].reduce;
+    var parent = [];
+
+
+    function runner(result, node) {
+
+        if (result || !node) {
+            return result
+        }
+
+        if (node.id === id) {
+            return parent[parent.length - 1]
+        } else {
+            if (!Array.isArray(node)) {
+                parent.push(node)
+            }
+        }
+
+        if (runner(null, node.open)) {
+            return runner(null, node.open);
+        }
+
+        return reduce.call(Object(node), runner, result);
+    }
+    return runner(null, node);
+}
+
+
+export function getNodeById(id, node) {
+    var reduce = [].reduce;
+    function runner(result, node) {
+        if (result || !node) return result;
+        return node.id === id && node ||
+            runner(null, node.open) ||
+            reduce.call(Object(node), runner, result);
+    }
+    return runner(null, node);
+}
+
+export function getNext(db, key) {
+    for (var i = 0; i < db.length; i++) {
+        if (db[i].key === key) {
+            return db[i + 1] && db[i + 1].value;
+        }
+    }
+}
+

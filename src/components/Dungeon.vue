@@ -9,6 +9,7 @@
         <div
           :class="{ ready: checkready(value) }"
           @click="selectEnemy(value)"
+          @click.middle="cheat(value)"
           class="kiste"
           :key="key"
           v-for="(value, key) in getPrestigeEnemys(this.enemys)"
@@ -51,6 +52,18 @@ export default {
     };
   },
   methods: {
+    cheat(e) {
+      if (this.$parent.player.name == "showmethemoney") {
+        let max = getLast(e.max, this.$parent.player.prestige);
+        if (this.$parent.player.counter[e.id] + 10 <= max) {
+          this.$parent.player.counter[e.id] += 10;
+          this.$parent.recalculate(this.$parent.player);
+        } else {
+          this.$parent.player.counter[e.id] = max;
+          this.$parent.recalculate(this.$parent.player);
+        }
+      }
+    },
     getLast(j, p) {
       return getLast(j, p);
     },
