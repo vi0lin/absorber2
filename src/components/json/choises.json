@@ -20,15 +20,15 @@
         "name": "Small health boost",
         "desc": "Adds five life",
         "gain": {
-            "life": 10
+            "life": 5
         }
     },
     {
         "id": "m_life",
         "name": "Minor health boost",
-        "desc": "Adds 25 life",
+        "desc": "Adds 10 life",
         "gain": {
-            "life": 25
+            "life": 10
         }
     },
     {

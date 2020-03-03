@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="container">
-      <div>
+    <div>
+      <div class="fixed">
         <button :class="{ active: this.active=='dungeon' }" @click="openTab('dungeon')" class="btn">
           Dungeon
           <img class="icons" :src="require('@/assets/icons/cave.png')" alt="dungeon" />
@@ -14,12 +14,26 @@
           <img class="icons" :src="require('@/assets/icons/log.png')" alt="log" />
           Log
         </button>
+        <button class="btn" v-show="this.enemy!=null" @click="$refs.dun.selectEnemy(null)">
+          Exit
+          <img class="icons" :src="require('@/assets/icons/door.png')" alt="back" />
+        </button>
+        <button
+          v-show="this.player.name=='showmethemoney' && this.beta"
+          :class="{ active: this.active=='enemybuilder' }"
+          @click="openTab('enemybuilder')"
+          class="btn"
+        >
+          EnemyBuilder
+          <img class="icons" :src="require('@/assets/icons/cave.png')" alt="dungeon" />
+        </button>
         <div class="time">{{gettime(player.time)}}</div>
       </div>
-      <div>
+      <div class="box">
         <Stats v-show="this.active == 'stats'" />
         <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
         <Log v-show="this.active == 'log'" />
+        <EnemyBuilder v-show="this.active == 'enemybuilder'" />
       </div>
     </div>
     <div class="flexy">
@@ -47,19 +61,20 @@ import Dungeon from "./Dungeon.vue";
 import Log from "./Log.vue";
 import Progressbar from "./Progressbar.vue";
 import Overlay from "./Overlay.vue";
+import EnemyBuilder from "./EnemyBuilder.vue";
 
 import skilltree from "./json/skilltree.json";
 import choiseslist from "./json/choises.json";
 import { RoundAll } from "./displayfunc";
 import { respawn, getLast, getNodeById, getLastBoss } from "./functions.js";
-import { log, kong } from "./gloabals.js";
+import { log } from "./gloabals.js";
 
-try {
+if (document.referrer.includes("kongregate.com")) {
   kongregateAPI.loadAPI();
-} catch {}
+}
 
 export default {
-  components: { Stats, Dungeon, Progressbar, Log, Overlay },
+  components: { Stats, Dungeon, Progressbar, Log, Overlay, EnemyBuilder },
   watch: {
     player: {
       deep: true,
@@ -77,7 +92,8 @@ export default {
       recovery: true,
       kongregate: null,
       overlay: false,
-      skilltree: false
+      skilltree: false,
+      beta: false
     };
   },
   methods: {
@@ -99,14 +115,15 @@ export default {
       player.name = pl.name;
       player.tutorial = pl.tutorial;
       player.highscore = pl.highscore;
-      player.log = pl.log;
+      player.log = log;
       player.speed = 2500;
+      player.sspeed = 0;
+      this.enemy = null;
 
       for (let a in player.highscore)
         if (0 < player.highscore[a])
-          try {
+          if (this.kongregate != null)
             this.kongregate.stats.submit(a, player.highscore[a]);
-          } catch {}
 
       for (let a in player.counter) {
         for (let b, c = 0; c < player.counter[a]; c++) {
@@ -116,7 +133,19 @@ export default {
                 player[a] += b.gain[a];
               } else if ("speed" == a) {
                 if (player[a] >= 100) {
-                  player[a] -= b.gain[a];
+                  if (b.gain[a] > 0) {
+                    if (player[a] > 110) {
+                      player[a] -= b.gain[a];
+                    } else {
+                      player.sspeed += b.gain[a];
+                    }
+                  } else {
+                    if (player.sspeed > 0) {
+                      player.sspeed += b.gain[a];
+                    } else {
+                      player[a] -= b.gain[a];
+                    }
+                  }
                 }
               } else if ("effects" == a) {
                 for (let a in b.gain.effects) {
@@ -139,7 +168,7 @@ export default {
       for (let a of player.skills) {
         let c = getNodeById(a, skilltree);
 
-        if (c == null) {
+        if (c == undefined || c == null) {
           var index = player.skills.indexOf(a);
           if (index !== -1) {
             player.skills.splice(index, 1);
@@ -183,11 +212,6 @@ export default {
         player.go = true;
       }
 
-      try {
-        if (!this.kongregate.services.isGuest()) {
-          player.name = this.kongregate.services.getUsername();
-        }
-      } catch {}
       this.player = player;
       respawn(this.player);
     },
@@ -269,6 +293,7 @@ export default {
       this.player.tutorial = 6;
       this.player.prestige = pres;
       this.player.skills = skills;
+      this.player.time = 0;
 
       this.recalculate(this.player);
       this.overlay = false;
@@ -295,11 +320,12 @@ export default {
   },
   mounted() {
     let el = this;
-    try {
+
+    if (document.referrer.includes("kongregate.com")) {
       kongregateAPI.loadAPI(function() {
         el.kongregate = kongregateAPI.getAPI();
       });
-    } catch {}
+    }
 
     if (null != localStorage.getItem("saveGame")) {
       let a = JSON.parse(localStorage.getItem("saveGame"));
@@ -311,14 +337,15 @@ export default {
         }
     }
 
-    1 == this.player.counter.chulthuluseye &&
-      0 == this.player.prestige &&
-      this.player.prestige++;
-
     0 >= this.player.tutorial && this.tutorial();
 
     this.player.log = log;
-    this.kongregate = kong;
+
+    if (this.kongregate != null) {
+      if (!this.kongregate.services.isGuest() && player.name == "Rimuro") {
+        player.name = this.kongregate.services.getUsername();
+      }
+    }
 
     setInterval(() => {
       localStorage.setItem("saveGame", JSON.stringify(this.player));
@@ -352,9 +379,11 @@ export default {
           pl.clife = pl.life;
           if (pl.auto) {
             let last = this.$refs.dun.enemys.find(e => e.id == pl.lastEnemy);
-            let max = this.getLast(last.max, pl.prestige);
-            if (pl.counter[last.id] < max) {
-              this.enemy = last;
+            if (last != undefined) {
+              let max = this.getLast(last.max, pl.prestige);
+              if (pl.counter[last.id] < max) {
+                this.enemy = last;
+              }
             }
           }
         }
@@ -368,15 +397,24 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  padding: 10px;
+  padding-top: 80px;
+}
+.fixed {
+  border: 1px solid black;
+  width: 100%;
+  position: fixed;
+  background: grey;
+  display: flex;
+  align-items: center;
+}
 .time {
+  margin-right: 10px;
+  margin-left: auto;
   font-size: 25px;
   color: white;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-.container {
-  margin: 10px;
+  right: 10px;
 }
 .btn {
   line-height: 32px;
@@ -416,7 +454,7 @@ export default {
 }
 
 .flexy {
-  position: absolute;
+  position: fixed;
   margin: 5px 5px;
   height: 34px;
   display: flex;

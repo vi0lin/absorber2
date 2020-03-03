@@ -19,12 +19,12 @@
             "lifesteal": 50
         },
         "gain": {
-            "effects": {
-                "lifesteal": 0.02
-            },
             "dmg": 0.02,
             "speed": 2,
-            "life": -0.01
+            "life": -0.01,
+            "effects": {
+                "lifesteal": 0.02
+            }
         },
         "status": {}
     },
@@ -82,12 +82,12 @@
             "crit": 50
         },
         "gain": {
-            "chance": {
-                "crit": 0.2
-            },
             "dmg": 0.01,
             "speed": 1,
-            "life": 0.01
+            "life": 0.01,
+            "chance": {
+                "crit": 0.2
+            }
         },
         "status": {}
     },
@@ -111,10 +111,10 @@
             "poison": 50
         },
         "gain": {
+            "speed": 3,
             "chance": {
                 "poison": 0.2
-            },
-            "speed": 3
+            }
         },
         "status": {}
     },
@@ -211,12 +211,12 @@
             "supercrit": 25
         },
         "gain": {
-            "chance": {
-                "supercrit": 0.1
-            },
             "dmg": 0.01,
             "speed": 1,
-            "life": 0.01
+            "life": 0.01,
+            "chance": {
+                "supercrit": 0.1
+            }
         },
         "status": {}
     },
@@ -235,7 +235,7 @@
         "speed": 1300,
         "cspeed": 0,
         "dmg": 1.8,
-        "magic": 0,
+        "magic": 2,
         "effects": {
             "block": 1
         },
@@ -244,10 +244,10 @@
             "crit": 10
         },
         "gain": {
+            "recovery": 0.02,
             "effects": {
                 "block": 0.02
-            },
-            "recovery": 0.02
+            }
         },
         "status": {}
     },
@@ -272,11 +272,11 @@
             "fire": 50
         },
         "gain": {
+            "magic": 0.02,
             "chance": {
                 "stun": 0.02,
                 "fire": 0.2
-            },
-            "magic": 0.02
+            }
         },
         "status": {}
     },
@@ -301,10 +301,10 @@
             "fire": 100
         },
         "gain": {
+            "magic": 2,
             "chance": {
                 "fire": 10
-            },
-            "magic": 2
+            }
         },
         "status": {}
     },
@@ -329,12 +329,12 @@
             "stun": 50
         },
         "gain": {
-            "chance": {
-                "stun": 0.5
-            },
             "life": 1,
             "recovery": 0.1,
-            "speed": -10
+            "speed": -10,
+            "chance": {
+                "stun": 0.5
+            }
         },
         "status": {}
     },
@@ -361,11 +361,11 @@
             "supercrit": 5
         },
         "gain": {
+            "speed": 4,
             "chance": {
                 "double": 0.1,
                 "dodge": 0.05
             },
-            "speed": 4,
             "effects": {
                 "precision": 0.05
             }
@@ -394,10 +394,10 @@
             "poison": 50
         },
         "gain": {
+            "magic": 0.2,
             "chance": {
                 "slow": 0.1
-            },
-            "magic": 0.2
+            }
         },
         "status": {}
     },
@@ -422,12 +422,12 @@
             "megacrit": 25
         },
         "gain": {
-            "chance": {
-                "megacrit": 0.05
-            },
             "dmg": 0.01,
             "speed": 1,
-            "life": 0.01
+            "life": 0.01,
+            "chance": {
+                "megacrit": 0.05
+            }
         },
         "status": {}
     },
@@ -548,11 +548,11 @@
             "block": 3
         },
         "gain": {
+            "speed": 2,
+            "dmg": 0.05,
             "chance": {
                 "dodge": 0.1
-            },
-            "speed": 2,
-            "dmg": 0.05
+            }
         },
         "status": {}
     },
@@ -584,11 +584,11 @@
             "block": 4
         },
         "gain": {
+            "regeneration": -0.5,
             "chance": {
                 "instakill": 0.1,
                 "silence": 0.75
             },
-            "regeneration": -0.5,
             "effects": {
                 "precision": 0.5
             }
@@ -656,10 +656,10 @@
         },
         "gain": {
             "dmg": 0.1,
+            "life": -0.1,
             "chance": {
                 "rot": 0.1
-            },
-            "life": -0.1
+            }
         },
         "status": {}
     },
@@ -693,10 +693,10 @@
         },
         "gain": {
             "dmg": 0.1,
+            "recovery": -0.03,
             "effects": {
                 "precision": 0.2
-            },
-            "recovery": -0.03
+            }
         },
         "status": {}
     },
@@ -730,10 +730,10 @@
         },
         "gain": {
             "dmg": 0.1,
+            "regeneration": -0.01,
             "chance": {
                 "bleed": 0.1
-            },
-            "regeneration": -0.01
+            }
         },
         "status": {}
     },
@@ -842,11 +842,11 @@
             "block": 30
         },
         "gain": {
+            "dmg": 0.5,
             "chance": {
                 "poison": 0.1,
                 "stun": 0.05
-            },
-            "dmg": 0.5
+            }
         },
         "status": {}
     },
@@ -939,11 +939,11 @@
             "stim": 30
         },
         "gain": {
+            "dmg": 0.1,
             "speed": -1,
             "chance": {
                 "stim": 0.1
-            },
-            "dmg": 0.1
+            }
         },
         "status": {}
     },
@@ -980,12 +980,12 @@
             "instakill": 10
         },
         "gain": {
+            "recovery": 10,
+            "life": 30,
             "chance": {
                 "stim": 10,
                 "bleed": 10
-            },
-            "recovery": 10,
-            "life": 30
+            }
         },
         "status": {}
     }

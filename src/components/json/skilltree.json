@@ -21,19 +21,19 @@
                                         "open": []
                                     },
                                     {
-                                        "id": "s_crit0",
+                                        "id": "s_crit1",
                                         "typ": "s_crit",
                                         "open": [
                                             {
-                                                "id": "s_scrit0",
+                                                "id": "s_scrit1",
                                                 "typ": "s_scrit",
                                                 "open": [
                                                     {
-                                                        "id": "s_mcrit0",
+                                                        "id": "s_mcrit1",
                                                         "typ": "s_mcrit",
                                                         "open": [
                                                             {
-                                                                "id": "m_crit0",
+                                                                "id": "m_crit1",
                                                                 "typ": "m_crit",
                                                                 "open": []
                                                             }

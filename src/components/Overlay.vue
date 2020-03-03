@@ -25,6 +25,7 @@
         <div class="kiste">
           <button class="btn close" @click="close">X</button>
           <div class="points">Points: {{this.$parent.player.points}}</div>
+          <button class="btn reset" @click="resetskills">Reset</button>
           <div class="middle">
             <Accordion
               :can="this.canBeChoosen"
@@ -77,6 +78,10 @@ export default {
         this.$parent.player.points--;
         this.$parent.recalculate(this.$parent.player);
       }
+    },
+    resetskills() {
+      this.$parent.player.skills = [];
+      this.$parent.recalculate(this.$parent.player);
     },
     choosen(s) {
       return this.$parent.player.skills.includes(s);
@@ -203,5 +208,12 @@ export default {
   border-radius: 4px;
   display: flex;
   overflow: auto;
+}
+
+.reset {
+  position: fixed;
+  background: red;
+  right: 230px;
+  top: 20px;
 }
 </style>

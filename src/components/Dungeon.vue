@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="moreroom">
     <div v-show="this.$parent.enemy==null">
       <div @click="autofight()" class="auto" :class="{autofight:this.$parent.player.auto}">
         Autofight
@@ -30,10 +30,7 @@
         </div>
       </div>
     </div>
-    <button class="back" v-show="this.$parent.enemy!=null" @click="selectEnemy(null)">
-      Exit
-      <img class="icons" :src="require('@/assets/icons/door.png')" alt="back" />
-    </button>
+
     <Fight v-if="this.$parent.enemy!=null" :item="this.$parent.enemy" />
   </div>
 </template>
@@ -53,7 +50,7 @@ export default {
   },
   methods: {
     cheat(e) {
-      if (this.$parent.player.name == "showmethemoney") {
+      if (this.$parent.player.name == "showmethemoney" && this.$parent.beta) {
         let max = getLast(e.max, this.$parent.player.prestige);
         if (this.$parent.player.counter[e.id] + 10 <= max) {
           this.$parent.player.counter[e.id] += 10;
@@ -151,6 +148,16 @@ export default {
   background: #c0c0c0;
 }
 
+.moreroom {
+  padding-bottom: 50px;
+}
+
+@media screen and (max-device-width: 500px) {
+  .moreroom {
+    padding-bottom: 0px;
+  }
+}
+
 .icons {
   float: left;
   height: 32px;
@@ -162,7 +169,7 @@ export default {
   font-size: 15px;
   user-select: none;
   cursor: pointer;
-  background: lightgrey;
+  background: white;
   margin: 5px;
   padding: 5px;
   border-style: outset;

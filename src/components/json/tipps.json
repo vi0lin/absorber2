@@ -21,7 +21,7 @@
     },
     {
         "id": "life",
-        "desc": "Maximum Amount of Health. Player dies if dropped to 0",
+        "desc": "Maximum Amount of Health. Target dies if dropped to 0",
         "form": "death = life<=0"
     },
     {
@@ -67,7 +67,7 @@
     {
         "id": "slow",
         "desc": "Chance to slow down the speed progress of the enemy.",
-        "form": "speedProgress = speedProgress - 10"
+        "form": "speedProgress = speedProgress - 20"
     },
     {
         "id": "stun",
@@ -133,5 +133,10 @@
         "id": "counter",
         "desc": "Chance to Attack the Enemy while getting attacked",
         "form": "counter = counter"
+    },
+    {
+        "id": "stim",
+        "desc": "Chance to use a stimmpack. Adds 20 speed per tick ",
+        "form": "speedProgress = speedProgress + 20"
     }
 ]

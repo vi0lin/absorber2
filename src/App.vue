@@ -19,11 +19,28 @@ export default {
 body,
 html,
 #app {
+  user-select: none;
+  image-rendering: optimizeQuality;
   background: grey;
   width: 100%;
   margin: 0px;
   padding: 0px;
   font-family: "MedievalSharp", cursive;
-  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background: #777;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #474747;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #616161;
 }
 </style>

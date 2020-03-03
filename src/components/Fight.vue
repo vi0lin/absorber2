@@ -1,16 +1,72 @@
 <template>
   <div class="rows">
     <div class="row1 box">
-      <b>{{item.name}}</b>
+      <h2 style="margin:4px 0px">{{item.name}}</h2>
+      <b>Stats:</b>
       <hr />
-      <div v-html="filtred(item)"></div>
+      <div style="margin:0px 0px 4px 0px" :key="k" v-for="(s,k) in item">
+        <div>
+          <div v-if="filtred(k,s)">
+            <img class="iconz" :src="require('@/assets/skills/'+k+'.png')" />
+            <span class="lol">{{s}}</span>
+          </div>
+          <TextToolTip :title="k" :item="getinfo(k)" />
+        </div>
+        <div style="margin:0px 0px 4px 10px" v-if="k=='chance'">
+          <div :key="cv" v-for="(c,cv) in item.chance">
+            <div>
+              <img class="iconz" :src="require('@/assets/skills/'+cv+'.png')" />
+              <span class="lol">{{c}}</span>
+            </div>
+            <TextToolTip :title="cv" :item="getinfo(cv)" />
+          </div>
+        </div>
+        <div style="margin:0px 0px 4px 10px" v-if="k=='effects'">
+          <div :key="cv" v-for="(c,cv) in item.effects">
+            <div>
+              <img class="iconz" :src="require('@/assets/skills/'+cv+'.png')" />
+              <span class="lol">{{c}}</span>
+            </div>
+            <TextToolTip :title="cv" :item="getinfo(cv)" />
+          </div>
+        </div>
+        <div style="margin:0px 0px 4px 0px" v-if="k=='gain'">
+          <b>Gain:</b>
+          <hr />
+          <div :key="gv" v-for="(g,gv) in item.gain">
+            <div v-if="filtred(gv,g)">
+              <img class="iconz" :src="require('@/assets/skills/'+gv+'.png')" />
+              <span class="lol">{{g}}</span>
+            </div>
+            <TextToolTip :title="gv" :item="getinfo(gv)" />
+            <div style="margin:0px 0px 4px 10px" v-if="gv=='chance'">
+              <div :key="cv" v-for="(c,cv) in item.gain.chance">
+                <div>
+                  <img class="iconz" :src="require('@/assets/skills/'+cv+'.png')" />
+                  <span class="lol">{{c}}</span>
+                </div>
+                <TextToolTip :title="cv" :item="getinfo(cv)" />
+              </div>
+            </div>
+            <div style="margin:0px 0px 4px 10px" v-if="gv=='effects'">
+              <div :key="cv" v-for="(c,cv) in item.gain.effects">
+                <div>
+                  <img class="iconz" :src="require('@/assets/skills/'+cv+'.png')" />
+                  <span class="lol">{{c}}</span>
+                </div>
+                <TextToolTip :title="cv" :item="getinfo(cv)" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="row2 middle">
       <div>
         <div>
           <div
             style="text-align:center"
-          >{{this.$parent.$parent.player.counter[item.id]}}/{{getLast(this.$parent.$parent.enemy.max,this.$parent.$parent.player.prestige)}}</div>
+          >{{this.$parent.$parent.player.counter[item.id]}}/{{getLast(this.item.max,this.$parent.$parent.player.prestige)}}</div>
           <div class="name">{{item.name}}</div>
         </div>
         <div style="width:200px">
@@ -19,7 +75,7 @@
             v-if="item.id"
             class="image"
             id="enemy"
-            :src="require('@/assets/enemys/'+item.id+'.png')"
+            :src="getImgUrl(item.id)"
             :alt="item.name"
           />
           <span
@@ -31,12 +87,7 @@
         </div>
 
         <div class="flex">
-          <div
-            v-show="value>0"
-            class="kiste"
-            :key="key"
-            v-for="(value, key) in this.$parent.$parent.enemy.status"
-          >
+          <div v-show="value>0" class="kiste" :key="key" v-for="(value, key) in this.item.status">
             {{value}}
             <img class="icon" :src="require('@/assets/buffs/'+key+'.png')" :alt="key" />
           </div>
@@ -64,10 +115,13 @@ import {
 
 import { displayEnemyStats } from "./displayfunc.js";
 import { dmgind } from "./gloabals.js";
+import TextToolTip from "./TextToolTip.vue";
+import tipps from "./json/tipps.json";
 
 export default {
   components: {
-    Progressbar
+    Progressbar,
+    TextToolTip
   },
   props: {
     item: {
@@ -86,14 +140,48 @@ export default {
     getLast(j, p) {
       return getLast(j, p);
     },
-    filtred(f) {
-      return displayEnemyStats(f);
+    getImgUrl(pet) {
+      var images = require.context("../assets/enemys/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./goblin.png");
+        return img;
+      }
+    },
+    filtred(f, v) {
+      let dont = [
+        "name",
+        "id",
+        "boss",
+        "clife",
+        "cspeed",
+        "effects",
+        "status",
+        "chance",
+        "gain",
+        "max"
+      ];
+      return !dont.includes(f) && v != 0;
+    },
+    getinfo(i) {
+      let tipp = tipps.find(x => x.id == i);
+      if (tipp != undefined) {
+        return tipp.desc;
+      } else {
+        return "lol";
+      }
     },
     getLog() {
-      return this.$parent.$parent.player.log.slice(-10).reverse();
+      return this.$parent.$parent.player.log.slice(-9).reverse();
     },
     exit() {
       this.$parent.$parent.enemy = null;
+      try {
+        this.$parent.tenemyo = null;
+      } catch {}
     },
     won() {
       this.$parent.$parent.player.prestige++;
@@ -111,11 +199,25 @@ export default {
     player.lastEnemy = this.item.id;
 
     this.timer2 = setInterval(() => {
-      checkTurn(player, this.item, this.won, this.exit, classlist);
+      checkTurn(
+        player,
+        this.item,
+        this.won,
+        this.exit,
+        classlist,
+        this.$parent.$parent.kongregate
+      );
     }, 100);
 
     this.timer1 = setInterval(() => {
-      checkTurn(this.item, player, this.won, this.exit, classlist);
+      checkTurn(
+        this.item,
+        player,
+        this.won,
+        this.exit,
+        classlist,
+        this.$parent.$parent.kongregate
+      );
     }, 100);
   },
   beforeDestroy() {
@@ -128,10 +230,26 @@ export default {
 </script>
 
 <style scoped>
+.gain {
+  border: 1px solid red;
+}
+.iconz {
+  float: left;
+  margin-right: 10px;
+  height: 32px;
+  width: 32px;
+}
+
+.lol {
+  line-height: 32px;
+}
+
 .box {
   padding: 10px;
   background: darkgrey;
   width: 100%;
+  min-width: 200px;
+  min-height: 400px;
 }
 
 .rows {
@@ -259,6 +377,8 @@ export default {
     float: left;
     width: 30%;
     border-radius: 5px;
+    min-width: unset;
+    min-height: unset;
   }
 
   .row2 {
@@ -268,7 +388,8 @@ export default {
   }
   .row3 {
     overflow: auto;
-    max-height: 260px;
+    max-height: 100px;
+    min-height: unset;
     float: left;
     width: 100%;
     border-radius: 5px;

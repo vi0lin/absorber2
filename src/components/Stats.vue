@@ -1,13 +1,23 @@
 <template>
-  <div>
+  <div style="padding-bottom:50px;">
     <input class="faker" v-model="$parent.player.name" />
+    <div>
+      <button v-show="$parent.player.go" class="reset" @click="$parent.displayfinish">
+        Prestige
+        <img class="icons" :src="require('@/assets/icons/star.png')" alt="reset" />
+      </button>
+      <button v-show="$parent.player.prestige>0" class="reset" @click="this.openskilltree">
+        Skills
+        <img class="icons" :src="require('@/assets/icons/skills.png')" alt="skills" />
+      </button>
+    </div>
     <div class="flex">
       <div class="kiste">
         <div :key="key" v-for="(value, key) in show(this.$parent.player)">
           <div style="margin:5px" class="flex">
             <div>
               <img class="icon" v-if="key" :src="require('@/assets/skills/'+key+'.png')" />
-              <span>{{value}}</span>
+              <span class="val">{{value}}</span>
             </div>
             <Tooltip2 :item="key" />
           </div>
@@ -22,7 +32,7 @@
           class="flex"
         >
           <div>
-            <span>{{key}}</span>
+            <span class="val">{{key}}</span>
             <img class="icon" v-if="value" :src="require('@/assets/skills/'+value+'.png')" />
           </div>
           <Tooltip2 :item="value" />
@@ -37,7 +47,7 @@
           class="flex"
         >
           <div>
-            <span>{{key}}</span>
+            <span class="val">{{key}}</span>
             <img class="icon" v-if="value" :src="require('@/assets/skills/'+value+'.png')" />
           </div>
           <Tooltip2 :item="value" />
@@ -53,7 +63,7 @@
         ></div>
       </div>
       <div class="kiste fux">
-        <span style="width:200px;line-height:20px">Skills</span>
+        <span>Skills</span>
         <div :key="key+value" v-for="(key,value) in this.$parent.player.skills">
           <div>
             <img
@@ -65,20 +75,21 @@
           </div>
         </div>
       </div>
-    </div>
+      <button class="reset export" @click="exportSave">
+        Export
+        <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
+      </button>
+      <input ref="import" id="import" accept="text/txt" type="file" />
 
-    <button class="reset" @click="openreset">
-      Reset
-      <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
-    </button>
-    <button v-show="$parent.player.go" class="reset" @click="$parent.displayfinish">
-      Prestige
-      <img class="icons" :src="require('@/assets/icons/star.png')" alt="reset" />
-    </button>
-    <button v-show="$parent.player.prestige>0" class="reset" @click="this.openskilltree">
-      Skills
-      <img class="icons" :src="require('@/assets/icons/skills.png')" alt="skills" />
-    </button>
+      <label for="import" class="reset import" @click="importSave">
+        Import
+        <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
+      </label>
+      <button class="reset hard" @click="openreset">
+        Hardreset
+        <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -89,6 +100,7 @@ import Tooltip2 from "./Tooltip2.vue";
 import TextToolTip from "./TextToolTip.vue";
 import choiseslist from "./json/choises.json";
 import { debug } from "./gloabals.js";
+import { copyToClipboard, getClipBoard } from "./functions";
 
 export default {
   components: { Tooltip2, TextToolTip },
@@ -101,9 +113,30 @@ export default {
     };
   },
   methods: {
+    exportSave() {
+      copyToClipboard(JSON.stringify(this.$parent.player));
+      this.$parent.player.log.push("<div>Save was downloaded</div>");
+    },
+    importSave() {
+      let el = this;
+      this.$refs.import.addEventListener("change", function() {
+        if (this.files && this.files[0]) {
+          var myFile = this.files[0];
+          var reader = new FileReader();
+
+          reader.addEventListener("load", function(e) {
+            el.$parent.recalculate(JSON.parse(e.target.result));
+            el.$parent.player.log.push("<div>Save was loaded</div>");
+          });
+
+          reader.readAsBinaryString(myFile);
+        }
+      });
+    },
     openreset() {
       let ov = this.$parent.$refs.ov.$data;
-      ov.text = "Do you really want to wipe your save?";
+      ov.text = "Do you really want to wipe your entire save?";
+      ov.place = "30%";
       ov.obj = [
         { text: "yes", func: this.$parent.hardreset },
         { text: "no", func: this.closereset }
@@ -183,10 +216,17 @@ export default {
 </script>
 
 <style scoped>
+#import {
+  display: none;
+}
+.val {
+  line-height: 40px;
+  font-size: 20px;
+}
 .icon {
   float: left;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   margin-right: 5px;
 }
 
@@ -250,5 +290,23 @@ export default {
 .debugclass {
   color: red;
   background: lightgrey;
+}
+
+.hard,
+.import,
+.export {
+  position: fixed;
+  bottom: 65px;
+  right: 10px;
+  background: #777777;
+  border: 1px solid black;
+  padding: 4px;
+}
+.export {
+  right: 150px;
+}
+
+.import {
+  right: 260px;
 }
 </style>

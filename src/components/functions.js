@@ -1,7 +1,6 @@
 import {
     log,
     dmgind,
-    kong,
 } from "./gloabals.js"
 
 function changeLife(a, b, c, d) {
@@ -121,7 +120,17 @@ function checkFire(a, b) {
 }
 
 function checkInstakill(a, b) {
-    return !!checkChance(a.chance.instakill, "instakill") && (b.clife = -1)
+    if (checkChance(a.chance.instakill, "instakill")) {
+        if (b.boss) {
+            log.push(`<div>${target.name} tryed to <span style="color:purple">instakill</span> ${attacker.name} doing ${b.life / 4} Damage</div>`)
+            b.clife -= b.life / 4;
+        } else {
+            log.push(`<div>${target.name} <span style="color:purple">instakilled</span> ${attacker.name}</div>`)
+            b.clife = -1;
+        }
+        return true;
+    }
+    return false;
 }
 
 function checkSlow(a, b) {
@@ -183,7 +192,7 @@ function checkRotTurn(a) {
     return false;
 }
 
-export function checkTurn(target, attacker, disfi, exit, classlist) {
+export function checkTurn(target, attacker, disfi, exit, classlist, kong) {
 
     if (checkSpeed(target)) {
         return;
@@ -191,12 +200,12 @@ export function checkTurn(target, attacker, disfi, exit, classlist) {
 
     checkDot(target, attacker);
 
-    if (!checkDeath(target, attacker, disfi, exit, classlist)) {
+    if (!checkDeath(target, attacker, disfi, exit, classlist, kong)) {
         return;
     }
 
     if (checkStunTurn(target)) {
-        checkDeath(target, attacker, disfi, exit, classlist)
+        checkDeath(target, attacker, disfi, exit, classlist, kong)
         return;
     }
 
@@ -212,7 +221,7 @@ export function checkTurn(target, attacker, disfi, exit, classlist) {
 
     if (checkDodge(target, attacker)) {
         log.push(`<div>${attacker.name} <span style="color:brown">dodged</span></div>`);
-        checkDeath(target, attacker, disfi, exit, classlist);
+        checkDeath(target, attacker, disfi, exit, classlist, kong);
         return;
     }
 
@@ -220,8 +229,7 @@ export function checkTurn(target, attacker, disfi, exit, classlist) {
         if (null != target.chance) {
 
             if (checkInstakill(target, attacker)) {
-                log.push(`<div>${target.name} <span style="color:purple">instakilled</span> ${attacker.name}</div>`)
-                checkDeath(target, attacker, disfi, exit, classlist)
+                checkDeath(target, attacker, disfi, exit, classlist, kong)
                 return;
             }
 
@@ -270,7 +278,7 @@ export function checkTurn(target, attacker, disfi, exit, classlist) {
 
     checkCounter(target, attacker)
 
-    checkDeath(target, attacker, disfi, exit, classlist)
+    checkDeath(target, attacker, disfi, exit, classlist, kong)
 }
 
 function checkCounter(target, attacker) {
@@ -334,7 +342,7 @@ function animateObject(b, classlist) {
 
 }
 
-function checkEnemyDeath(target, attacker, func, res, classlist) {
+function checkEnemyDeath(target, attacker, func, res, classlist, kong) {
 
     if (attacker.chance != null) {
         if (checkChance(attacker.chance.resurrect, "resurrect")) {
@@ -342,6 +350,7 @@ function checkEnemyDeath(target, attacker, func, res, classlist) {
             return;
         }
     }
+
     if (target.version != null) {
         animateObject("die", classlist);
     }
@@ -386,12 +395,11 @@ function checkEnemyDeath(target, attacker, func, res, classlist) {
         target.highscore[attacker.id] = target.time;
         log.push(`<div>${attacker.name} was killed in ${target.time}</div>`)
 
-        try { kong.stats.submit(attacker.id, target.time); } catch{ }
+        if (kong != null && kong != undefined) {
+            kong.stats.submit(attacker.id, target.time);
+        }
 
-
-        let lastBoss = getLastBoss(target);
-
-        attacker.id == lastBoss && func();
+        attacker.id == getLastBoss(target) && func();
 
     } else {
         log.push(`<div>${target.name} killed  ${attacker.name}</div>`);
@@ -421,10 +429,10 @@ export function getLastBoss(t) {
     return lastBoss
 }
 
-function checkDeath(target, attacker, func, res, classlist) {
+function checkDeath(target, attacker, func, res, classlist, kong) {
     if (target.version != null) {
         if (attacker.clife <= 0) {
-            checkEnemyDeath(target, attacker, func, res, classlist);
+            checkEnemyDeath(target, attacker, func, res, classlist, kong);
             return false;
         }
         if (target.clife <= 0) {
@@ -437,7 +445,7 @@ function checkDeath(target, attacker, func, res, classlist) {
             return false;
         }
         if (target.clife <= 0) {
-            checkEnemyDeath(attacker, target, func, res, classlist);
+            checkEnemyDeath(attacker, target, func, res, classlist, kong);
             return false;
         }
     }
@@ -453,6 +461,15 @@ export function respawn(t) {
 }
 
 function checkPlayerDeath(a, b, d) {
+
+    if (a.chance != null) {
+        if (checkChance(a.chance.resurrect, "resurrect")) {
+            log.push(`<div>${a.name} resurrected</div>`)
+            respawn(a);
+            return;
+        }
+    }
+
     log.push(`<div>${b.name} killed  ${a.name}</div>`)
     respawn(b)
     d();
@@ -534,4 +551,22 @@ export function getNext(db, key) {
         }
     }
 }
+
+
+export function copyToClipboard(text) {
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    let filename = "AbsorberSave" + date;
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
 

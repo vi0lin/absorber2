@@ -71,6 +71,7 @@ export default {
 .fspeed {
   background: white;
 }
+
 .middle {
   width: 200px;
   position: absolute;
