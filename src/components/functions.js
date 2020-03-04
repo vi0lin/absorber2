@@ -122,10 +122,10 @@ function checkFire(a, b) {
 function checkInstakill(a, b) {
     if (checkChance(a.chance.instakill, "instakill")) {
         if (b.boss) {
-            log.push(`<div>${target.name} tryed to <span style="color:purple">instakill</span> ${attacker.name} doing ${b.life / 4} Damage</div>`)
+            log.push(`<div>${a.name} tryed to <span style="color:purple">instakill</span> ${b.name} doing ${b.life / 4} Damage</div>`)
             b.clife -= b.life / 4;
         } else {
-            log.push(`<div>${target.name} <span style="color:purple">instakilled</span> ${attacker.name}</div>`)
+            log.push(`<div>${a.name} <span style="color:purple">instakilled</span> ${b.name}</div>`)
             b.clife = -1;
         }
         return true;

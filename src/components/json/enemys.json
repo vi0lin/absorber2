@@ -967,8 +967,8 @@
         "magic": 200,
         "effects": {
             "block": 100,
-            "reflect": 50,
-            "counter": 50
+            "reflect": 30,
+            "counter": 80
         },
         "chance": {
             "bleed": 50,

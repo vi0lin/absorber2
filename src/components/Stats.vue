@@ -16,7 +16,7 @@
         <div :key="key" v-for="(value, key) in show(this.$parent.player)">
           <div style="margin:5px" class="flex">
             <div>
-              <img class="icon" v-if="key" :src="require('@/assets/skills/'+key+'.png')" />
+              <img class="icon" v-if="key" :src="getImgUrl(key)" />
               <span class="val">{{value}}</span>
             </div>
             <Tooltip2 :item="key" />
@@ -184,6 +184,17 @@ export default {
     openskilltree() {
       this.$parent.skilltree = true;
       this.$parent.overlay = true;
+    },
+    getImgUrl(pet) {
+      var images = require.context("../assets/skills/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./dmg.png");
+        return img;
+      }
     },
     show(p) {
       let pl = JSON.parse(JSON.stringify(p));

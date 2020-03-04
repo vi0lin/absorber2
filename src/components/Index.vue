@@ -93,13 +93,13 @@ export default {
       kongregate: null,
       overlay: false,
       skilltree: false,
-      beta: false
+      beta: true
     };
   },
   methods: {
     recalculate(pl) {
       let player = {};
-      player = JSON.parse(JSON.stringify(p));
+      player = JSON.parse(JSON.stringify(ep));
       player.counter = pl.counter;
       player.auto = pl.auto;
 

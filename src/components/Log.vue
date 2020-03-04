@@ -1,12 +1,17 @@
 <template>
   <div class="all">
     <div class="box">
-      <div class="one" :key="l" v-for="(c,l) in getLog()" v-html="c"></div>
+      <div :key="l" v-for="(c,l) in getLog()">
+        <div class="one" v-html="c"></div>
+      </div>
     </div>
     <div class="credits">
       <a target="_blank" href="https://discord.gg/gUwvjw2">
         <img class="icon" :src="require('@/assets/icons/discord.png')" />
         <span>Discord</span>
+      </a>
+      <a target="_blank" style="right:120px" href="https://www.buymeacoffee.com/a4bl2n1">
+        <img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee" />
       </a>
     </div>
   </div>

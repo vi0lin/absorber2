@@ -71,7 +71,7 @@
     },
     {
         "id": "stun",
-        "desc": "Chance to stun the enemy.",
+        "desc": "Chance to stun the enemy. Stunned Enemies cant attack.",
         "form": "stun = stun"
     },
     {
