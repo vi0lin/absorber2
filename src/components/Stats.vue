@@ -2,11 +2,11 @@
   <div style="padding-bottom:50px;">
     <input class="faker" v-model="$parent.player.name" />
     <div>
-      <button v-show="$parent.player.go" class="reset" @click="$parent.displayfinish">
+      <button v-show="$parent.player.go" class="btn" @click="$parent.displayfinish">
         Prestige
         <img class="icons" :src="require('@/assets/icons/star.png')" alt="reset" />
       </button>
-      <button v-show="$parent.player.prestige>0" class="reset" @click="this.openskilltree">
+      <button v-show="$parent.player.prestige>0" class="btn" @click="this.openskilltree">
         Skills
         <img class="icons" :src="require('@/assets/icons/skills.png')" alt="skills" />
       </button>
@@ -33,7 +33,7 @@
         >
           <div>
             <span class="val">{{key}}</span>
-            <img class="icon" v-if="value" :src="require('@/assets/skills/'+value+'.png')" />
+            <img class="icon" v-if="value" :src="getImgUrl(value)" />
           </div>
           <Tooltip2 :item="value" />
         </div>
@@ -48,7 +48,7 @@
         >
           <div>
             <span class="val">{{key}}</span>
-            <img class="icon" v-if="value" :src="require('@/assets/skills/'+value+'.png')" />
+            <img class="icon" v-if="value" :src="getImgUrl(value)" />
           </div>
           <Tooltip2 :item="value" />
         </div>
@@ -75,20 +75,36 @@
           </div>
         </div>
       </div>
-      <button class="reset export" @click="exportSave">
-        Export
-        <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
-      </button>
-      <input ref="import" id="import" accept="text/txt" type="file" />
+      <div class="ecke">
+        <button class="btn export" @click="exportSave">
+          <img :src="require('@/assets/icons/export.png')" alt="Export" />
+          Export
+        </button>
 
-      <label for="import" class="reset import" @click="importSave">
-        Import
-        <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
-      </label>
-      <button class="reset hard" @click="openreset">
-        Hardreset
-        <img class="icons" :src="require('@/assets/icons/reset.png')" alt="reset" />
-      </button>
+        <input ref="import" id="import" accept="text/txt" type="file" />
+
+        <button class="btn import" @click="importSave">
+          <label for="import" style="cursor:pointer">
+            <img :src="require('@/assets/icons/import.png')" alt="Import" />
+            Import
+          </label>
+        </button>
+
+        <button class="btn load" @click="loadGame">
+          <img :src="require('@/assets/icons/load.png')" alt="Load" />
+          Load
+        </button>
+
+        <button class="btn save" @click="saveGame">
+          <img :src="require('@/assets/icons/save.png')" alt="Save" />
+          Save
+        </button>
+
+        <button class="btn hard" @click="openreset">
+          <img :src="require('@/assets/icons/reset.png')" alt="reset" />
+          Hardreset
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -113,8 +129,30 @@ export default {
     };
   },
   methods: {
+    reverse(str) {
+      return str
+        .split("")
+        .reverse()
+        .join("");
+    },
+    loadGame() {
+      if (null != localStorage.getItem("saveGame")) {
+        let a = JSON.parse(localStorage.getItem("saveGame"));
+        this.$parent.recalculate(a);
+      }
+    },
+    saveGame() {
+      localStorage.setItem("saveGame", JSON.stringify(this.$parent.player));
+    },
     exportSave() {
-      copyToClipboard(JSON.stringify(this.$parent.player));
+      if (this.$parent.beta) {
+        copyToClipboard(JSON.stringify(this.$parent.player));
+      } else {
+        copyToClipboard(
+          this.reverse(btoa(this.reverse(JSON.stringify(this.$parent.player))))
+        );
+      }
+
       this.$parent.player.log.push("<div>Save was downloaded</div>");
     },
     importSave() {
@@ -125,13 +163,21 @@ export default {
           var reader = new FileReader();
 
           reader.addEventListener("load", function(e) {
-            el.$parent.recalculate(JSON.parse(e.target.result));
+            let r = {};
+            try {
+              r = JSON.parse(e.target.result);
+            } catch {
+              r = JSON.parse(el.reverse(atob(el.reverse(e.target.result))));
+            }
+
+            el.$parent.recalculate(r);
             el.$parent.player.log.push("<div>Save was loaded</div>");
           });
 
           reader.readAsBinaryString(myFile);
         }
       });
+      this.saveGame();
     },
     openreset() {
       let ov = this.$parent.$refs.ov.$data;
@@ -210,6 +256,7 @@ export default {
       delete pl.auto;
       delete pl.debug;
       delete pl.tutorial;
+      delete pl.order;
 
       delete pl.cspeed;
       delete pl.clife;
@@ -254,10 +301,14 @@ export default {
 }
 
 .flex {
-  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.fux {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  max-width: 200px;
 }
 
 .kiste {
@@ -270,54 +321,11 @@ export default {
   min-width: 100px;
 }
 
-.reset {
-  line-height: 32px;
-  border-radius: 10px;
-  font-size: 20px;
-  font-family: "MedievalSharp", cursive;
-  margin: 10px 0px 0px 10px;
-  padding: 10px;
-  outline: none;
-  border: none;
-  background: #fefefe;
-  cursor: pointer;
-}
-
-.fux {
+.ecke {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  max-width: 200px;
-}
-.reset:hover {
-  background: #c0c0c0;
-}
-
-.icons {
-  float: left;
-  height: 32px;
-}
-
-.debugclass {
-  color: red;
-  background: lightgrey;
-}
-
-.hard,
-.import,
-.export {
+  flex-direction: column;
   position: fixed;
   bottom: 65px;
-  right: 10px;
-  background: #777777;
-  border: 1px solid black;
-  padding: 4px;
-}
-.export {
-  right: 150px;
-}
-
-.import {
-  right: 260px;
+  right: 0px;
 }
 </style>

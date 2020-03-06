@@ -7,7 +7,7 @@
       <div style="margin:0px 0px 4px 0px" :key="k" v-for="(s,k) in item">
         <div>
           <div v-if="filtred(k,s)">
-            <img class="iconz" :src="require('@/assets/skills/'+k+'.png')" />
+            <img class="iconz" :src="getImgUrlS(k)" />
             <span class="lol">{{s}}</span>
           </div>
           <TextToolTip :title="k" :item="getinfo(k)" />
@@ -15,7 +15,7 @@
         <div style="margin:0px 0px 4px 10px" v-if="k=='chance'">
           <div :key="cv" v-for="(c,cv) in item.chance">
             <div>
-              <img class="iconz" :src="require('@/assets/skills/'+cv+'.png')" />
+              <img class="iconz" :src="getImgUrlS(cv)" />
               <span class="lol">{{c}}</span>
             </div>
             <TextToolTip :title="cv" :item="getinfo(cv)" />
@@ -24,7 +24,7 @@
         <div style="margin:0px 0px 4px 10px" v-if="k=='effects'">
           <div :key="cv" v-for="(c,cv) in item.effects">
             <div>
-              <img class="iconz" :src="require('@/assets/skills/'+cv+'.png')" />
+              <img class="iconz" :src="getImgUrlS(cv)" />
               <span class="lol">{{c}}</span>
             </div>
             <TextToolTip :title="cv" :item="getinfo(cv)" />
@@ -35,14 +35,14 @@
           <hr />
           <div :key="gv" v-for="(g,gv) in item.gain">
             <div v-if="filtred(gv,g)">
-              <img class="iconz" :src="require('@/assets/skills/'+gv+'.png')" />
+              <img class="iconz" :src="getImgUrlS(gv)" />
               <span class="lol">{{g}}</span>
             </div>
             <TextToolTip :title="gv" :item="getinfo(gv)" />
             <div style="margin:0px 0px 4px 10px" v-if="gv=='chance'">
               <div :key="cv" v-for="(c,cv) in item.gain.chance">
                 <div>
-                  <img class="iconz" :src="require('@/assets/skills/'+cv+'.png')" />
+                  <img class="iconz" :src="getImgUrlS(cv)" />
                   <span class="lol">{{c}}</span>
                 </div>
                 <TextToolTip :title="cv" :item="getinfo(cv)" />
@@ -51,7 +51,7 @@
             <div style="margin:0px 0px 4px 10px" v-if="gv=='effects'">
               <div :key="cv" v-for="(c,cv) in item.gain.effects">
                 <div>
-                  <img class="iconz" :src="require('@/assets/skills/'+cv+'.png')" />
+                  <img class="iconz" :src="getImgUrlS(cv)" />
                   <span class="lol">{{c}}</span>
                 </div>
                 <TextToolTip :title="cv" :item="getinfo(cv)" />
@@ -89,7 +89,7 @@
         <div class="flex">
           <div v-show="value>0" class="kiste" :key="key" v-for="(value, key) in this.item.status">
             {{value}}
-            <img class="icon" :src="require('@/assets/buffs/'+key+'.png')" :alt="key" />
+            <img class="icon" :src="getImgUrlB(key)" :alt="key" />
           </div>
         </div>
       </div>
@@ -151,6 +151,28 @@ export default {
         return img;
       }
     },
+    getImgUrlB(pet) {
+      var images = require.context("../assets/buffs/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./poison.png");
+        return img;
+      }
+    },
+    getImgUrlS(pet) {
+      var images = require.context("../assets/skills/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./dmg.png");
+        return img;
+      }
+    },
     filtred(f, v) {
       let dont = [
         "name",
@@ -171,7 +193,7 @@ export default {
       if (tipp != undefined) {
         return tipp.desc;
       } else {
-        return "lol";
+        return "No Description";
       }
     },
     getLog() {
@@ -184,9 +206,8 @@ export default {
       } catch {}
     },
     won() {
-      this.$parent.$parent.player.prestige++;
-      this.$parent.$parent.player.points++;
       this.$parent.$parent.player.go = true;
+      this.$parent.$parent.player.auto = false;
       this.$parent.$parent.displayfinish();
     }
   },
@@ -279,12 +300,6 @@ export default {
   border-radius: 5px;
 }
 
-.flex {
-  margin: 5px 0px;
-  height: 18px;
-  display: flex;
-}
-
 .middle {
   display: flex;
   flex-direction: column;
@@ -296,6 +311,8 @@ export default {
   padding: 1px;
   border: 1px solid black;
   line-height: 16px;
+  height: 16px;
+  margin: 2px;
 }
 .image {
   margin: 0px 10px;

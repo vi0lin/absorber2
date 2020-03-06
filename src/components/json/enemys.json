@@ -988,5 +988,39 @@
             }
         },
         "status": {}
+    },
+    {
+        "id": "wolf",
+        "name": "Twin-tailed Wolf",
+        "prestige": 3,
+        "boss": false,
+        "max": [
+            0,
+            0,
+            0,
+            80
+        ],
+        "life": 150,
+        "clife": 150,
+        "regeneration": 10,
+        "speed": 250,
+        "cspeed": 0,
+        "dmg": 45,
+        "magic": 0,
+        "effects": {
+            "block": 50,
+            "precision": 20
+        },
+        "chance": {
+            "stim": 30,
+            "invert": 40
+        },
+        "gain": {
+            "life": 0.3,
+            "chance": {
+                "invert": 0.1
+            }
+        },
+        "status": {}
     }
 ]

@@ -143,24 +143,13 @@ export default {
   bottom: 0;
   z-index: 10;
 }
-.btn {
-  background: darkgrey;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  border: 1px solid black;
-  margin-bottom: 20px;
-}
-.btn:hover {
-  background: grey;
-}
+
 .flex {
   width: 500px;
-  display: flex;
   justify-content: space-around;
   align-items: center;
-  flex-wrap: wrap;
 }
+
 .box {
   text-align: center;
   background: lightgrey;
@@ -181,20 +170,23 @@ export default {
   z-index: 11;
 }
 .close {
+  padding: 5px 10px;
   position: fixed;
   background: darkred;
   right: 30px;
   top: 20px;
 }
+
 .close:hover {
   background: red;
 }
 .points {
+  font-size: 20px;
   position: fixed;
   padding: 10px;
   background: darkgrey;
   right: 100px;
-  top: 20px;
+  top: 30px;
   border-radius: 5px;
 }
 .kiste {

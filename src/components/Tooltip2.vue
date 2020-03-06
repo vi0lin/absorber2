@@ -26,7 +26,10 @@ export default {
     maketext(l) {
       try {
         let tipp = tipps.find(x => x.id === l);
-        let out = "<div class='title'>" + l + "</div>";
+        let out =
+          "<div style='font-size: 25px;margin-bottom: 5px;text-transform: capitalize;'>" +
+          l +
+          "</div>";
         out += "<div><b>Description:</b><hr/>" + tipp.desc + "</div><br>";
         out += "<div><b>Calculation:</b><hr/>" + tipp.form + "</div>";
         return out;
@@ -88,7 +91,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .wiste {
   padding: 10px;
   position: fixed;
@@ -98,12 +101,6 @@ export default {
   z-index: 10;
   min-width: 100px;
   width: 180px;
-}
-
-.title {
-  font-size: 25px;
-  margin-bottom: 5px;
-  text-transform: capitalize;
 }
 
 .skiste {

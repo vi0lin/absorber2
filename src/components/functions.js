@@ -54,13 +54,17 @@ function checkDot(a, b, c) {
 }
 
 function checkRegeneration(a, b, c) {
-    if (a.status.bury <= 0) {
-        a.regeneration + a.clife <= a.life
-            ? changeLife(a, a.regeneration, "regeneration", "heal", b, c)
-            : changeLife(a, a.life - a.clife, "regeneration", "heal", b, c)
-    } else {
+    if (a.status.invert > 0) {
+        changeLife(a, a.regeneration, "invert", "damage", b, c)
+        a.status.invert--;
+    }
+    else if (a.status.bury > 0) {
         (a.regeneration * 10) + a.clife <= a.life
             ? changeLife(a, (a.regeneration * 10), "regeneration", "heal", b, c)
+            : changeLife(a, a.life - a.clife, "regeneration", "heal", b, c)
+    } else {
+        a.regeneration + a.clife <= a.life
+            ? changeLife(a, a.regeneration, "regeneration", "heal", b, c)
             : changeLife(a, a.life - a.clife, "regeneration", "heal", b, c)
     }
 }
@@ -140,6 +144,13 @@ function checkSlow(a, b) {
     }
 }
 
+function checkInvert(a, b) {
+    if (checkChance(a.chance.invert, "invert")) {
+        b.status.invert++;
+        log.push(`<div>${a.name} <span style="color:white">invert</span> ${b.name}</div>`)
+    }
+}
+
 function checkStim(a) {
     if (checkChance(a.chance.stim, "stim")) {
         a.status.stim++;
@@ -163,7 +174,7 @@ function checkSilence(a, b) {
 
 function checkBury(a) {
     if (checkChance(a.chance.bury, "bury")) {
-        a.status.bury += 4;
+        a.status.bury++;
         log.push(`<div>${a.name} <span style="color:white">buried</span> himself</div>`)
         return true;
     }
@@ -192,7 +203,7 @@ function checkRotTurn(a) {
     return false;
 }
 
-export function checkTurn(target, attacker, disfi, exit, classlist, kong) {
+export function checkTurn(target, attacker, disfi, exit, kong) {
 
     if (checkSpeed(target)) {
         return;
@@ -200,12 +211,12 @@ export function checkTurn(target, attacker, disfi, exit, classlist, kong) {
 
     checkDot(target, attacker);
 
-    if (!checkDeath(target, attacker, disfi, exit, classlist, kong)) {
+    if (!checkDeath(target, attacker, disfi, exit, kong)) {
         return;
     }
 
     if (checkStunTurn(target)) {
-        checkDeath(target, attacker, disfi, exit, classlist, kong)
+        checkDeath(target, attacker, disfi, exit, kong)
         return;
     }
 
@@ -213,15 +224,13 @@ export function checkTurn(target, attacker, disfi, exit, classlist, kong) {
         checkRegeneration(target)
     }
 
-    if (checkBuryTurn(target)) {
-        return;
-    }
+    checkBuryTurn(target)
 
     let att = false, crit = 1;
 
     if (checkDodge(target, attacker)) {
         log.push(`<div>${attacker.name} <span style="color:brown">dodged</span></div>`);
-        checkDeath(target, attacker, disfi, exit, classlist, kong);
+        checkDeath(target, attacker, disfi, exit, kong);
         return;
     }
 
@@ -229,7 +238,7 @@ export function checkTurn(target, attacker, disfi, exit, classlist, kong) {
         if (null != target.chance) {
 
             if (checkInstakill(target, attacker)) {
-                checkDeath(target, attacker, disfi, exit, classlist, kong)
+                checkDeath(target, attacker, disfi, exit, kong)
                 return;
             }
 
@@ -239,6 +248,8 @@ export function checkTurn(target, attacker, disfi, exit, classlist, kong) {
                 return;
             }
 
+
+            checkInvert(target, attacker)
             checkStim(target, attacker)
             checkRot(target, attacker)
             checkPoison(target, attacker)
@@ -261,10 +272,8 @@ export function checkTurn(target, attacker, disfi, exit, classlist, kong) {
     let block = checkBlock(attacker)
 
     if (target.version != null) {
-        animateObject("animated", classlist);
+        animateObject("animated");
     }
-
-
 
     checkCrit(crit, attacker, target, block)
 
@@ -278,7 +287,7 @@ export function checkTurn(target, attacker, disfi, exit, classlist, kong) {
 
     checkCounter(target, attacker)
 
-    checkDeath(target, attacker, disfi, exit, classlist, kong)
+    checkDeath(target, attacker, disfi, exit, kong)
 }
 
 function checkCounter(target, attacker) {
@@ -334,15 +343,12 @@ function checkSpeed(a) {
     return true;
 }
 
-function animateObject(b, classlist) {
-    if (0 < classlist.length) {
-        classlist.add(b);
-        setTimeout(() => { try { classlist.remove(b) } catch{ } }, 500)
-    }
-
+function animateObject(b) {
+    $("#enemy").addClass(b)
+    setTimeout(() => { try { $("#enemy").removeClass(b) } catch{ } }, 500)
 }
 
-function checkEnemyDeath(target, attacker, func, res, classlist, kong) {
+function checkEnemyDeath(target, attacker, func, res, kong) {
 
     if (attacker.chance != null) {
         if (checkChance(attacker.chance.resurrect, "resurrect")) {
@@ -352,7 +358,7 @@ function checkEnemyDeath(target, attacker, func, res, classlist, kong) {
     }
 
     if (target.version != null) {
-        animateObject("die", classlist);
+        animateObject("die");
     }
 
     for (let a in attacker.gain)
@@ -429,10 +435,10 @@ export function getLastBoss(t) {
     return lastBoss
 }
 
-function checkDeath(target, attacker, func, res, classlist, kong) {
+function checkDeath(target, attacker, func, res, kong) {
     if (target.version != null) {
         if (attacker.clife <= 0) {
-            checkEnemyDeath(target, attacker, func, res, classlist, kong);
+            checkEnemyDeath(target, attacker, func, res, kong);
             return false;
         }
         if (target.clife <= 0) {
@@ -445,7 +451,7 @@ function checkDeath(target, attacker, func, res, classlist, kong) {
             return false;
         }
         if (target.clife <= 0) {
-            checkEnemyDeath(attacker, target, func, res, classlist, kong);
+            checkEnemyDeath(attacker, target, func, res, kong);
             return false;
         }
     }
@@ -456,7 +462,7 @@ export function respawn(t) {
     t.clife = t.life;
     t.cspeed = 0;
     t.status = {
-        slow: 0, poison: 0, fire: 0, stun: 0, silence: 0, rot: 0, bleed: 0, bury: 0, stim: 0
+        slow: 0, poison: 0, fire: 0, stun: 0, silence: 0, rot: 0, bleed: 0, bury: 0, stim: 0, invert: 0
     }
 }
 
@@ -478,9 +484,7 @@ function checkPlayerDeath(a, b, d) {
 function checkBuryTurn(a) {
     if (a.status.bury > 0) {
         a.status.bury--;
-        return true;
     }
-    return false;
 }
 
 function checkStunTurn(a) {
@@ -560,12 +564,9 @@ export function copyToClipboard(text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
-
     element.style.display = 'none';
     document.body.appendChild(element);
-
     element.click();
-
     document.body.removeChild(element);
 }
 

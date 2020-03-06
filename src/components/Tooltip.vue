@@ -1,6 +1,17 @@
 <template>
   <transition name="fade">
-    <div v-show="show" class="wiste" v-html="makelist(item.gain)"></div>
+    <div v-show="show" class="wiste">
+      <div class="fleo" :key="g" v-for="(n,g) in item.gain">
+        <div v-if="g!='effects'&&g!='chance'">
+          <img :src="getImgUrlS(g)" />
+          {{n}}
+        </div>
+        <div v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
+          <img :src="getImgUrlS(gi)" />
+          {{gn}}
+        </div>
+      </div>
+    </div>
   </transition>
 </template>
 
@@ -20,6 +31,17 @@ export default {
     };
   },
   methods: {
+    getImgUrlS(pet) {
+      var images = require.context("../assets/skills/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./dmg.png");
+        return img;
+      }
+    },
     makelist(l) {
       let alist = "";
       for (let i in l) {
@@ -81,6 +103,16 @@ export default {
 </script>
 
 <style scoped>
+.fleo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+img {
+  float: left;
+}
+
 .wiste {
   padding: 10px;
   position: fixed;

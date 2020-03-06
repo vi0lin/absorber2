@@ -19,7 +19,7 @@ var player = {
     "auto": false,
     "lastEnemy": "bat",
     "log": [],
-    "version": 1.1,
+    "version": 1.2,
     "highscore": {
         "vampire": -1,
         "hydra": -1,
@@ -30,7 +30,8 @@ var player = {
     "tutorial": 0,
     "prestige": 0,
     "points": 0,
-    "go": false
+    "go": false,
+    "order": []
 }
 
 export default player;

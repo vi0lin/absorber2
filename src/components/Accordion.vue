@@ -1,10 +1,10 @@
 <template>
-  <div class="thingy" v-if="item!=null">
+  <div style="margin-left:20px" class="flex-colum" v-if="item!=null">
     <div>
       <img
         class="small"
-        :class="{ big: gettype(item.typ)=='m', active: co(item.id), deactive: can(item.id) }"
-        :src="require('@/assets/skills/'+getreal(item.typ)+'.png')"
+        :class="{ big: gettype(item.typ)=='m', shinny: co(item.id), deactive: can(item.id) }"
+        :src="getImgUrl(getreal(item.typ))"
         @click="chooseskill(item.id)"
       />
       <TextToolTip :title="gettipp(item).name" :item="gettipp(item).desc" />
@@ -43,6 +43,17 @@ export default {
     }
   },
   methods: {
+    getImgUrl(pet) {
+      var images = require.context("../assets/skills/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./dmg.png");
+        return img;
+      }
+    },
     gettype(r) {
       return r.charAt(0);
     },
@@ -64,11 +75,6 @@ export default {
 </script>
 
 <style scoped>
-.thingy {
-  margin-left: 50px;
-  display: flex;
-  flex-direction: column;
-}
 .right {
   float: right;
 }
@@ -85,7 +91,7 @@ export default {
   filter: grayscale(100%);
   cursor: default;
 }
-.active {
+.shinny {
   border: 1px solid yellow;
   cursor: default;
   border-radius: 20px;

@@ -357,7 +357,7 @@
                         "typ": "s_regen",
                         "open": [
                             {
-                                "id": "s_recovery0",
+                                "id": "s_recovery1",
                                 "typ": "s_recovery",
                                 "open": [
                                     {

@@ -2,43 +2,52 @@
   <div>
     <div>
       <div class="fixed">
-        <button :class="{ active: this.active=='dungeon' }" @click="openTab('dungeon')" class="btn">
+        <button @click="openTab('dungeon')" class="btn">
+          <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
           Dungeon
-          <img class="icons" :src="require('@/assets/icons/cave.png')" alt="dungeon" />
         </button>
-        <button :class="{ active: this.active=='stats' }" @click="openTab('stats')" class="btn">
-          <img class="icons" :src="require('@/assets/icons/hero.png')" alt="stats" />
+        <button @click="openTab('stats')" class="btn">
+          <img :src="require('@/assets/icons/hero.png')" alt="stats" />
           Stats
         </button>
-        <button :class="{ active: this.active=='log' }" @click="openTab('log')" class="btn">
-          <img class="icons" :src="require('@/assets/icons/log.png')" alt="log" />
+        <button @click="openTab('log')" class="btn">
+          <img :src="require('@/assets/icons/log.png')" alt="log" />
           Log
         </button>
+        <button v-show="this.player.prestige>=3" @click="openTab('order')" class="btn">
+          <img :src="require('@/assets/icons/auto.png')" alt="order" />
+          Order
+        </button>
         <button class="btn" v-show="this.enemy!=null" @click="$refs.dun.selectEnemy(null)">
+          <img :src="require('@/assets/icons/door.png')" alt="back" />
           Exit
-          <img class="icons" :src="require('@/assets/icons/door.png')" alt="back" />
         </button>
         <button
           v-show="this.player.name=='showmethemoney' && this.beta"
-          :class="{ active: this.active=='enemybuilder' }"
           @click="openTab('enemybuilder')"
           class="btn"
         >
+          <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
           EnemyBuilder
-          <img class="icons" :src="require('@/assets/icons/cave.png')" alt="dungeon" />
         </button>
+        <button @click="autofight()" class="btn" :class="{active:this.player.auto}">
+          <img :src="require('@/assets/icons/auto.png')" alt="auto" />
+          Autofight
+        </button>
+
         <div class="time">{{gettime(player.time)}}</div>
       </div>
       <div class="box">
-        <Stats v-show="this.active == 'stats'" />
+        <Stats v-if="this.active == 'stats'" />
         <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
-        <Log v-show="this.active == 'log'" />
-        <EnemyBuilder v-show="this.active == 'enemybuilder'" />
+        <Log v-if="this.active == 'log'" />
+        <EnemyBuilder v-if="this.active == 'enemybuilder'" />
+        <AutoOrder v-show="this.active == 'order'" />
       </div>
     </div>
-    <div class="flexy">
+    <div class="status">
       <div v-show="value>0" class="kiste" :key="key" v-for="(value, key) in this.player.status">
-        <img class="icon" :src="require('@/assets/buffs/'+key+'.png')" :alt="key" />
+        <img class="icons" :src="getImgUrlS(key)" :alt="key" />
         <span class="itext">{{value}}</span>
       </div>
     </div>
@@ -62,6 +71,7 @@ import Log from "./Log.vue";
 import Progressbar from "./Progressbar.vue";
 import Overlay from "./Overlay.vue";
 import EnemyBuilder from "./EnemyBuilder.vue";
+import AutoOrder from "./AutoOrder.vue";
 
 import skilltree from "./json/skilltree.json";
 import choiseslist from "./json/choises.json";
@@ -69,12 +79,22 @@ import { RoundAll } from "./displayfunc";
 import { respawn, getLast, getNodeById, getLastBoss } from "./functions.js";
 import { log } from "./gloabals.js";
 
+import e from "./json/enemys.json";
+
 if (document.referrer.includes("kongregate.com")) {
   kongregateAPI.loadAPI();
 }
 
 export default {
-  components: { Stats, Dungeon, Progressbar, Log, Overlay, EnemyBuilder },
+  components: {
+    Stats,
+    Dungeon,
+    Progressbar,
+    Log,
+    Overlay,
+    EnemyBuilder,
+    AutoOrder
+  },
   watch: {
     player: {
       deep: true,
@@ -91,34 +111,50 @@ export default {
       htimer: null,
       recovery: true,
       kongregate: null,
-      overlay: false,
+      overlay: true,
       skilltree: false,
       beta: true
     };
   },
   methods: {
+    autofight() {
+      this.player.auto = !this.player.auto;
+    },
+    getImgUrlS(pet) {
+      var images = require.context("../assets/buffs/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./poison.png");
+        return img;
+      }
+    },
     recalculate(pl) {
       let player = {};
       player = JSON.parse(JSON.stringify(ep));
       player.counter = pl.counter;
       player.auto = pl.auto;
 
-      if (pl.prestige != null) {
-        player.prestige = pl.prestige;
-      }
+      pl.prestige != null && (player.prestige = pl.prestige);
 
+      player.name = pl.name;
       player.go = pl.go;
       player.skills = pl.skills;
       player.lastEnemy = pl.lastEnemy;
       player.time = pl.time;
-      player.version = pl.version;
-      player.name = pl.name;
       player.tutorial = pl.tutorial;
       player.highscore = pl.highscore;
       player.log = log;
       player.speed = 2500;
       player.sspeed = 0;
       this.enemy = null;
+
+      player.order =
+        pl.order != undefined && pl.order.length > 0
+          ? pl.order
+          : e.map(({ id: a }) => a);
 
       for (let a in player.highscore)
         if (0 < player.highscore[a])
@@ -216,6 +252,13 @@ export default {
       respawn(this.player);
     },
     openTab(t) {
+      $(".active").removeClass("active");
+
+      let target = event.target.classList.contains("btn")
+        ? event.target
+        : event.target.parentNode;
+
+      $(target).addClass("active");
       this.active = t;
     },
     tutorial() {
@@ -287,9 +330,15 @@ export default {
       this.overlay = false;
     },
     reset() {
+      this.player.prestige++;
+      this.player.points++;
       let pres = this.player.prestige;
       let skills = this.player.skills;
+      let name = this.player.name;
+      let order = this.player.order;
       this.player = JSON.parse(JSON.stringify(ep));
+      this.player.name = name;
+      this.player.order = order;
       this.player.tutorial = 6;
       this.player.prestige = pres;
       this.player.skills = skills;
@@ -329,12 +378,7 @@ export default {
 
     if (null != localStorage.getItem("saveGame")) {
       let a = JSON.parse(localStorage.getItem("saveGame"));
-      if (a.version == p.version && a.version != null) {
-        this.recalculate(a);
-      } else
-        for (let b in p) {
-          null == a[b] && (a[b] = p[b]);
-        }
+      this.recalculate(a);
     }
 
     0 >= this.player.tutorial && this.tutorial();
@@ -349,11 +393,13 @@ export default {
 
     setInterval(() => {
       localStorage.setItem("saveGame", JSON.stringify(this.player));
-    }, 6000);
+    }, 60000);
 
     setInterval(() => {
       this.player.time += 1;
     }, 1000);
+
+    this.overlay = false;
 
     this.htimer = setInterval(() => {
       if (this.recovery) {
@@ -368,7 +414,8 @@ export default {
           rot: 0,
           bleed: 0,
           bury: 0,
-          stim: 0
+          stim: 0,
+          invert: 0
         };
 
         if (pl.clife + pl.recovery + pl.regeneration <= pl.life) {
@@ -378,11 +425,22 @@ export default {
         } else {
           pl.clife = pl.life;
           if (pl.auto) {
-            let last = this.$refs.dun.enemys.find(e => e.id == pl.lastEnemy);
-            if (last != undefined) {
-              let max = this.getLast(last.max, pl.prestige);
-              if (pl.counter[last.id] < max) {
-                this.enemy = last;
+            if (this.player.prestige >= 3) {
+              for (let ind of this.player.order) {
+                let e = this.$refs.dun.enemys.find(e => e.id == ind);
+                let tmax = this.getLast(e.max, pl.prestige);
+                if (pl.counter[e.id] < tmax) {
+                  this.enemy = e;
+                  break;
+                }
+              }
+            } else {
+              let last = this.$refs.dun.enemys.find(e => e.id == pl.lastEnemy);
+              if (last != undefined) {
+                let max = this.getLast(last.max, pl.prestige);
+                if (pl.counter[last.id] < max) {
+                  this.enemy = last;
+                }
               }
             }
           }
@@ -416,53 +474,24 @@ export default {
   color: white;
   right: 10px;
 }
-.btn {
-  line-height: 32px;
-  border-radius: 5%;
-  font-size: 20px;
-  font-family: "MedievalSharp", cursive;
-  margin: 10px;
-  padding: 10px;
-  outline: none;
-  border: none;
-  background: #fefefe;
-  cursor: pointer;
-}
-.btn:hover {
-  background: #c0c0c0;
-}
-.active {
-  background: #999999;
-}
+
 .kiste {
   background: darkgrey;
   padding: 1px;
   border: 1px solid black;
   line-height: 32px;
 }
+
 .itext {
   color: white;
   font-stretch: bold;
   padding: 0px 2px;
 }
 
-.icon {
-  height: 32px;
-  width: 32px;
-  margin: 0px;
-  float: right;
-}
-
-.flexy {
+.status {
   position: fixed;
   margin: 5px 5px;
   height: 34px;
-  display: flex;
   bottom: 60px;
-}
-
-.icons {
-  float: left;
-  height: 32px;
 }
 </style>

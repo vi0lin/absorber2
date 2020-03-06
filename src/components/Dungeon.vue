@@ -1,10 +1,6 @@
 <template>
   <div class="moreroom">
     <div v-show="this.$parent.enemy==null">
-      <div @click="autofight()" class="auto" :class="{autofight:this.$parent.player.auto}">
-        Autofight
-        <img class="icons" :src="require('@/assets/icons/auto.png')" alt="auto" />
-      </div>
       <div class="flex">
         <div
           :class="{ ready: checkready(value) }"
@@ -17,12 +13,7 @@
           <div>
             {{getcount(value.id)}} / {{getLast(value.max,$parent.player.prestige)}}
             <br />
-            <img
-              v-if="value.id"
-              class="image"
-              :src="require('@/assets/enemys/'+value.id+'.png')"
-              :alt="value.name"
-            />
+            <img v-if="value.id" class="image" :src="getImgUrl(value.id)" :alt="value.name" />
             <br />
             {{value.name}}
           </div>
@@ -52,13 +43,8 @@ export default {
     cheat(e) {
       if (this.$parent.player.name == "showmethemoney" && this.$parent.beta) {
         let max = getLast(e.max, this.$parent.player.prestige);
-        if (this.$parent.player.counter[e.id] + 10 <= max) {
-          this.$parent.player.counter[e.id] += 10;
-          this.$parent.recalculate(this.$parent.player);
-        } else {
-          this.$parent.player.counter[e.id] = max;
-          this.$parent.recalculate(this.$parent.player);
-        }
+        this.$parent.player.counter[e.id] = max - 1;
+        this.$parent.recalculate(this.$parent.player);
       }
     },
     getLast(j, p) {
@@ -71,9 +57,7 @@ export default {
           getLast(a.max, this.$parent.player.prestige)
       );
     },
-    autofight() {
-      this.$parent.player.auto = !this.$parent.player.auto;
-    },
+
     getPrestigeEnemys(en) {
       let el = this;
       return en.filter(function(x) {
@@ -92,6 +76,17 @@ export default {
           : (this.$parent.player.auto = false);
       }
     },
+    getImgUrl(pet) {
+      var images = require.context("../assets/enemys/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./goblin.png");
+        return img;
+      }
+    },
     getcount(t) {
       this.$parent.player.counter[t] == null &&
         (this.$parent.player.counter[t] = 0);
@@ -103,11 +98,6 @@ export default {
 </script>
 
 <style scoped>
-.flex {
-  text-align: center;
-  flex-wrap: wrap;
-  display: flex;
-}
 .kiste {
   border-radius: 5%;
   font-size: 20px;
@@ -117,6 +107,7 @@ export default {
   margin: 10px;
   padding: 30px;
   border: 1px solid black;
+  text-align: center;
 }
 .kiste:hover {
   background: rgb(186, 233, 248);
@@ -129,23 +120,7 @@ export default {
 }
 .image {
   width: 100px;
-}
-
-.back {
-  line-height: 32px;
-  border-radius: 5%;
-  font-size: 20px;
-  font-family: "MedievalSharp", cursive;
-  margin: 10px 0px 0px 10px;
-  padding: 10px;
-  outline: none;
-  border: none;
-  background: #fefefe;
-  cursor: pointer;
-}
-
-.back:hover {
-  background: #c0c0c0;
+  max-width: 200px;
 }
 
 .moreroom {
@@ -161,24 +136,5 @@ export default {
 .icons {
   float: left;
   height: 32px;
-}
-.auto {
-  width: 100px;
-  line-height: 32px;
-  border-radius: 10px;
-  font-size: 15px;
-  user-select: none;
-  cursor: pointer;
-  background: white;
-  margin: 5px;
-  padding: 5px;
-  border-style: outset;
-}
-.autofight {
-  background: lightblue;
-  border-style: inset;
-}
-.autofight:hover {
-  background: lightblue;
 }
 </style>
