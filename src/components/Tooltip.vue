@@ -183,6 +183,8 @@ img {
   z-index: 10;
   min-width: 100px;
   width: 180px;
+  max-height: 300px;
+  overflow: auto;
 }
 
 .iconz {

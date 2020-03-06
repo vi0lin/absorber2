@@ -113,7 +113,7 @@ export default {
       kongregate: null,
       overlay: true,
       skilltree: false,
-      beta: true
+      beta: false
     };
   },
   methods: {

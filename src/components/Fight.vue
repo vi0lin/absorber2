@@ -2,8 +2,19 @@
   <div class="rows">
     <div class="row1 box">
       <h2 style="margin:4px 0px">{{item.name}}</h2>
+      <div>
+        <b>Description:</b>
+        <div>
+          <div>
+            <img class="iconz" :src="getImgUrlS('description')" />
+            <span class="lol">{{item.description}}</span>
+          </div>
+          <TextToolTip :title="k" :item="getinfo('description')" />
+        </div>
+        <hr />
+      </div>
       <b>Stats:</b>
-      <hr />
+
       <div style="margin:0px 0px 4px 0px" :key="k" v-for="(s,k) in item">
         <div>
           <div v-if="filtred(k,s)">
@@ -30,9 +41,10 @@
             <TextToolTip :title="cv" :item="getinfo(cv)" />
           </div>
         </div>
+
         <div style="margin:0px 0px 4px 0px" v-if="k=='gain'">
-          <b>Gain:</b>
           <hr />
+          <b>Gain:</b>
           <div :key="gv" v-for="(g,gv) in item.gain">
             <div v-if="filtred(gv,g)">
               <img class="iconz" :src="getImgUrlS(gv)" />
@@ -175,6 +187,7 @@ export default {
     },
     filtred(f, v) {
       let dont = [
+        "description",
         "name",
         "id",
         "boss",

@@ -1,6 +1,6 @@
 <template>
-  <div class="moreroom">
-    <div v-show="this.$parent.enemy==null">
+  <div>
+    <div class="moreroom" v-show="this.$parent.enemy==null">
       <div style="margin-left:10px;">
         Press
         <i>CTRL</i> for gain and
@@ -146,7 +146,7 @@ export default {
 }
 
 .moreroom {
-  padding-bottom: 250px;
+  padding-bottom: 100px;
 }
 
 @media screen and (max-device-width: 500px) {
