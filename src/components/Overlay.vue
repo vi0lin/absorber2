@@ -152,7 +152,7 @@ export default {
 
 .box {
   text-align: center;
-  background: lightgrey;
+  background: grey;
   top: 25%;
   position: absolute;
   padding: 20px;

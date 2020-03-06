@@ -1,6 +1,11 @@
 <template>
   <div class="moreroom">
     <div v-show="this.$parent.enemy==null">
+      <div style="margin-left:10px;">
+        Press
+        <i>CTRL</i> for gain and
+        <i>SHIFT</i> for description
+      </div>
       <div class="flex">
         <div
           :class="{ ready: checkready(value) }"
@@ -17,7 +22,7 @@
             <br />
             {{value.name}}
           </div>
-          <Tooltip :item="value" />
+          <Tooltip :shift="shiftIsPressed" :ctrl="cntrlIsPressed" :item="value" />
         </div>
       </div>
     </div>
@@ -36,7 +41,9 @@ export default {
   components: { Fight, Tooltip },
   data() {
     return {
-      enemys: e
+      enemys: e,
+      cntrlIsPressed: false,
+      shiftIsPressed: false
     };
   },
   methods: {
@@ -93,6 +100,21 @@ export default {
 
       return this.$parent.player.counter[t];
     }
+  },
+  mounted() {
+    let el = this;
+    window.addEventListener("keydown", function(e) {
+      if (event.which == "17") {
+        el.cntrlIsPressed = true;
+      }
+      if (event.which == "16") {
+        el.shiftIsPressed = true;
+      }
+    });
+    window.addEventListener("keyup", function(e) {
+      el.cntrlIsPressed = false;
+      el.shiftIsPressed = false;
+    });
   }
 };
 </script>
@@ -124,7 +146,7 @@ export default {
 }
 
 .moreroom {
-  padding-bottom: 50px;
+  padding-bottom: 250px;
 }
 
 @media screen and (max-device-width: 500px) {

@@ -26,7 +26,7 @@ function showIndicator(c, d, e, f) {
         default:
     }
 
-    log.push(`<div>${e.name} gets <span style="color:${g}">${c}</span> ${f} through ${d}</div>`);
+    log.push(`<div>${e.name} takes <span style="color:${g}">${c}</span> ${f} through ${d}</div>`);
 
     if (null == e.version) {
         dmgind.push({ text: c, color: g });
@@ -59,8 +59,8 @@ function checkRegeneration(a, b, c) {
         a.status.invert--;
     }
     else if (a.status.bury > 0) {
-        (a.regeneration * 10) + a.clife <= a.life
-            ? changeLife(a, (a.regeneration * 10), "regeneration", "heal", b, c)
+        (a.regeneration * 4) + a.clife <= a.life
+            ? changeLife(a, (a.regeneration * 4), "regeneration", "heal", b, c)
             : changeLife(a, a.life - a.clife, "regeneration", "heal", b, c)
     } else {
         a.regeneration + a.clife <= a.life
@@ -100,27 +100,40 @@ function checkDouble(a) {
     return !!checkChance(a.chance.double, "double")
 }
 
-function checkPoison(a, b) {
-    if (checkChance(a.chance.poison, "poison")) {
-        b.status.poison++;
-        log.push(`<div>${a.name} <span style="color:green">poisoned</span> ${b.name}</div>`)
+
+
+function CheckDotChance(name, a, b) {
+    let chance = a.chance[name];
+    if (chance != undefined) {
+        let table = [
+            { id: "fire", color: "orange", verb: "burned" },
+            { id: "bleed", color: "crimson", verb: "sliced" },
+            { id: "poison", color: "green", verb: "poisoned" }];
+
+        let obj = table.find(x => name == x.id);
+
+        if (chance >= 100) {
+            let times = (chance - chance % 100) / 100;
+            checkChance(chance % 100, name) && times++;
+            b.status[name] += times;
+            log.push(`<div>${a.name} <span style="color:${obj.color}">${obj.verb}</span> ${b.name} ${times} times</div>`)
+        } else if (checkChance(chance, name)) {
+            b.status[name]++;
+            log.push(`<div>${a.name} <span style="color:${obj.color}">${obj.verb}</span> ${b.name}</div>`)
+        }
     }
 }
 
-
+function checkPoison(a, b) {
+    CheckDotChance("poison", a, b)
+}
 
 function checkBleed(a, b) {
-    if (checkChance(a.chance.bleed, "bleed")) {
-        b.status.bleed++;
-        log.push(`<div>${a.name} <span style="color:crimson">sliced</span> ${b.name}</div>`)
-    }
+    CheckDotChance("bleed", a, b)
 }
 
 function checkFire(a, b) {
-    if (checkChance(a.chance.fire, "fire")) {
-        b.status.fire++;
-        log.push(`<div>${a.name} <span style="color:orange">burned</span> ${b.name}</div>`)
-    }
+    CheckDotChance("fire", a, b)
 }
 
 function checkInstakill(a, b) {
@@ -402,7 +415,10 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
         log.push(`<div>${attacker.name} was killed in ${target.time}</div>`)
 
         if (kong != null && kong != undefined) {
-            kong.stats.submit(attacker.id, target.time);
+            try {
+                kong.stats.submit(attacker.id, target.time);
+            }
+            catch{ }
         }
 
         attacker.id == getLastBoss(target) && func();
@@ -427,9 +443,12 @@ export function getLastBoss(t) {
         case 2:
             lastBoss = "darlek"
             break;
+        case 3:
+            lastBoss = "chromeman"
+            break;
 
         default:
-            lastBoss = "darlek"
+            lastBoss = "chromeman"
             break;
     }
     return lastBoss

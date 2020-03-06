@@ -30,7 +30,7 @@
           <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
           EnemyBuilder
         </button>
-        <button @click="autofight()" class="btn" :class="{active:this.player.auto}">
+        <button @click="autofight()" class="btn" id="auto" :class="{active:this.player.auto}">
           <img :src="require('@/assets/icons/auto.png')" alt="auto" />
           Autofight
         </button>
@@ -252,7 +252,7 @@ export default {
       respawn(this.player);
     },
     openTab(t) {
-      $(".active").removeClass("active");
+      $(".active:not(#auto)").removeClass("active");
 
       let target = event.target.classList.contains("btn")
         ? event.target
@@ -401,6 +401,19 @@ export default {
 
     this.overlay = false;
 
+    this.player.status = {
+      poison: 0,
+      fire: 0,
+      stun: 0,
+      slow: 0,
+      silence: 0,
+      rot: 0,
+      bleed: 0,
+      bury: 0,
+      stim: 0,
+      invert: 0
+    };
+
     this.htimer = setInterval(() => {
       if (this.recovery) {
         let pl = this.player;
@@ -493,5 +506,7 @@ export default {
   margin: 5px 5px;
   height: 34px;
   bottom: 60px;
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -1,7 +1,7 @@
 [
     {
         "id": "block",
-        "desc": "Amount of total damage reduction",
+        "desc": "The total amount of damage reduction",
         "form": "damage = damage - block"
     },
     {
@@ -11,132 +11,147 @@
     },
     {
         "id": "speed",
-        "desc": "Amount needs to be reached to start the turn",
+        "desc": "The value required to begin each turn",
         "form": "turn = currentSpeed>=speed"
     },
     {
         "id": "magic",
-        "desc": "Magic is used to calculate non physical attacks",
+        "desc": "Magic is used to calculate non-physical attacks",
         "form": "magic = magic"
     },
     {
         "id": "life",
-        "desc": "Maximum Amount of Health. Target dies if dropped to 0",
+        "desc": "Maximum amount of health. The target dies when it is dropped to 0.",
         "form": "death = life<=0"
     },
     {
         "id": "regeneration",
-        "desc": "Health restored every turn",
+        "desc": "Health restored at every turn",
         "form": "health = health + regeneration"
     },
     {
         "id": "recovery",
-        "desc": "Health restored every second outside the fight",
+        "desc": "Health restored in each second outside of combat",
         "form": "health = health + regeneration + recovery"
     },
     {
         "id": "lifesteal",
-        "desc": "Percentage of life restored after every attack",
+        "desc": "The percentage of life restored from each attack.",
         "form": "health = dmg * lifesteal / 100"
     },
     {
         "id": "crit",
-        "desc": "Percentage of getting a critical attack. Critical attacks doubles the Damage",
+        "desc": "Chance in percent of performing a critical attack. Critical attacks double the damage",
         "form": "dmg = dmg * 2"
     },
     {
         "id": "supercrit",
-        "desc": "Percentage of getting a super critical attack. Super critical attacks quadruples the Damage. Can only occur if crits.",
+        "desc": "Chance in percent of performing a super critical attack. Supercritical attacks quadruple the damage. Can only occur during critical attacks.",
         "form": "dmg = dmg * 4"
     },
     {
         "id": "megacrit",
-        "desc": "Percentage of getting a mega critical attack. Mega critical attacks eightfold the Damage. Can only occur if super crits.",
+        "desc": "Percentage of a mega-critical attack. Mega-critical attacks increase damage eightfold. Can only occur when super-critical.",
         "form": "dmg = dmg * 8"
     },
     {
         "id": "poison",
-        "desc": "Damages the Enemy on his turn.",
+        "desc": "Chance to poison the enemy. Poisoned opponents suffer damage on their turn.",
         "form": "dmg = magic / 4"
     },
     {
         "id": "fire",
-        "desc": "Damages the Enemy on his turn.",
+        "desc": "Chance to set the opponent on fire. Burning opponents suffer damage on their turn.",
         "form": "dmg = magic / 3"
     },
     {
         "id": "slow",
-        "desc": "Chance to slow down the speed progress of the enemy.",
+        "desc": "Chance to slow the rate of enemy progress.",
         "form": "speedProgress = speedProgress - 20"
     },
     {
         "id": "stun",
-        "desc": "Chance to stun the enemy. Stunned Enemies cant attack.",
+        "desc": "Chance to stun the enemy. Stunned enemies are unable to attack.",
         "form": "stun = stun"
     },
     {
         "id": "silence",
-        "desc": "Chance to silence the enemy. Silenced enemies can't use stun, crit or DoT",
+        "desc": "A chance to silence the enemy. Silenced enemies can only perform physical attacks.",
         "form": "silence = silence"
     },
     {
         "id": "dodge",
-        "desc": "Chance to completely nullify the enemies damage",
+        "desc": "Chance to completely avoid the damage of the enemy",
         "form": "dodge = dodge"
     },
     {
         "id": "double",
-        "desc": "Chance to hit an enemy twice",
+        "desc": "A chance to hit an enemy twice",
         "form": "dmg = (dmg * crit) * 2"
     },
     {
         "id": "instakill",
-        "desc": "Chance to kill an enemy instant",
+        "desc": "Chance to kill an enemy instantly",
         "form": "enemy life = -1"
     },
     {
         "id": "prestige",
-        "desc": "Times you have finished the game",
+        "desc": "Number of times you've finished the game",
         "form": "prestige = last boss killed"
     },
     {
         "id": "precision",
-        "desc": "Lowers the chance of enemies dodge",
+        "desc": "Reduces the chance that enemies will dodge.",
         "form": "hit = dodge - precision"
     },
     {
         "id": "rot",
-        "desc": "Rotten enemies can't use regeneration",
+        "desc": "Rotten enemies can't regenerate",
         "form": "regeneration = 0"
     },
     {
         "id": "bleed",
-        "desc": "Damages the Enemy on his turn. ",
+        "desc": "Chance to cut the opponent. Bleeding enemies suffer damage on their turn.",
         "form": "dmg = physical_dmg / 10"
     },
     {
         "id": "reflect",
-        "desc": "Returns a percentage of damage to the enemy",
+        "desc": "Returns a percentage of the damage caused back to the enemy",
         "form": "dmg = dmg * reflect / 100"
     },
     {
         "id": "sspeed",
-        "desc": "Saved Speed. Used if reached the 110 Speed limit",
+        "desc": "Stored speed. Is used when the speed limit of 110 is exceeded.",
         "form": "if speed>110 start saving"
     },
     {
+        "id": "bury",
+        "desc": "Regenerates quadruple the amount on the next turn.",
+        "form": "life = life + (regeneration*4)"
+    },
+    {
         "id": "points",
-        "desc": "Used to buy Skills",
+        "desc": "Is used to purchase skills",
         "form": "1 Point = 1 Skill"
     },
     {
         "id": "counter",
-        "desc": "Chance to Attack the Enemy while getting attacked",
+        "desc": "Chance to hit the enemy when attacked.",
         "form": "counter = counter"
     },
     {
         "id": "stim",
-        "desc": "Chance to use a stimmpack. Adds 20 speed per tick ",
+        "desc": "Chance to accelerate the rate of progression.",
         "form": "speedProgress = speedProgress + 20"
+    },
+    {
+        "id": "invert",
+        "desc": "Chance to invert the opponent. Inverted enemies suffer damage instead of regeneration.",
+        "form": "life = life - regeneration"
+    },
+    {
+        "id": "description",
+        "desc": "It explains things just like this text here.",
+        "form": "life = life - regeneration"
     }
 ]

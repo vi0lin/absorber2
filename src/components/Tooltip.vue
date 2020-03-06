@@ -1,14 +1,55 @@
 <template>
   <transition name="fade">
-    <div v-show="show" class="wiste">
-      <div class="fleo" :key="g" v-for="(n,g) in item.gain">
-        <div v-if="g!='effects'&&g!='chance'">
-          <img :src="getImgUrlS(g)" />
-          {{n}}
+    <div v-if="create" v-show="show" class="wiste">
+      <div v-if="ctrl">
+        <h2 style="margin:4px 0px">{{item.name}}</h2>
+        <b>Gain:</b>
+        <hr />
+        <div class="fleo" :key="g" v-for="(n,g) in item.gain">
+          <div style="margin:4px 0px" v-if="g!='effects'&&g!='chance'">
+            <img :src="getImgUrlS(g)" />
+            {{n}}
+          </div>
+          <div style="margin:0px 0px 4px 10px" v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
+            <img :src="getImgUrlS(gi)" />
+            {{gn}}
+          </div>
         </div>
-        <div v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
-          <img :src="getImgUrlS(gi)" />
-          {{gn}}
+      </div>
+      <div v-else-if="shift">
+        <h2 style="margin:4px 0px">{{item.name}}</h2>
+        <b>Description:</b>
+        <hr />
+        <img class="iconz" :src="getImgUrlS('description')" />
+        <span class="lol">{{item.description}}</span>
+      </div>
+      <div v-else>
+        <h2 style="margin:4px 0px">{{item.name}}</h2>
+        <b>Stats:</b>
+        <hr />
+        <div style="margin:0px 0px 4px 0px" :key="k" v-for="(s,k) in item">
+          <div>
+            <div v-if="filtred(k,s)">
+              <img class="iconz" :src="getImgUrlS(k)" />
+              <span class="lol">{{s}}</span>
+            </div>
+          </div>
+          <div style="margin:0px 0px 4px 10px" v-if="k=='chance'">
+            <div :key="cv" v-for="(c,cv) in item.chance">
+              <div>
+                <img class="iconz" :src="getImgUrlS(cv)" />
+                <span class="lol">{{c}}</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin:0px 0px 4px 10px" v-if="k=='effects'">
+            <div :key="cv" v-for="(c,cv) in item.effects">
+              <div>
+                <img class="iconz" :src="getImgUrlS(cv)" />
+                <span class="lol">{{c}}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -16,21 +57,56 @@
 </template>
 
 <script>
+import tipps from "./json/tipps.json";
+
 export default {
   props: {
     item: {
       type: Object,
       required: true
+    },
+    ctrl: {
+      type: Boolean,
+      required: false
+    },
+    shift: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
     return {
+      create: false,
       show: false,
       elistender: null,
       llistender: null
     };
   },
   methods: {
+    getinfo(i) {
+      let tipp = tipps.find(x => x.id == i);
+      if (tipp != undefined) {
+        return tipp.desc;
+      } else {
+        return "No Description";
+      }
+    },
+    filtred(f, v) {
+      let dont = [
+        "description",
+        "name",
+        "id",
+        "boss",
+        "clife",
+        "cspeed",
+        "effects",
+        "status",
+        "chance",
+        "gain",
+        "max"
+      ];
+      return !dont.includes(f) && v != 0;
+    },
     getImgUrlS(pet) {
       var images = require.context("../assets/skills/", false, /\.png$/);
       let img = "";
@@ -41,43 +117,28 @@ export default {
         img = images("./dmg.png");
         return img;
       }
-    },
-    makelist(l) {
-      let alist = "";
-      for (let i in l) {
-        if (i != "effects" && i != "chance") {
-          alist += `<div>${i}: ${l[i]}</div>`;
-        } else {
-          for (let c in l[i]) {
-            alist += `<div>${c}: ${l[i][c]}</div>`;
-          }
-        }
-      }
-      return alist;
     }
   },
   mounted() {
     let el = this;
+
     this.elistender = function(e) {
-      el.show = true;
-      let eposy = e.target.getBoundingClientRect().left;
-      let eposx = e.target.getBoundingClientRect().top;
+      el.create = true;
 
-      el.$el.style.top = eposx + "px";
-      el.$el.style.left = eposy + "px";
-
-      setTimeout(function() {
+      setInterval(function() {
+        el.show = true;
         try {
-          let height = el.$el.offsetHeight;
-          if (eposx + height >= 600) {
-            el.$el.style.top = eposx - height + e.target.offsetHeight + "px";
-          }
+          let eposy = e.target.getBoundingClientRect().left;
+          let eposx = e.target.getBoundingClientRect().top;
+          el.$el.style.top = eposx + "px";
+          el.$el.style.left = eposy + "px";
         } catch {}
-      }, 50);
+      }, 100);
     };
 
     this.llistender = function() {
       el.show = false;
+      el.create = false;
     };
 
     this.$el.parentElement.firstChild.addEventListener(
@@ -122,6 +183,17 @@ img {
   z-index: 10;
   min-width: 100px;
   width: 180px;
+}
+
+.iconz {
+  float: left;
+  margin-right: 10px;
+  height: 32px;
+  width: 32px;
+}
+
+.lol {
+  line-height: 32px;
 }
 
 .skiste {

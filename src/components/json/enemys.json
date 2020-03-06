@@ -3,11 +3,13 @@
         "id": "bat",
         "name": "Bat",
         "boss": false,
+        "description": "Nanananana Bat",
         "max": [
             200,
-            220,
-            240,
-            260
+            210,
+            230,
+            260,
+            300
         ],
         "life": 2,
         "clife": 2,
@@ -31,12 +33,14 @@
     {
         "id": "evil_spirit",
         "name": "Evil Spirit",
+        "description": "If you don't press like, it will haunt you today.",
         "boss": false,
         "max": [
             300,
             320,
             340,
-            360
+            360,
+            400
         ],
         "life": 1,
         "clife": 1,
@@ -67,10 +71,12 @@
         "id": "blue_slime",
         "name": "Blue Slime",
         "boss": false,
+        "description": "I am not an evil slime",
         "max": [
             150,
             200,
-            250
+            250,
+            300
         ],
         "life": 5,
         "clife": 5,
@@ -94,11 +100,13 @@
     {
         "id": "snake",
         "name": "Snake",
+        "description": "Upon thy belly shalt thou go, and dust shalt thou eat all the days of thy life",
         "boss": false,
         "max": [
             100,
             140,
-            180
+            180,
+            220
         ],
         "life": 6,
         "clife": 6,
@@ -122,10 +130,12 @@
         "id": "turtle",
         "name": "Turtle",
         "boss": false,
+        "description": "Lucky it's not the blue one.",
         "max": [
             200,
             210,
-            220
+            220,
+            300
         ],
         "life": 10,
         "clife": 10,
@@ -143,12 +153,14 @@
     {
         "id": "vampire",
         "name": "Vampire",
+        "description": "Make sure you bring a stake.",
         "boss": true,
         "max": [
             1,
             2,
             5,
-            8
+            8,
+            10
         ],
         "life": 30,
         "clife": 30,
@@ -169,11 +181,13 @@
     {
         "id": "boar",
         "name": "Boar",
+        "description": "Hmm it smells like roasted boar.",
         "boss": false,
         "max": [
             150,
             170,
-            210
+            210,
+            255
         ],
         "life": 15,
         "clife": 15,
@@ -194,11 +208,13 @@
     {
         "id": "red_slime",
         "name": "Red Slime",
+        "description": "I might not be a bad slime",
         "boss": false,
         "max": [
             130,
             150,
-            170
+            170,
+            210
         ],
         "life": 15,
         "clife": 15,
@@ -223,11 +239,13 @@
     {
         "id": "goblin",
         "name": "Goblin",
+        "description": "I'll be reckless if it means I'll win",
         "boss": false,
         "max": [
             140,
             160,
-            200
+            200,
+            240
         ],
         "life": 10,
         "clife": 10,
@@ -254,11 +272,13 @@
     {
         "id": "fire_elementar",
         "name": "Fire Elemental",
+        "description": "Ready to set the world on fire? Heheheh...",
         "boss": false,
         "max": [
             300,
             350,
-            400
+            400,
+            420
         ],
         "life": 20,
         "clife": 20,
@@ -283,12 +303,14 @@
     {
         "id": "hydra",
         "name": "Hydra",
+        "description": "The Lernaean Hydra or Hydra of Lerna (Greek: Λερναῖα Ὕδρα, Lernaîa Hýdra), more often known simply as the Hydra, is a serpentine water monster in Greek and Roman mythology. ",
         "boss": true,
         "max": [
             1,
             2,
             3,
-            5
+            5,
+            8
         ],
         "life": 40,
         "clife": 40,
@@ -311,12 +333,14 @@
     {
         "id": "oger",
         "name": "Ogre",
+        "description": "Famous Ogre: 'Layers. Onions have layers. Ogres have layers. Onions have layers. You get it? We both have layers.'",
         "boss": false,
         "max": [
             12,
             15,
             18,
-            20
+            20,
+            25
         ],
         "life": 30,
         "clife": 30,
@@ -341,11 +365,13 @@
     {
         "id": "thief",
         "name": "Thief",
+        "description": "Thou shalt not steal.'",
         "boss": false,
         "max": [
             150,
             160,
-            180
+            180,
+            200
         ],
         "life": 15,
         "clife": 15,
@@ -375,11 +401,13 @@
     {
         "id": "spider",
         "name": "Spider",
+        "description": "I am a spider so what?",
         "boss": false,
         "max": [
             150,
             170,
-            190
+            190,
+            210
         ],
         "life": 8,
         "clife": 8,
@@ -404,11 +432,13 @@
     {
         "id": "yellow_slime",
         "name": "Yellow Slime",
+        "description": "I'm probably a bad slime",
         "boss": false,
         "max": [
             140,
             160,
-            180
+            180,
+            200
         ],
         "life": 20,
         "clife": 20,
@@ -434,12 +464,14 @@
     {
         "id": "iron_golem",
         "name": "Iron Golem",
+        "description": "You need four iron blocks and a pumpkin.",
         "boss": true,
         "max": [
             1,
             2,
             3,
-            5
+            5,
+            8
         ],
         "life": 40,
         "clife": 40,
@@ -465,11 +497,13 @@
     {
         "id": "water_elementar",
         "name": "Water Elementar",
+        "description": "STR 18 (+4) DEX 14 (+2) CON 18 (+4) INT 5 (-3) WIS 10 (+0) CHA 8 (-1)",
         "boss": false,
         "max": [
             130,
             150,
-            160
+            160,
+            180
         ],
         "life": 30,
         "clife": 10,
@@ -496,11 +530,13 @@
     {
         "id": "hard_turtle",
         "name": "Hard Turtle",
+        "description": "Mario! How dare you disturb my family vacation?!",
         "boss": false,
         "max": [
             100,
             150,
-            200
+            200,
+            220
         ],
         "life": 100,
         "clife": 100,
@@ -524,12 +560,14 @@
     {
         "id": "wind_elementar",
         "name": "Wind Elementar",
+        "description": "Notice that the stiffest tree is most easily cracked, while the bamboo or willow survives by bending with the wind - Bruce Lee",
         "boss": false,
         "max": [
             170,
             180,
             190,
-            200
+            200,
+            220
         ],
         "life": 10,
         "clife": 10,
@@ -559,12 +597,14 @@
     {
         "id": "assasin",
         "name": "Assassin",
+        "description": "Nothing is true, everything is permitted.",
         "boss": false,
         "max": [
             20,
             25,
             30,
-            35
+            35,
+            40
         ],
         "life": 20,
         "clife": 10,
@@ -598,6 +638,7 @@
     {
         "id": "chulthuluseye",
         "name": "Flying Eye",
+        "description": "You feel an evil presence watching you...",
         "boss": true,
         "max": [
             1,
@@ -633,13 +674,15 @@
     {
         "id": "zombie",
         "name": "Zombie",
+        "description": "BRAAAINN",
         "prestige": 1,
         "boss": false,
         "max": [
             0,
             100,
             120,
-            140
+            140,
+            200
         ],
         "life": 60,
         "clife": 60,
@@ -666,13 +709,15 @@
     {
         "id": "skeleton",
         "name": "Skeleton Bowman",
+        "description": "Spooky scary skeletons",
         "prestige": 1,
         "boss": false,
         "max": [
             0,
             100,
             120,
-            140
+            140,
+            160
         ],
         "life": 80,
         "clife": 80,
@@ -703,6 +748,7 @@
     {
         "id": "ghoul",
         "name": "Ghoul",
+        "description": "We need to have a mask that we never take off.",
         "prestige": 1,
         "boss": false,
         "max": [
@@ -740,6 +786,7 @@
     {
         "id": "unholy_knight",
         "name": "Unholy Knight",
+        "description": "Who is attacking my castle day after day without interruption?",
         "prestige": 1,
         "boss": false,
         "max": [
@@ -776,6 +823,7 @@
     {
         "id": "necromant",
         "name": "Necromancer",
+        "description": "If there are many heroes, then we will replace them all. Let the entire world know that Necromancer is the true hero!",
         "prestige": 1,
         "boss": true,
         "max": [
@@ -819,6 +867,7 @@
     {
         "id": "jellyfish",
         "name": "Jellyfish",
+        "description": "And where there is jellyfish, there is the Jellyfish Hunter.",
         "prestige": 2,
         "boss": false,
         "max": [
@@ -853,6 +902,7 @@
     {
         "id": "hedgehog",
         "name": "Hedgehog",
+        "description": "Hedgehog's the name. Speed isn't my game.",
         "prestige": 2,
         "boss": false,
         "max": [
@@ -882,6 +932,7 @@
     {
         "id": "klez",
         "name": "Klez",
+        "description": "3 2 1 BOTS",
         "prestige": 2,
         "boss": false,
         "max": [
@@ -917,6 +968,7 @@
     {
         "id": "marine",
         "name": "Space Soldier",
+        "description": "You wanna piece of me, boy?",
         "prestige": 2,
         "boss": false,
         "max": [
@@ -950,13 +1002,14 @@
     {
         "id": "darlek",
         "name": "strange Robot",
+        "description": "EXTERMINATE",
         "prestige": 2,
         "boss": true,
         "max": [
             0,
             0,
             1,
-            1
+            2
         ],
         "life": 900,
         "clife": 900,
@@ -967,10 +1020,10 @@
         "magic": 200,
         "effects": {
             "block": 100,
-            "reflect": 30,
-            "counter": 80
+            "reflect": 30
         },
         "chance": {
+            "counter": 80,
             "bleed": 50,
             "fire": 50,
             "poison": 50,
@@ -992,6 +1045,7 @@
     {
         "id": "wolf",
         "name": "Twin-tailed Wolf",
+        "description": "Found on the 1st floor",
         "prestige": 3,
         "boss": false,
         "max": [
@@ -1019,6 +1073,196 @@
             "life": 0.3,
             "chance": {
                 "invert": 0.1
+            }
+        },
+        "status": {}
+    },
+    {
+        "id": "cyclops",
+        "name": "Cyclops",
+        "description": "Arrr",
+        "prestige": 3,
+        "boss": false,
+        "max": [
+            0,
+            0,
+            0,
+            20
+        ],
+        "life": 550,
+        "clife": 550,
+        "regeneration": 100,
+        "speed": 700,
+        "cspeed": 0,
+        "dmg": 120,
+        "magic": 0,
+        "effects": {
+            "block": 50,
+            "precision": 20,
+            "reflect": 10
+        },
+        "chance": {
+            "counter": 30,
+            "stun": 45,
+            "bury": 30
+        },
+        "gain": {
+            "life": 10,
+            "recovery": 10,
+            "speed": -10,
+            "chance": {
+                "bury": 1
+            }
+        },
+        "status": {}
+    },
+    {
+        "id": "wandering_monster",
+        "name": "Wandering Monster",
+        "description": "Play this card, with a Monster from your hand, when someone (including you!) is in combat.",
+        "prestige": 3,
+        "boss": false,
+        "max": [
+            0,
+            0,
+            0,
+            220
+        ],
+        "life": 250,
+        "clife": 250,
+        "regeneration": 60,
+        "speed": 540,
+        "cspeed": 0,
+        "dmg": 80,
+        "magic": 100,
+        "effects": {
+            "block": 48,
+            "precision": 25
+        },
+        "chance": {
+            "poison": 45,
+            "fire": 30,
+            "megacrit": 100,
+            "crit": 20,
+            "supercrit": 50,
+            "silence": 50,
+            "slow": 20,
+            "stim": 30
+        },
+        "gain": {
+            "magic": 0.5,
+            "dmg": -0.01
+        },
+        "status": {}
+    },
+    {
+        "id": "slav",
+        "name": "Slav",
+        "description": "Master of hardbass and apparently magic too.",
+        "prestige": 3,
+        "boss": false,
+        "max": [
+            0,
+            0,
+            0,
+            500
+        ],
+        "life": 350,
+        "clife": 350,
+        "regeneration": 60,
+        "speed": 440,
+        "cspeed": 0,
+        "dmg": 180,
+        "magic": 1000000,
+        "effects": {
+            "block": 68,
+            "precision": 35
+        },
+        "chance": {
+            "dodge": 100,
+            "megacrit": 20,
+            "crit": 20,
+            "supercrit": 20,
+            "silence": 100,
+            "stim": 60
+        },
+        "gain": {
+            "dmg": 0.05
+        },
+        "status": {}
+    },
+    {
+        "id": "shroom",
+        "name": "Shroomy Boy",
+        "description": "Just what I needed!",
+        "prestige": 3,
+        "boss": false,
+        "max": [
+            0,
+            0,
+            0,
+            100
+        ],
+        "life": 250,
+        "clife": 250,
+        "regeneration": 160,
+        "speed": 320,
+        "cspeed": 0,
+        "dmg": 80,
+        "magic": 220,
+        "effects": {
+            "block": 38,
+            "precision": 40
+        },
+        "chance": {
+            "poison": 320,
+            "instakill": 2
+        },
+        "gain": {
+            "chance": {
+                "poison": 1,
+                "instakill": 0.01
+            }
+        },
+        "status": {}
+    },
+    {
+        "id": "chromeman",
+        "name": "Chrome Avatar",
+        "description": "Silver. Copper. Gold. Chrome. Long ago, the four nations lived together in harmony. Then, everything changed when the Gold Nation attacked.",
+        "prestige": 3,
+        "boss": true,
+        "max": [
+            0,
+            0,
+            0,
+            1
+        ],
+        "life": 500,
+        "clife": 500,
+        "regeneration": 0,
+        "speed": 220,
+        "cspeed": 0,
+        "dmg": 150,
+        "magic": 0,
+        "effects": {
+            "block": 200,
+            "precision": 160
+        },
+        "chance": {
+            "counter": 40,
+            "fire": 255,
+            "dodge": 100,
+            "megacrit": 20,
+            "crit": 20,
+            "supercrit": 20,
+            "silence": 100,
+            "stim": 60
+        },
+        "gain": {
+            "speed": 100,
+            "chance": {
+                "fire": 55
             }
         },
         "status": {}
