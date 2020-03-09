@@ -2,52 +2,42 @@
   <transition name="fade">
     <div v-if="create" v-show="show" class="wiste">
       <div v-if="ctrl">
-        <h2 style="margin:4px 0px">{{item.name}}</h2>
-        <b>Gain:</b>
-        <hr />
-        <div class="fleo" :key="g" v-for="(n,g) in item.gain">
-          <div style="margin:4px 0px" v-if="g!='effects'&&g!='chance'">
-            <img :src="getImgUrlS(g)" />
-            {{n}}
-          </div>
-          <div style="margin:0px 0px 4px 10px" v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
-            <img :src="getImgUrlS(gi)" />
-            {{gn}}
+        <h2 class="title">{{item.name}}</h2>
+        <b>Stats:</b>
+        <div class="fleo">
+          <div class="fleo" :key="g" v-for="(n,g) in filtred(item)">
+            <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
+            <div class="one" v-if="g!='effects'||g!='chance'">
+              <img :src="getImgUrlS(g)" />
+              <span>{{n}}</span>
+            </div>
+            <div class="one" v-else :key="gi" v-for="(gn,gi) in item[g]">
+              <img :src="getImgUrlS(gi)" />
+              <span>{{gn}}</span>
+            </div>
           </div>
         </div>
       </div>
       <div v-else-if="shift">
-        <h2 style="margin:4px 0px">{{item.name}}</h2>
+        <h2 class="title">{{item.name}}</h2>
         <b>Description:</b>
         <hr />
-        <img class="iconz" :src="getImgUrlS('description')" />
+        <img :src="getImgUrlS('description')" />
         <span class="lol">{{item.description}}</span>
       </div>
       <div v-else>
-        <h2 style="margin:4px 0px">{{item.name}}</h2>
-        <b>Stats:</b>
-        <hr />
-        <div style="margin:0px 0px 4px 0px" :key="k" v-for="(s,k) in item">
-          <div>
-            <div v-if="filtred(k,s)">
-              <img class="iconz" :src="getImgUrlS(k)" />
-              <span class="lol">{{s}}</span>
+        <h2 class="title">{{item.name}}</h2>
+        <b>Gain:</b>
+        <div class="fleo">
+          <div class="fleo" :key="g" v-for="(n,g) in item.gain">
+            <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
+            <div class="one" v-if="g!='effects'&&g!='chance'">
+              <img :src="getImgUrlS(g)" />
+              <span>{{n}}</span>
             </div>
-          </div>
-          <div style="margin:0px 0px 4px 10px" v-if="k=='chance'">
-            <div :key="cv" v-for="(c,cv) in item.chance">
-              <div>
-                <img class="iconz" :src="getImgUrlS(cv)" />
-                <span class="lol">{{c}}</span>
-              </div>
-            </div>
-          </div>
-          <div style="margin:0px 0px 4px 10px" v-if="k=='effects'">
-            <div :key="cv" v-for="(c,cv) in item.effects">
-              <div>
-                <img class="iconz" :src="getImgUrlS(cv)" />
-                <span class="lol">{{c}}</span>
-              </div>
+            <div class="one" v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
+              <img :src="getImgUrlS(gi)" />
+              <span>{{gn}}</span>
             </div>
           </div>
         </div>
@@ -91,8 +81,8 @@ export default {
         return "No Description";
       }
     },
-    filtred(f, v) {
-      let dont = [
+    filtred(arr) {
+      let allowed = [
         "description",
         "name",
         "id",
@@ -103,9 +93,20 @@ export default {
         "status",
         "chance",
         "gain",
-        "max"
+        "max",
+        "prestige"
       ];
-      return !dont.includes(f) && v != 0;
+
+      let ob = Object.keys(arr)
+        .filter(key => !allowed.includes(key))
+        .reduce((obj, key) => {
+          if (arr[key] > 0) {
+            obj[key] = arr[key];
+          }
+          return obj;
+        }, {});
+
+      return ob;
     },
     getImgUrlS(pet) {
       var images = require.context("../assets/skills/", false, /\.png$/);
@@ -164,13 +165,26 @@ export default {
 </script>
 
 <style scoped>
+.title {
+  margin: 0px;
+}
+.one {
+  margin-top: 2px;
+  height: 40px;
+  width: 100px;
+  line-height: 40px;
+  white-space: nowrap;
+  border: 0.5px solid lightgrey;
+}
+
 .fleo {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 img {
+  margin: 4px;
   float: left;
 }
 
@@ -181,10 +195,8 @@ img {
   background: whitesmoke;
   pointer-events: none;
   z-index: 10;
-  min-width: 100px;
-  width: 180px;
-  max-height: 300px;
-  overflow: auto;
+  width: 220px;
+  overflow: hidden;
 }
 
 .iconz {

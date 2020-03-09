@@ -2,19 +2,8 @@
   <div class="rows">
     <div class="row1 box">
       <h2 style="margin:4px 0px">{{item.name}}</h2>
-      <div>
-        <b>Description:</b>
-        <div>
-          <div>
-            <img class="iconz" :src="getImgUrlS('description')" />
-            <span class="lol">{{item.description}}</span>
-          </div>
-          <TextToolTip :title="k" :item="getinfo('description')" />
-        </div>
-        <hr />
-      </div>
-      <b>Stats:</b>
 
+      <b>Stats:</b>
       <div style="margin:0px 0px 4px 0px" :key="k" v-for="(s,k) in item">
         <div>
           <div v-if="filtred(k,s)">
@@ -23,6 +12,7 @@
           </div>
           <TextToolTip :title="k" :item="getinfo(k)" />
         </div>
+
         <div style="margin:0px 0px 4px 10px" v-if="k=='chance'">
           <div :key="cv" v-for="(c,cv) in item.chance">
             <div>
@@ -70,6 +60,17 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <hr />
+      <div>
+        <b>Description:</b>
+        <div>
+          <div>
+            <img class="iconz" :src="getImgUrlS('description')" />
+            <span class="lol">{{item.description}}</span>
+          </div>
+          <TextToolTip :title="'description'" :item="getinfo('description')" />
         </div>
       </div>
     </div>

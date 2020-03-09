@@ -13,8 +13,9 @@
     </div>
     <div class="flex">
       <div class="kiste">
+        <span class="title">Base</span>
         <div :key="key" v-for="(value, key) in show(this.$parent.player)">
-          <div style="margin:5px" class="flex">
+          <div class="valbox">
             <div>
               <img class="icon" v-if="key" :src="getImgUrl(key)" />
               <span class="val">{{value}}</span>
@@ -24,14 +25,9 @@
         </div>
       </div>
       <div class="kiste">
-        <span>Chances</span>
-        <div
-          style="margin:5px"
-          :key="key+value"
-          v-for="(key,value) in this.$parent.player.chance"
-          class="flex"
-        >
-          <div>
+        <span class="title">Chances</span>
+        <div :key="key+value" v-for="(key,value) in this.$parent.player.chance">
+          <div class="valbox">
             <span class="val">{{key}}</span>
             <img class="icon" v-if="value" :src="getImgUrl(value)" />
           </div>
@@ -39,14 +35,9 @@
         </div>
       </div>
       <div class="kiste">
-        <span>Effects</span>
-        <div
-          style="margin:5px"
-          :key="key+value"
-          v-for="(key,value) in this.$parent.player.effects"
-          class="flex"
-        >
-          <div>
+        <span class="title">Effects</span>
+        <div :key="key+value" v-for="(key,value) in this.$parent.player.effects">
+          <div class="valbox">
             <span class="val">{{key}}</span>
             <img class="icon" v-if="value" :src="getImgUrl(value)" />
           </div>
@@ -54,16 +45,19 @@
         </div>
       </div>
       <div class="kiste">
-        <span>Highscore</span>
-        <div
-          style="margin-left:10px"
-          :key="key+value"
-          v-for="(key,value ) in this.$parent.player.highscore"
-          v-html="displayescore(value)"
-        ></div>
+        <span class="title">Highscore</span>
+        <div :key="key+value" v-for="(key,value ) in this.$parent.player.highscore">
+          <div v-show="key>0">
+            <div class="valbox">
+              <span class="val">{{key}}</span>
+              <img class="icon" v-if="value" :src="getImgUrlH(value)" />
+            </div>
+            <TextToolTip :title="value" :item="'killed in '+key+' seconds'" />
+          </div>
+        </div>
       </div>
       <div class="kiste fux">
-        <span>Skills</span>
+        <span class="title">Skills</span>
         <div :key="key+value" v-for="(key,value) in this.$parent.player.skills">
           <div>
             <img
@@ -86,7 +80,7 @@
         <button class="btn import" @click="importSave">
           <label for="import" style="cursor:pointer">
             <img :src="require('@/assets/icons/import.png')" alt="Import" />
-            Import
+            <span>Import</span>
           </label>
         </button>
 
@@ -242,6 +236,17 @@ export default {
         return img;
       }
     },
+    getImgUrlH(pet) {
+      var images = require.context("../assets/enemys/", false, /\.png$/);
+      let img = "";
+      try {
+        img = images("./" + pet + ".png");
+        return img;
+      } catch (e) {
+        img = images("./chulthuluseye.png");
+        return img;
+      }
+    },
     show(p) {
       let pl = JSON.parse(JSON.stringify(p));
       delete pl.log;
@@ -274,17 +279,22 @@ export default {
 </script>
 
 <style scoped>
+.title {
+  width: 310px;
+  margin: 4px;
+}
+
 #import {
   display: none;
 }
 .val {
-  line-height: 40px;
-  font-size: 20px;
+  line-height: 25px;
+  font-size: 14px;
 }
 .icon {
   float: left;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   margin-right: 5px;
 }
 
@@ -312,13 +322,22 @@ export default {
 }
 
 .kiste {
-  clear: both;
+  width: 310px;
+  display: flex;
+  flex-wrap: wrap;
   padding: 10px;
-  float: left;
   margin: 5px;
   border: 1px solid black;
   background-color: whitesmoke;
   min-width: 100px;
+}
+
+.valbox {
+  margin: 5px;
+  padding: 2px;
+  width: 80px;
+  white-space: nowrap;
+  border: 0.5px solid lightgrey;
 }
 
 .ecke {
@@ -327,5 +346,17 @@ export default {
   position: fixed;
   bottom: 65px;
   right: 0px;
+}
+
+.import {
+  padding: 0px;
+}
+
+.import > label {
+  padding: 10px;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
 }
 </style>

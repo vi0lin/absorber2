@@ -86,6 +86,7 @@ export default {
   width: 180px;
 }
 .title {
+  text-transform: capitalize;
   font-size: 20px;
 }
 .skiste {

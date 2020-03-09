@@ -19,13 +19,14 @@ var player = {
     "auto": false,
     "lastEnemy": "bat",
     "log": [],
-    "version": 1.2,
+    "version": 1.3,
     "highscore": {
         "vampire": -1,
         "hydra": -1,
         "iron_golem": -1,
         "chulthuluseye": -1,
-        "necromant": -1
+        "necromant": -1,
+        "chromeman": -1
     },
     "tutorial": 0,
     "prestige": 0,

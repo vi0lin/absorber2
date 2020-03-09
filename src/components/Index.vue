@@ -14,10 +14,6 @@
           <img :src="require('@/assets/icons/log.png')" alt="log" />
           Log
         </button>
-        <button v-show="this.player.prestige>=3" @click="openTab('order')" class="btn">
-          <img :src="require('@/assets/icons/auto.png')" alt="order" />
-          Order
-        </button>
         <button class="btn" v-show="this.enemy!=null" @click="$refs.dun.selectEnemy(null)">
           <img :src="require('@/assets/icons/door.png')" alt="back" />
           Exit
@@ -30,11 +26,6 @@
           <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
           EnemyBuilder
         </button>
-        <button @click="autofight()" class="btn" id="auto" :class="{active:this.player.auto}">
-          <img :src="require('@/assets/icons/auto.png')" alt="auto" />
-          Autofight
-        </button>
-
         <div class="time">{{gettime(player.time)}}</div>
       </div>
       <div class="box">
@@ -42,7 +33,6 @@
         <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
         <Log v-if="this.active == 'log'" />
         <EnemyBuilder v-if="this.active == 'enemybuilder'" />
-        <AutoOrder v-show="this.active == 'order'" />
       </div>
     </div>
     <div class="status">
@@ -71,8 +61,6 @@ import Log from "./Log.vue";
 import Progressbar from "./Progressbar.vue";
 import Overlay from "./Overlay.vue";
 import EnemyBuilder from "./EnemyBuilder.vue";
-import AutoOrder from "./AutoOrder.vue";
-
 import skilltree from "./json/skilltree.json";
 import choiseslist from "./json/choises.json";
 import { RoundAll } from "./displayfunc";
@@ -92,8 +80,7 @@ export default {
     Progressbar,
     Log,
     Overlay,
-    EnemyBuilder,
-    AutoOrder
+    EnemyBuilder
   },
   watch: {
     player: {
@@ -113,13 +100,12 @@ export default {
       kongregate: null,
       overlay: true,
       skilltree: false,
-      beta: false
+      beta: false,
+      cntrlIsPressed: false,
+      shiftIsPressed: false
     };
   },
   methods: {
-    autofight() {
-      this.player.auto = !this.player.auto;
-    },
     getImgUrlS(pet) {
       var images = require.context("../assets/buffs/", false, /\.png$/);
       let img = "";
@@ -146,7 +132,6 @@ export default {
       player.time = pl.time;
       player.tutorial = pl.tutorial;
       player.highscore = pl.highscore;
-      player.log = log;
       player.speed = 2500;
       player.sspeed = 0;
       this.enemy = null;
@@ -390,6 +375,20 @@ export default {
         player.name = this.kongregate.services.getUsername();
       }
     }
+
+    window.addEventListener("keydown", function(e) {
+      if (event.which == "17") {
+        el.cntrlIsPressed = true;
+      }
+      if (event.which == "16") {
+        el.shiftIsPressed = true;
+      }
+    });
+
+    window.addEventListener("keyup", function(e) {
+      el.cntrlIsPressed = false;
+      el.shiftIsPressed = false;
+    });
 
     setInterval(() => {
       localStorage.setItem("saveGame", JSON.stringify(this.player));
