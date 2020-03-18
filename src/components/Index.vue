@@ -2,19 +2,28 @@
   <div>
     <div>
       <div class="fixed">
-        <button @click="openTab('dungeon')" class="btn">
+        <button
+          :class="{ active: this.active=='fight' }"
+          v-if="this.enemy!=null"
+          @click="openTab('fight')"
+          class="btn"
+        >
+          <img :src="require('@/assets/icons/auto.png')" alt="fight" />
+          Fight
+        </button>
+        <button :class="{ active: this.active=='dungeon' }" @click="openTab('dungeon')" class="btn">
           <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
           Dungeon
         </button>
-        <button @click="openTab('stats')" class="btn">
+        <button :class="{ active: this.active=='stats' }" @click="openTab('stats')" class="btn">
           <img :src="require('@/assets/icons/hero.png')" alt="stats" />
           Stats
         </button>
-        <button @click="openTab('log')" class="btn">
+        <button :class="{ active: this.active=='log' }" @click="openTab('log')" class="btn">
           <img :src="require('@/assets/icons/log.png')" alt="log" />
           Log
         </button>
-        <button class="btn" v-show="this.enemy!=null" @click="$refs.dun.selectEnemy(null)">
+        <button class="btn" v-show="this.enemy!=null" @click="exitFight()">
           <img :src="require('@/assets/icons/door.png')" alt="back" />
           Exit
         </button>
@@ -26,6 +35,7 @@
           <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
           EnemyBuilder
         </button>
+
         <div class="time">{{gettime(player.time)}}</div>
       </div>
       <div class="box">
@@ -33,6 +43,7 @@
         <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
         <Log v-if="this.active == 'log'" />
         <EnemyBuilder v-if="this.active == 'enemybuilder'" />
+        <Fight v-if="this.enemy!=null" v-show="this.active == 'fight'" :item="this.enemy" />
       </div>
     </div>
     <div class="status">
@@ -58,6 +69,7 @@ import ep from "./json/playerempty.js";
 import Stats from "./Stats.vue";
 import Dungeon from "./Dungeon.vue";
 import Log from "./Log.vue";
+import Fight from "./Fight.vue";
 import Progressbar from "./Progressbar.vue";
 import Overlay from "./Overlay.vue";
 import EnemyBuilder from "./EnemyBuilder.vue";
@@ -80,7 +92,8 @@ export default {
     Progressbar,
     Log,
     Overlay,
-    EnemyBuilder
+    EnemyBuilder,
+    Fight
   },
   watch: {
     player: {
@@ -102,10 +115,15 @@ export default {
       skilltree: false,
       beta: false,
       cntrlIsPressed: false,
-      shiftIsPressed: false
+      shiftIsPressed: false,
+      log: log
     };
   },
   methods: {
+    exitFight() {
+      this.$refs.dun.selectEnemy(null);
+      this.active = "dungeon";
+    },
     getImgUrlS(pet) {
       var images = require.context("../assets/buffs/", false, /\.png$/);
       let img = "";
@@ -237,13 +255,6 @@ export default {
       respawn(this.player);
     },
     openTab(t) {
-      $(".active:not(#auto)").removeClass("active");
-
-      let target = event.target.classList.contains("btn")
-        ? event.target
-        : event.target.parentNode;
-
-      $(target).addClass("active");
       this.active = t;
     },
     tutorial() {
@@ -313,6 +324,7 @@ export default {
     hardreset() {
       this.recalculate(JSON.parse(JSON.stringify(ep)));
       this.overlay = false;
+      this.save();
     },
     reset() {
       this.player.prestige++;
@@ -350,6 +362,42 @@ export default {
         10 > e && (e = "0" + e),
         0 < c ? c + ":" + d + ":" + e : 0 < d ? d + ":" + e : e
       );
+    },
+    setNextEnemy() {
+      let pl = this.player;
+
+      if (pl.prestige >= 3) {
+        for (let ind of pl.order) {
+          let e = this.$refs.dun.enemys.find(e => e.id == ind);
+          let tmax = this.getLast(e.max, pl.prestige);
+          if (pl.counter[e.id] < tmax) {
+            this.enemy = e;
+            break;
+          }
+        }
+      } else {
+        let last = this.$refs.dun.enemys.find(e => e.id == pl.lastEnemy);
+        if (last != undefined) {
+          let max = this.getLast(last.max, pl.prestige);
+          if (pl.counter[last.id] < max) {
+            this.enemy = last;
+          } else {
+            this.enemy = null;
+            this.active = "dungeon";
+          }
+        }
+      }
+    },
+    save() {
+      if (typeof Storage !== "undefined") {
+        try {
+          localStorage.setItem("saveGame", JSON.stringify(this.player));
+        } catch (e) {
+          console.log("save didnt worked", e);
+        }
+      } else {
+        console.log("your browser dosnt support storage");
+      }
     }
   },
   mounted() {
@@ -362,13 +410,12 @@ export default {
     }
 
     if (null != localStorage.getItem("saveGame")) {
-      let a = JSON.parse(localStorage.getItem("saveGame"));
-      this.recalculate(a);
+      this.recalculate(JSON.parse(localStorage.getItem("saveGame")));
+    } else {
+      this.recalculate(this.player);
     }
 
     0 >= this.player.tutorial && this.tutorial();
-
-    this.player.log = log;
 
     if (this.kongregate != null) {
       if (!this.kongregate.services.isGuest() && player.name == "Rimuro") {
@@ -391,7 +438,7 @@ export default {
     });
 
     setInterval(() => {
-      localStorage.setItem("saveGame", JSON.stringify(this.player));
+      el.save();
     }, 60000);
 
     setInterval(() => {
@@ -437,24 +484,7 @@ export default {
         } else {
           pl.clife = pl.life;
           if (pl.auto) {
-            if (this.player.prestige >= 3) {
-              for (let ind of this.player.order) {
-                let e = this.$refs.dun.enemys.find(e => e.id == ind);
-                let tmax = this.getLast(e.max, pl.prestige);
-                if (pl.counter[e.id] < tmax) {
-                  this.enemy = e;
-                  break;
-                }
-              }
-            } else {
-              let last = this.$refs.dun.enemys.find(e => e.id == pl.lastEnemy);
-              if (last != undefined) {
-                let max = this.getLast(last.max, pl.prestige);
-                if (pl.counter[last.id] < max) {
-                  this.enemy = last;
-                }
-              }
-            }
+            el.setNextEnemy();
           }
         }
       }

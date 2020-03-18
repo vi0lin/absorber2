@@ -22,7 +22,7 @@
 export default {
   methods: {
     getLog() {
-      return this.$parent.player.log.slice(-60).reverse();
+      return this.$parent.log.slice(-60).reverse();
     }
   }
 };

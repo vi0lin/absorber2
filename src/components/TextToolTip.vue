@@ -82,8 +82,8 @@ export default {
   background: whitesmoke;
   pointer-events: none;
   z-index: 10;
-  min-width: 100px;
   width: 180px;
+  white-space: normal;
 }
 .title {
   text-transform: capitalize;

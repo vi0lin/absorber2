@@ -7,13 +7,15 @@
         <div class="fleo">
           <div class="fleo" :key="g" v-for="(n,g) in filtred(item)">
             <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
-            <div class="one" v-if="g!='effects'||g!='chance'">
+            <div class="fleo" v-if="g=='effects'||g=='chance'">
+              <div class="one" :key="gi" v-for="(gn,gi) in item[g]">
+                <img :src="getImgUrlS(gi)" />
+                <span>{{gn}}</span>
+              </div>
+            </div>
+            <div v-else class="one">
               <img :src="getImgUrlS(g)" />
               <span>{{n}}</span>
-            </div>
-            <div class="one" v-else :key="gi" v-for="(gn,gi) in item[g]">
-              <img :src="getImgUrlS(gi)" />
-              <span>{{gn}}</span>
             </div>
           </div>
         </div>
@@ -69,7 +71,11 @@ export default {
       create: false,
       show: false,
       elistender: null,
-      llistender: null
+      llistender: null,
+      mlistender: null,
+      target: null,
+      x: 0,
+      y: 0
     };
   },
   methods: {
@@ -89,9 +95,7 @@ export default {
         "boss",
         "clife",
         "cspeed",
-        "effects",
         "status",
-        "chance",
         "gain",
         "max",
         "prestige"
@@ -100,9 +104,8 @@ export default {
       let ob = Object.keys(arr)
         .filter(key => !allowed.includes(key))
         .reduce((obj, key) => {
-          if (arr[key] > 0) {
-            obj[key] = arr[key];
-          }
+          obj[key] = arr[key];
+
           return obj;
         }, {});
 
@@ -118,23 +121,56 @@ export default {
         img = images("./dmg.png");
         return img;
       }
+    },
+    setReal() {
+      let el = this;
+      setTimeout(function() {
+        let eposy = 0;
+        let eposx = 0;
+        try {
+          if (el.x > 500) {
+            eposy = el.target.left - 250;
+          } else {
+            eposy = el.target.left + el.target.width + 10;
+          }
+
+          if (el.y > 350) {
+            eposx = el.target.bottom - el.$el.scrollHeight;
+          } else {
+            eposx = el.target.top + 10;
+          }
+
+          el.$el.style.top = eposx + "px";
+          el.$el.style.left = eposy + "px";
+        } catch {}
+      }, 10);
+    },
+    setDimensions(e, el) {
+      el.create = true;
+      el.show = true;
+      el.target = e.target.getBoundingClientRect();
+      el.x = e.clientX;
+      el.y = e.clientY;
+      this.setReal();
+    }
+  },
+  watch: {
+    shift: function(val) {
+      this.setReal();
+    },
+    ctrl: function(val) {
+      this.setReal();
     }
   },
   mounted() {
     let el = this;
 
     this.elistender = function(e) {
-      el.create = true;
+      el.setDimensions(e, el);
+    };
 
-      setInterval(function() {
-        el.show = true;
-        try {
-          let eposy = e.target.getBoundingClientRect().left;
-          let eposx = e.target.getBoundingClientRect().top;
-          el.$el.style.top = eposx + "px";
-          el.$el.style.left = eposy + "px";
-        } catch {}
-      }, 100);
+    this.mlistender = function(e) {
+      el.setDimensions(e, el);
     };
 
     this.llistender = function() {
@@ -142,24 +178,36 @@ export default {
       el.create = false;
     };
 
-    this.$el.parentElement.firstChild.addEventListener(
-      "mouseenter",
-      this.elistender
-    );
-    this.$el.parentElement.firstChild.addEventListener(
-      "mouseleave",
-      this.llistender
-    );
+    $(this.$el)
+      .parent()
+      .first()
+      .on("mouseenter", this.elistender);
+
+    $(this.$el)
+      .parent()
+      .first()
+      .on("mousemove", this.mlistender);
+
+    $(this.$el)
+      .parent()
+      .first()
+      .on("mouseleave", this.llistender);
   },
   beforeDestroy() {
-    this.$el.parentElement.firstChild.removeEventListener(
-      "mouseenter",
-      this.elistender
-    );
-    this.$el.parentElement.firstChild.removeEventListener(
-      "mouseleave",
-      this.llistender
-    );
+    $(this.$el)
+      .parent()
+      .first()
+      .off("mouseenter", this.elistender);
+
+    $(this.$el)
+      .parent()
+      .first()
+      .off("mousemove", this.mlistender);
+
+    $(this.$el)
+      .parent()
+      .first()
+      .off("mouseleave", this.llistender);
   }
 };
 </script>

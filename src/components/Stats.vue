@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="kiste">
+      <div v-show="Object.keys(this.$parent.player.chance).length !== 0" class="kiste">
         <span class="title">Chances</span>
         <div :key="key+value" v-for="(key,value) in this.$parent.player.chance">
           <div class="valbox">
@@ -34,7 +34,7 @@
           <Tooltip2 :item="value" />
         </div>
       </div>
-      <div class="kiste">
+      <div v-show="Object.keys(this.$parent.player.effects).length !== 0" class="kiste">
         <span class="title">Effects</span>
         <div :key="key+value" v-for="(key,value) in this.$parent.player.effects">
           <div class="valbox">
@@ -52,21 +52,18 @@
               <span class="val">{{key}}</span>
               <img class="icon" v-if="value" :src="getImgUrlH(value)" />
             </div>
-            <TextToolTip :title="value" :item="'killed in '+key+' seconds'" />
+            <TextToolTip :title="getRealEnemyName(value)" :item="'killed in '+key+' seconds'" />
           </div>
         </div>
       </div>
-      <div class="kiste fux">
+      <div v-show="Object.keys(this.$parent.player.skills).length !== 0" class="kiste fux">
         <span class="title">Skills</span>
-        <div :key="key+value" v-for="(key,value) in this.$parent.player.skills">
-          <div>
-            <img
-              style="margin:5px"
-              class="icon"
-              :src="require('@/assets/skills/'+displayeskills(key)+'.png')"
-            />
-            <TextToolTip :title="displayeskills2(key).name" :item="displayeskills2(key).desc" />
+        <div :key="value" v-for="(key,value) in groupSkills(this.$parent.player.skills)">
+          <div class="valbox">
+            <img class="icon" :src="require('@/assets/skills/'+displayeskills(value)+'.png')" />
+            <span class="val">{{key}}</span>
           </div>
+          <TextToolTip :title="displayeskills2(value).name" :item="displayeskills2(value).desc" />
         </div>
       </div>
       <div class="ecke">
@@ -107,6 +104,7 @@
 import j from "./json/player.js";
 import tipp from "./json/tipps.json";
 import Tooltip2 from "./Tooltip2.vue";
+import enemylist from "./json/enemys.json";
 import TextToolTip from "./TextToolTip.vue";
 import choiseslist from "./json/choises.json";
 import { debug } from "./gloabals.js";
@@ -136,7 +134,7 @@ export default {
       }
     },
     saveGame() {
-      localStorage.setItem("saveGame", JSON.stringify(this.$parent.player));
+      this.$parent.save();
     },
     exportSave() {
       if (this.$parent.beta) {
@@ -147,7 +145,10 @@ export default {
         );
       }
 
-      this.$parent.player.log.push("<div>Save was downloaded</div>");
+      this.$parent.log.push("<div>Save was downloaded</div>");
+    },
+    getRealEnemyName(id) {
+      return enemylist.find(x => x.id == id).name;
     },
     importSave() {
       let el = this;
@@ -165,13 +166,27 @@ export default {
             }
 
             el.$parent.recalculate(r);
-            el.$parent.player.log.push("<div>Save was loaded</div>");
+            el.$parent.log.push("<div>Save was loaded</div>");
           });
 
           reader.readAsBinaryString(myFile);
         }
       });
       this.saveGame();
+    },
+    groupSkills(list) {
+      let obj = {};
+
+      list.reduce(function(rv, x) {
+        x = x.substring(0, x.length - 1);
+
+        if (!(x in obj)) {
+          obj[x] = 1;
+        } else {
+          obj[x]++;
+        }
+      }, {});
+      return obj;
     },
     openreset() {
       let ov = this.$parent.$refs.ov.$data;
@@ -212,12 +227,10 @@ export default {
       );
     },
     displayeskills(a) {
-      a = a.substring(0, a.length - 1);
       let t = choiseslist.find(b => b.id === a).id;
       return t.substring(2);
     },
     displayeskills2(a) {
-      a = a.substring(0, a.length - 1);
       let t = choiseslist.find(b => b.id === a);
       return t;
     },
@@ -249,7 +262,6 @@ export default {
     },
     show(p) {
       let pl = JSON.parse(JSON.stringify(p));
-      delete pl.log;
       delete pl.name;
       delete pl.status;
       delete pl.counter;
@@ -312,13 +324,6 @@ export default {
 
 .flex {
   align-items: flex-start;
-}
-
-.fux {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  max-width: 200px;
 }
 
 .kiste {

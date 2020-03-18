@@ -1,77 +1,49 @@
 <template>
   <div class="rows">
     <div class="row1 box">
-      <h2 style="margin:4px 0px">{{item.name}}</h2>
-
+      <h2 class="title">{{item.name}}</h2>
+      <br />
       <b>Stats:</b>
-      <div style="margin:0px 0px 4px 0px" :key="k" v-for="(s,k) in item">
-        <div>
-          <div v-if="filtred(k,s)">
-            <img class="iconz" :src="getImgUrlS(k)" />
-            <span class="lol">{{s}}</span>
+      <hr />
+      <div class="fleo">
+        <div :key="g" v-for="(n,g) in filtred(item)">
+          <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
+          <div class="fleo" v-if="g=='effects'||g=='chance'">
+            <div class="one" :key="gi" v-for="(gn,gi) in item[g]">
+              <img :src="getImgUrlS(gi)" />
+              <span>{{gn}}</span>
+            </div>
           </div>
-          <TextToolTip :title="k" :item="getinfo(k)" />
-        </div>
-
-        <div style="margin:0px 0px 4px 10px" v-if="k=='chance'">
-          <div :key="cv" v-for="(c,cv) in item.chance">
-            <div>
-              <img class="iconz" :src="getImgUrlS(cv)" />
-              <span class="lol">{{c}}</span>
-            </div>
-            <TextToolTip :title="cv" :item="getinfo(cv)" />
-          </div>
-        </div>
-        <div style="margin:0px 0px 4px 10px" v-if="k=='effects'">
-          <div :key="cv" v-for="(c,cv) in item.effects">
-            <div>
-              <img class="iconz" :src="getImgUrlS(cv)" />
-              <span class="lol">{{c}}</span>
-            </div>
-            <TextToolTip :title="cv" :item="getinfo(cv)" />
-          </div>
-        </div>
-
-        <div style="margin:0px 0px 4px 0px" v-if="k=='gain'">
-          <hr />
-          <b>Gain:</b>
-          <div :key="gv" v-for="(g,gv) in item.gain">
-            <div v-if="filtred(gv,g)">
-              <img class="iconz" :src="getImgUrlS(gv)" />
-              <span class="lol">{{g}}</span>
-            </div>
-            <TextToolTip :title="gv" :item="getinfo(gv)" />
-            <div style="margin:0px 0px 4px 10px" v-if="gv=='chance'">
-              <div :key="cv" v-for="(c,cv) in item.gain.chance">
-                <div>
-                  <img class="iconz" :src="getImgUrlS(cv)" />
-                  <span class="lol">{{c}}</span>
-                </div>
-                <TextToolTip :title="cv" :item="getinfo(cv)" />
-              </div>
-            </div>
-            <div style="margin:0px 0px 4px 10px" v-if="gv=='effects'">
-              <div :key="cv" v-for="(c,cv) in item.gain.effects">
-                <div>
-                  <img class="iconz" :src="getImgUrlS(cv)" />
-                  <span class="lol">{{c}}</span>
-                </div>
-                <TextToolTip :title="cv" :item="getinfo(cv)" />
-              </div>
+          <div v-else>
+            <div class="one">
+              <img :src="getImgUrlS(g)" />
+              <span>{{n}}</span>
             </div>
           </div>
         </div>
       </div>
+      <br />
+      <b>Gain:</b>
       <hr />
-      <div>
-        <b>Description:</b>
-        <div>
-          <div>
-            <img class="iconz" :src="getImgUrlS('description')" />
-            <span class="lol">{{item.description}}</span>
+      <div class="fleo">
+        <div class="fleo" :key="g" v-for="(n,g) in item.gain">
+          <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
+          <div class="one" v-if="g!='effects'&&g!='chance'">
+            <img :src="getImgUrlS(g)" />
+            <span>{{n}}</span>
           </div>
-          <TextToolTip :title="'description'" :item="getinfo('description')" />
+          <div class="one" v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
+            <img :src="getImgUrlS(gi)" />
+            <span>{{gn}}</span>
+          </div>
         </div>
+      </div>
+      <div>
+        <br />
+        <b>Description:</b>
+        <hr />
+        <img :src="getImgUrlS('description')" />
+        <span class="lol">{{item.description}}</span>
       </div>
     </div>
     <div class="row2 middle">
@@ -79,7 +51,7 @@
         <div>
           <div
             style="text-align:center"
-          >{{this.$parent.$parent.player.counter[item.id]}}/{{getLast(this.item.max,this.$parent.$parent.player.prestige)}}</div>
+          >{{this.$parent.player.counter[item.id]}}/{{getLast(this.item.max,this.$parent.player.prestige)}}</div>
           <div class="name">{{item.name}}</div>
         </div>
         <div style="width:200px">
@@ -133,8 +105,7 @@ import tipps from "./json/tipps.json";
 
 export default {
   components: {
-    Progressbar,
-    TextToolTip
+    Progressbar
   },
   props: {
     item: {
@@ -186,21 +157,29 @@ export default {
         return img;
       }
     },
-    filtred(f, v) {
-      let dont = [
+    filtred(arr) {
+      let allowed = [
         "description",
         "name",
         "id",
         "boss",
         "clife",
         "cspeed",
-        "effects",
         "status",
-        "chance",
         "gain",
-        "max"
+        "max",
+        "prestige"
       ];
-      return !dont.includes(f) && v != 0;
+
+      let ob = Object.keys(arr)
+        .filter(key => !allowed.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = arr[key];
+
+          return obj;
+        }, {});
+
+      return ob;
     },
     getinfo(i) {
       let tipp = tipps.find(x => x.id == i);
@@ -211,24 +190,32 @@ export default {
       }
     },
     getLog() {
-      return this.$parent.$parent.player.log.slice(-9).reverse();
+      return this.$parent.log.slice(-9).reverse();
     },
     exit() {
-      this.$parent.$parent.enemy = null;
-      try {
-        this.$parent.tenemyo = null;
-      } catch {}
+      if (
+        this.$parent.player.clife == this.$parent.player.life &&
+        this.$parent.player.auto
+      ) {
+        this.$parent.setNextEnemy();
+      } else {
+        this.$parent.enemy = null;
+        this.$parent.active = "dungeon";
+        try {
+          this.$parent.tenemyo = null;
+        } catch {}
+      }
     },
     won() {
-      this.$parent.$parent.player.go = true;
-      this.$parent.$parent.player.auto = false;
-      this.$parent.$parent.displayfinish();
+      this.$parent.player.go = true;
+      this.$parent.player.auto = false;
+      this.$parent.displayfinish();
     }
   },
   mounted() {
-    this.$parent.$parent.recovery = false;
+    this.$parent.recovery = false;
 
-    let player = this.$parent.$parent.player,
+    let player = this.$parent.player,
       classlist = this.$refs.eimage.classList;
 
     player.lastEnemy = this.item.id;
@@ -240,7 +227,7 @@ export default {
         this.won,
         this.exit,
         classlist,
-        this.$parent.$parent.kongregate
+        this.$parent.kongregate
       );
     }, 100);
 
@@ -251,14 +238,14 @@ export default {
         this.won,
         this.exit,
         classlist,
-        this.$parent.$parent.kongregate
+        this.$parent.kongregate
       );
     }, 100);
   },
   beforeDestroy() {
     clearInterval(this.timer1);
     clearInterval(this.timer2);
-    this.$parent.$parent.recovery = true;
+    this.$parent.recovery = true;
     respawn(this.item);
   }
 };
@@ -283,8 +270,32 @@ export default {
   padding: 10px;
   background: darkgrey;
   width: 100%;
-  min-width: 200px;
+  min-width: 220px;
   min-height: 400px;
+}
+
+.title {
+  margin: 0px;
+}
+
+.one {
+  margin-top: 2px;
+  height: 40px;
+  width: 100px;
+  line-height: 40px;
+  white-space: nowrap;
+  border: 0.5px solid lightgrey;
+}
+
+.fleo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.one img {
+  margin: 4px;
+  float: left;
 }
 
 .rows {

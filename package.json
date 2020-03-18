@@ -30,6 +30,7 @@
       "eslint:recommended"
     ],
     "rules": {
+      "no-unused-declaration": "on",
       "no-console": "off",
       "no-unused-vars": "off",
       "no-empty": "off",

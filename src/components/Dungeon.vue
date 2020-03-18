@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="moreroom" v-show="this.$parent.enemy==null">
+    <div class="moreroom">
       <div>
         <button v-show="$parent.player.prestige>=3" class="btn dun" @click="resetOrder()">
           <img :src="require('@/assets/icons/order.png')" alt="auto" />
@@ -17,7 +17,7 @@
         </button>
         <div style="margin-left:10px;">
           Press
-          <b>CTRL</b> for gain.
+          <b>CTRL</b> for stats.
           <b>SHIFT</b> for description.
           <span v-show="$parent.player.prestige>=3">
             <b>DRAG</b> to change fighting order.
@@ -69,19 +69,16 @@
         </div>
       </div>
     </div>
-
-    <Fight v-if="this.$parent.enemy!=null" :item="this.$parent.enemy" />
   </div>
 </template>
 
 <script>
 import e from "./json/enemys.json";
-import Fight from "./Fight.vue";
 import Tooltip from "./Tooltip.vue";
 import { respawn, getLast } from "./functions";
 
 export default {
-  components: { Fight, Tooltip },
+  components: { Tooltip },
   data() {
     return {
       enemys: e,
@@ -164,6 +161,7 @@ export default {
     selectEnemy(t) {
       if (!this.checkready(t)) {
         this.$parent.enemy = t;
+        this.$parent.active = "fight";
 
         this.$parent.enemy != null
           ? respawn(this.$parent.enemy)
@@ -202,7 +200,8 @@ export default {
   padding: 10px;
   border: 1px solid black;
   text-align: center;
-  width: 70px;
+  width: 80px;
+  min-height: 130px;
 }
 .kiste:hover {
   background: rgb(186, 233, 248);

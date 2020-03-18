@@ -101,6 +101,7 @@ export default {
   z-index: 10;
   min-width: 100px;
   width: 180px;
+  white-space: normal;
 }
 
 .skiste {

@@ -152,6 +152,11 @@
     {
         "id": "description",
         "desc": "It explains things just like this text here.",
-        "form": "life = life - regeneration"
+        "form": "description = description"
+    },
+    {
+        "id": "resurrect",
+        "desc": "The chance of not dying and continuing to fight with full life.",
+        "form": "life = maxlife"
     }
 ]
