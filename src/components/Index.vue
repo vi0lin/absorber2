@@ -113,7 +113,7 @@ export default {
       kongregate: null,
       overlay: true,
       skilltree: false,
-      beta: false,
+      beta: true,
       cntrlIsPressed: false,
       shiftIsPressed: false,
       log: log
@@ -418,8 +418,21 @@ export default {
     0 >= this.player.tutorial && this.tutorial();
 
     if (this.kongregate != null) {
-      if (!this.kongregate.services.isGuest() && player.name == "Rimuro") {
-        player.name = this.kongregate.services.getUsername();
+      let isguest = this.kongregate.services.isGuest();
+      let username = "";
+      if (!isguest) {
+        username = this.kongregate.services.getUsername();
+        $.getJSON(
+          "https://api.kongregate.com/api/kongpanions.json?username=" +
+            username,
+          function(data) {
+            console.log(data);
+          }
+        );
+      }
+
+      if (!isguest && player.name == "Rimuro") {
+        player.name = username;
       }
     }
 

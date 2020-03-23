@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left:20px" class="flex-colum" v-if="item!=null">
+  <div v-if="item!=null">
     <div>
       <img
         class="small"
@@ -9,7 +9,9 @@
       />
       <TextToolTip :title="gettipp(item).name" :item="gettipp(item).desc" />
     </div>
-    <Accordion :can="can" :co="co" :fun="fun" :key="i.id" :item="i" v-for="i of item.open" />
+    <div class="flex-colum">
+      <Accordion :can="can" :co="co" :fun="fun" :key="i.id" :item="i" v-for="i of item.open" />
+    </div>
   </div>
 </template>
 
@@ -75,6 +77,12 @@ export default {
 </script>
 
 <style scoped>
+.flex-colum {
+  border: 1px solid darkgrey;
+  display: flex;
+  flex-flow: row wrap;
+}
+
 .right {
   float: right;
 }

@@ -1266,5 +1266,132 @@
             }
         },
         "status": {}
+    },
+    {
+        "id": "prior",
+        "name": "Priors of the Uri",
+        "description": "Fear not the Uri, fear the darkness that would conceal the knowledge of the universe. Believe in the truth of all things, and you too may find the Path to enlightenment",
+        "prestige": 4,
+        "boss": false,
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            20
+        ],
+        "life": 5000,
+        "clife": 5000,
+        "regeneration": 50,
+        "speed": 300,
+        "cspeed": 0,
+        "dmg": 0,
+        "magic": 3000,
+        "effects": {
+            "block": 250,
+            "precision": 210
+        },
+        "resistance": {
+            "fire": 100,
+            "poison": 100
+        },
+        "chance": {
+            "fire": 355,
+            "silence": 100,
+            "stim": 60
+        },
+        "gain": {
+            "speed": 1,
+            "chance": {
+                "fire": 1
+            },
+            "effects": {
+                "precision": 0.1
+            },
+            "resistance": {
+                "fire": 0.01
+            }
+        },
+        "status": {}
+    },
+    {
+        "id": "mawas",
+        "name": "Mawas",
+        "description": "Mawas were passionate scavengers, combing the deserts of Labooine for droids or scraps which they would capture and sell to the local residents",
+        "prestige": 4,
+        "boss": false,
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            300
+        ],
+        "life": 250,
+        "clife": 250,
+        "regeneration": 10,
+        "speed": 200,
+        "cspeed": 0,
+        "dmg": 250,
+        "magic": 40,
+        "effects": {
+            "block": 280,
+            "precision": 220
+        },
+        "chance": {
+            "fire": 20,
+            "dodge": 150,
+            "disarm": 65
+        },
+        "gain": {
+            "speed": 1,
+            "chance": {
+                "disarm": 0.05
+            },
+            "effects": {
+                "precision": 0.1
+            }
+        },
+        "status": {}
+    },
+    {
+        "id": "ROAMEr",
+        "name": "ROAMEr",
+        "description": "Remote Observation And Manipulation device",
+        "prestige": 4,
+        "boss": false,
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            200
+        ],
+        "life": 350,
+        "clife": 350,
+        "regeneration": 0,
+        "speed": 150,
+        "cspeed": 0,
+        "dmg": 250,
+        "magic": 40,
+        "effects": {
+            "block": 350,
+            "precision": 220
+        },
+        "chance": {
+            "fire": 100,
+            "dodge": 180,
+            "disarm": 55
+        },
+        "gain": {
+            "dmg": 1,
+            "chance": {
+                "disarm": 0.05
+            },
+            "effects": {
+                "precision": 0.1
+            }
+        },
+        "status": {}
     }
 ]

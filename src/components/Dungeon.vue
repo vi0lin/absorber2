@@ -151,6 +151,12 @@ export default {
         list.push(this.enemys.find(b => a == b.id));
       }
 
+      while (this.enemys.length > this.$parent.player.order.length) {
+        this.$parent.player.order.push(
+          this.enemys[this.$parent.player.order.length].id
+        );
+      }
+
       return list.filter(function(x) {
         if (x.prestige != null && x.prestige != undefined) {
           return el.$parent.player.prestige >= x.prestige;
