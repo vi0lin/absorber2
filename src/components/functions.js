@@ -414,13 +414,6 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
         target.highscore[attacker.id] = target.time;
         log.push(`<div>${attacker.name} was killed in ${target.time}</div>`)
 
-        if (kong != null && kong != undefined) {
-            try {
-                kong.stats.submit(attacker.id, target.time);
-            }
-            catch{ }
-        }
-
         attacker.id == getLastBoss(target) && func();
 
     } else {
@@ -526,22 +519,6 @@ export function getLast(j, p) {
         return j[p];
     }
 }
-
-
-/*export function getParentById(pid, pnode) {
-    let parent = null;
-    let someFunction = function (node) {
-        for (let i of node) {
-            if (pid == i.id) {
-                return parent
-            } else if (i.open.length > 0) {
-                parent = i;
-                someFunction(i.open)
-            }
-        }
-    }
-    console.log(someFunction(pnode))
-}*/
 
 export function getParentById(id, node) {
     var reduce = [].reduce;

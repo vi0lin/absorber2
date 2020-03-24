@@ -26,7 +26,7 @@
           <button class="btn close" @click="close">X</button>
           <div class="points">Points: {{this.$parent.player.points}}</div>
           <button class="btn reset" @click="resetskills">Reset</button>
-          <div style="display:flex;flex-flow:column wrap; margin: 100px 10px;">
+          <div class="middle">
             <Accordion
               :can="this.canBeChoosen"
               :co="this.choosen"
@@ -91,13 +91,20 @@ export default {
       this.$parent.skilltree = false;
     },
     canBeChoosen(s) {
-      if (["s_dmg0", "s_magic0", "s_life0", "s_speed0"].includes(s)) {
-        return !1;
+      var start = ["s_dmg0", "s_magic0", "s_life0", "s_speed0"];
+
+      if (start.includes(s)) {
+        return false;
       }
 
-      //var b = getParentById(s, skilltree);
-      let b = null;
-      return !(null == b || this.choosen(b.id));
+      var target = getParentById(s, skilltree);
+
+      if (target != undefined) {
+        if (!this.choosen(target.id)) {
+          return true;
+        }
+      }
+      return false;
     }
   },
   props: {
@@ -105,9 +112,6 @@ export default {
       type: Boolean,
       required: true
     }
-  },
-  mounted() {
-    console.log(getParentById("m_regen0", this.st));
   },
   data() {
     return {
@@ -124,6 +128,11 @@ export default {
 </script>
 
 <style scoped>
+.middle {
+  position: relative;
+  top: 0%;
+  left: 0%;
+}
 .bc {
   width: 100%;
   height: 100%;

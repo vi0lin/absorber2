@@ -28,6 +28,12 @@ html,
   font-family: "MedievalSharp", cursive;
 }
 
+#app {
+  width: 900px;
+  height: 600px;
+  overflow: auto;
+}
+
 ::-webkit-scrollbar {
   width: 15px;
 }

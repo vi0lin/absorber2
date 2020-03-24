@@ -81,10 +81,6 @@ import { log } from "./gloabals.js";
 
 import e from "./json/enemys.json";
 
-if (document.referrer.includes("kongregate.com")) {
-  kongregateAPI.loadAPI();
-}
-
 export default {
   components: {
     Stats,
@@ -110,10 +106,9 @@ export default {
       enemy: null,
       htimer: null,
       recovery: true,
-      kongregate: null,
       overlay: true,
       skilltree: false,
-      beta: true,
+      beta: false,
       cntrlIsPressed: false,
       shiftIsPressed: false,
       log: log
@@ -158,11 +153,6 @@ export default {
         pl.order != undefined && pl.order.length > 0
           ? pl.order
           : e.map(({ id: a }) => a);
-
-      for (let a in player.highscore)
-        if (0 < player.highscore[a])
-          if (this.kongregate != null)
-            this.kongregate.stats.submit(a, player.highscore[a]);
 
       for (let a in player.counter) {
         for (let b, c = 0; c < player.counter[a]; c++) {
@@ -403,12 +393,6 @@ export default {
   mounted() {
     let el = this;
 
-    if (document.referrer.includes("kongregate.com")) {
-      kongregateAPI.loadAPI(function() {
-        el.kongregate = kongregateAPI.getAPI();
-      });
-    }
-
     if (null != localStorage.getItem("saveGame")) {
       this.recalculate(JSON.parse(localStorage.getItem("saveGame")));
     } else {
@@ -416,25 +400,6 @@ export default {
     }
 
     0 >= this.player.tutorial && this.tutorial();
-
-    if (this.kongregate != null) {
-      let isguest = this.kongregate.services.isGuest();
-      let username = "";
-      if (!isguest) {
-        username = this.kongregate.services.getUsername();
-        $.getJSON(
-          "https://api.kongregate.com/api/kongpanions.json?username=" +
-            username,
-          function(data) {
-            console.log(data);
-          }
-        );
-      }
-
-      if (!isguest && player.name == "Rimuro") {
-        player.name = username;
-      }
-    }
 
     window.addEventListener("keydown", function(e) {
       if (event.which == "17") {
