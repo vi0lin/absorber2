@@ -388,85 +388,102 @@ export default {
       } else {
         console.log("your browser dosnt support storage");
       }
+    },
+    startGame(name) {
+      let el = this;
+      console.log(name);
+      if (null != localStorage.getItem("saveGame")) {
+        this.recalculate(JSON.parse(localStorage.getItem("saveGame")));
+      } else {
+        this.player.name = name;
+        this.recalculate(this.player);
+      }
+
+      0 >= this.player.tutorial && this.tutorial();
+
+      window.addEventListener("keydown", function(e) {
+        if (event.which == "17") {
+          el.cntrlIsPressed = true;
+        }
+        if (event.which == "16") {
+          el.shiftIsPressed = true;
+        }
+      });
+
+      window.addEventListener("keyup", function(e) {
+        el.cntrlIsPressed = false;
+        el.shiftIsPressed = false;
+      });
+
+      setInterval(() => {
+        el.save();
+      }, 60000);
+
+      setInterval(() => {
+        this.player.time += 1;
+      }, 1000);
+
+      this.overlay = false;
+
+      this.player.status = {
+        poison: 0,
+        fire: 0,
+        stun: 0,
+        slow: 0,
+        silence: 0,
+        rot: 0,
+        bleed: 0,
+        bury: 0,
+        stim: 0,
+        invert: 0
+      };
+
+      this.htimer = setInterval(() => {
+        if (this.recovery) {
+          let pl = this.player;
+
+          pl.status = {
+            poison: 0,
+            fire: 0,
+            stun: 0,
+            slow: 0,
+            silence: 0,
+            rot: 0,
+            bleed: 0,
+            bury: 0,
+            stim: 0,
+            invert: 0
+          };
+
+          if (pl.clife + pl.recovery + pl.regeneration <= pl.life) {
+            pl.clife < 0
+              ? (pl.clife = pl.recovery + pl.regeneration)
+              : (pl.clife += pl.recovery + pl.regeneration);
+          } else {
+            pl.clife = pl.life;
+            if (pl.auto) {
+              el.setNextEnemy();
+            }
+          }
+        }
+      }, 1000);
     }
   },
   mounted() {
     let el = this;
-
-    if (null != localStorage.getItem("saveGame")) {
-      this.recalculate(JSON.parse(localStorage.getItem("saveGame")));
-    } else {
-      this.recalculate(this.player);
-    }
-
-    0 >= this.player.tutorial && this.tutorial();
-
-    window.addEventListener("keydown", function(e) {
-      if (event.which == "17") {
-        el.cntrlIsPressed = true;
-      }
-      if (event.which == "16") {
-        el.shiftIsPressed = true;
-      }
+    FB.init({
+      appId: "210831430161721",
+      autoLogAppEvents: true,
+      xfbml: true,
+      version: "v6.0"
     });
-
-    window.addEventListener("keyup", function(e) {
-      el.cntrlIsPressed = false;
-      el.shiftIsPressed = false;
+    let name = "Rimuro";
+    FB.getLoginStatus(function(response) {
+      FB.api(response.authResponse.userID, function(response) {
+        response.name != undefined && (name = response.name);
+        el.startGame(name);
+      });
     });
-
-    setInterval(() => {
-      el.save();
-    }, 60000);
-
-    setInterval(() => {
-      this.player.time += 1;
-    }, 1000);
-
-    this.overlay = false;
-
-    this.player.status = {
-      poison: 0,
-      fire: 0,
-      stun: 0,
-      slow: 0,
-      silence: 0,
-      rot: 0,
-      bleed: 0,
-      bury: 0,
-      stim: 0,
-      invert: 0
-    };
-
-    this.htimer = setInterval(() => {
-      if (this.recovery) {
-        let pl = this.player;
-
-        pl.status = {
-          poison: 0,
-          fire: 0,
-          stun: 0,
-          slow: 0,
-          silence: 0,
-          rot: 0,
-          bleed: 0,
-          bury: 0,
-          stim: 0,
-          invert: 0
-        };
-
-        if (pl.clife + pl.recovery + pl.regeneration <= pl.life) {
-          pl.clife < 0
-            ? (pl.clife = pl.recovery + pl.regeneration)
-            : (pl.clife += pl.recovery + pl.regeneration);
-        } else {
-          pl.clife = pl.life;
-          if (pl.auto) {
-            el.setNextEnemy();
-          }
-        }
-      }
-    }, 1000);
   },
   beforeDestroy() {
     clearInterval(this.htimer);

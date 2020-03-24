@@ -22,15 +22,16 @@ html,
   user-select: none;
   image-rendering: optimizeQuality;
   background: grey;
-  width: 100%;
   margin: 0px;
   padding: 0px;
   font-family: "MedievalSharp", cursive;
 }
 
 #app {
-  width: 900px;
+  width: 760px;
   height: 600px;
+  max-width: 760px;
+  max-height: 600px;
   overflow: auto;
 }
 
