@@ -6,12 +6,25 @@
       </div>
     </div>
     <div class="credits">
-      <a class="abs" style="right:70px" target="_blank" href="https://discord.gg/gUwvjw2">
-        <img class="icon" :src="require('@/assets/icons/discord.png')" />
-        <span>Discord</span>
+      <a class="abs" style="right:20px" target="_blank" href="https://discord.gg/gUwvjw2">
+        <img class="icon" :src="require('@/assets/icons/discord.png')" alt="discord" />
       </a>
-      <a class="abs" target="_blank" style="right:20px" href="https://www.buymeacoffee.com/a4bl2n1">
-        <img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee" />
+      <a class="abs" target="_blank" style="right:80px" href="https://www.buymeacoffee.com/a4bl2n1">
+        <img class="icon" :src="require('@/assets/icons/coffe.svg')" alt="buy me a coffe" />
+      </a>
+      <a
+        class="abs"
+        target="_blank"
+        style="right:140px"
+        href="https://www.facebook.com/Schlau3Wurst"
+      >
+        <img class="icon" :src="require('@/assets/icons/facebook.png')" alt="facebook" />
+      </a>
+      <a class="abs" target="_blank" style="right:200px" href="https://twitter.com/schlauewurst">
+        <img class="icon" :src="require('@/assets/icons/twitter.png')" alt="Twitter" />
+      </a>
+      <a class="abs" target="_blank" style="right:20px" href="https://www.patreon.com/schlauewurst">
+        <img class="icon" :src="require('@/assets/icons/patreon.jpg')" alt="patreon" />
       </a>
       <div class="abs" style="left:20px">{{this.$parent.player.version}}</div>
     </div>
@@ -49,6 +62,7 @@ export default {
 }
 
 .credits .abs {
+  border: 1px solid black;
   position: fixed;
   bottom: 65px;
   cursor: grab;
@@ -58,15 +72,12 @@ export default {
   border-radius: 5px;
   font-weight: bold;
   display: block;
+  margin: auto;
 }
 
-span {
-  color: #7289da;
-  line-height: 32px;
-  float: right;
-}
 .icon {
   width: 32px;
   height: 32px;
+  padding: 2px;
 }
 </style>
