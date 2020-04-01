@@ -61,7 +61,7 @@
 <script>
 import skilltree from "./json/skilltree.json";
 import Accordion from "./Accordion.vue";
-import { getParentById } from "./functions.js";
+import { getParentById, getNodeById } from "./functions.js";
 
 export default {
   components: {
@@ -91,13 +91,11 @@ export default {
       this.$parent.skilltree = false;
     },
     canBeChoosen(s) {
-      if (["s_dmg0", "s_magic0", "s_life0", "s_speed0"].includes(s)) {
-        return !1;
+      let f = getNodeById(s, this.skillist);
+      if (this.choosen(f.parent) || f.parent == "first") {
+        return false;
       }
-
-      //var b = getParentById(s, skilltree);
-      let b = null;
-      return !(null == b || this.choosen(b.id));
+      return true;
     }
   },
   props: {
@@ -105,9 +103,6 @@ export default {
       type: Boolean,
       required: true
     }
-  },
-  mounted() {
-    console.log(getParentById("m_regen0", this.st));
   },
   data() {
     return {

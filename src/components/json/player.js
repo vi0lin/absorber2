@@ -18,20 +18,22 @@ var player = {
     "time": 0,
     "auto": false,
     "lastEnemy": "bat",
-    "version": 1.4,
+    "version": 1.5,
     "highscore": {
         "vampire": -1,
         "hydra": -1,
         "iron_golem": -1,
         "chulthuluseye": -1,
         "necromant": -1,
-        "chromeman": -1
+        "chromeman": -1,
+        "turret": -1
     },
     "tutorial": 0,
     "prestige": 0,
     "points": 0,
     "go": false,
-    "order": []
+    "order": [],
+    "companion": null
 }
 
 export default player;

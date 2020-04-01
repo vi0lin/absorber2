@@ -158,5 +158,25 @@
         "id": "resurrect",
         "desc": "The chance of not dying and continuing to fight with full life.",
         "form": "life = maxlife"
+    },
+    {
+        "id": "disarm",
+        "desc": "The chance to disarm an opponent. Disarmed opponents can still cast spells.",
+        "form": "disarm = disarm"
+    },
+    {
+        "id": "fireresistance",
+        "desc": "Blocks a percentage of firedamage",
+        "form": "firedamage = firedamage-(firedamage*resistace)"
+    },
+    {
+        "id": "poisonresistance",
+        "desc": "Blocks a percentage of poisondamage",
+        "form": "poisondamage = poisondamage-(poisondamage*resistace)"
+    },
+    {
+        "id": "bleedresistance",
+        "desc": "Blocks a percentage of bleeddamage",
+        "form": "bleeddamage = bleeddamage-(bleeddamage*resistace)"
     }
 ]

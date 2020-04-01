@@ -8,6 +8,8 @@ function changeLife(a, b, c, d) {
 
     if (isNaN(b)) return;
 
+    if ("damage" == d && b < 0) return;
+
     "damage" == d
         ? a.clife -= b
         : a.clife += b;
@@ -37,16 +39,32 @@ function showIndicator(c, d, e, f) {
 
 function checkDot(a, b, c) {
     if (0 < a.status.poison) {
-        changeLife(a, b.magic / 4, "poison", "damage", c);
+        let damage = b.magic / 4;
+        if (a.resistance.poisonresistance != undefined) {
+            log.push(`<div>${a.name} resisted<span style="green"> ${damage * a.resistance.poisonresistance} poison</span> damage</div>`);
+            damage = damage - (damage * a.resistance.poisonresistance)
+        }
+        changeLife(a, damage, "poison", "damage", c);
         a.status.poison--
     }
     if (0 < a.status.fire) {
-        changeLife(a, b.magic / 3, "fire", "damage", c),
-            a.status.fire--
+        let damage = b.magic / 3;
+        if (a.resistance.fireresistance != undefined) {
+            log.push(`<div>${a.name} resisted<span style="orange"> ${damage * a.resistance.fireresistance} fire</span> damage</div>`);
+            damage = damage - (damage * a.resistance.fireresistance)
+        }
+
+        changeLife(a, damage, "fire", "damage", c);
+        a.status.fire--
     }
     if (0 < a.status.bleed) {
-        changeLife(a, b.dmg / 10, "bleed", "damage", c),
-            a.status.bleed--
+        let damage = b.dmg / 10;
+        if (a.resistance.bleedresistance != undefined) {
+            log.push(`<div>${a.name} resisted<span style="crimson"> ${damage * a.resistance.bleedresistance} bleeding</span>  damage</div>`);
+            damage = damage - (damage * a.resistance.bleedresistance)
+        }
+        changeLife(a, damage, "bleed", "damage", c);
+        a.status.bleed--
     }
 
     0 < a.status.slow && a.status.slow--;
@@ -401,17 +419,25 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
                 target.effects[b] == null
                     ? target.effects[b] = attacker.gain.effects[b]
                     : target.effects[b] += attacker.gain.effects[b]
+
         else if ("chance" == a)
             for (let b in attacker.gain.chance)
                 target.chance[b] == null
                     ? target.chance[b] = attacker.gain.chance[b]
                     : target.chance[b] += attacker.gain.chance[b];
 
+        else if ("resistance" == a)
+            for (let b in attacker.gain.resistance)
+                target.resistance[b] == null
+                    ? target.resistance[b] = attacker.gain.resistance[b]
+                    : target.resistance[b] += attacker.gain.resistance[b];
+
 
     target.counter[attacker.id]++;
 
     if (attacker.boss) {
-        target.highscore[attacker.id] = target.time;
+        target.time < target.highscore[attacker.id] && (target.highscore[attacker.id] = target.time);
+
         log.push(`<div>${attacker.name} was killed in ${target.time}</div>`)
 
         if (kong != null && kong != undefined) {
@@ -481,7 +507,7 @@ export function respawn(t) {
     t.clife = t.life;
     t.cspeed = 0;
     t.status = {
-        slow: 0, poison: 0, fire: 0, stun: 0, silence: 0, rot: 0, bleed: 0, bury: 0, stim: 0, invert: 0
+        slow: 0, poison: 0, fire: 0, stun: 0, silence: 0, rot: 0, bleed: 0, bury: 0, stim: 0, invert: 0, disarm: 0
     }
 }
 
@@ -525,50 +551,6 @@ export function getLast(j, p) {
     } else {
         return j[p];
     }
-}
-
-
-/*export function getParentById(pid, pnode) {
-    let parent = null;
-    let someFunction = function (node) {
-        for (let i of node) {
-            if (pid == i.id) {
-                return parent
-            } else if (i.open.length > 0) {
-                parent = i;
-                someFunction(i.open)
-            }
-        }
-    }
-    console.log(someFunction(pnode))
-}*/
-
-export function getParentById(id, node) {
-    var reduce = [].reduce;
-    var parent = [];
-
-
-    function runner(result, node) {
-
-        if (result || !node) {
-            return result
-        }
-
-        if (node.id === id) {
-            return parent[parent.length - 1]
-        } else {
-            if (!Array.isArray(node)) {
-                parent.push(node)
-            }
-        }
-
-        if (runner(null, node.open)) {
-            return runner(null, node.open);
-        }
-
-        return reduce.call(Object(node), runner, result);
-    }
-    return runner(null, node);
 }
 
 

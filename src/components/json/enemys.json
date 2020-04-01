@@ -2,7 +2,6 @@
     {
         "id": "bat",
         "name": "Bat",
-        "boss": false,
         "description": "Nanananana Bat",
         "max": [
             200,
@@ -11,30 +10,30 @@
             260,
             300
         ],
-        "life": 2,
+        "boss": false,
         "clife": 2,
-        "regeneration": 0,
-        "speed": 1000,
         "cspeed": 0,
         "dmg": 0.3,
+        "life": 2,
+        "regeneration": 0,
+        "speed": 1000,
+        "status": {},
         "effects": {
             "lifesteal": 50
         },
         "gain": {
             "dmg": 0.02,
-            "speed": 2,
             "life": -0.01,
+            "speed": 2,
             "effects": {
                 "lifesteal": 0.02
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "evil_spirit",
         "name": "Evil Spirit",
         "description": "If you don't press like, it will haunt you today.",
-        "boss": false,
         "max": [
             300,
             320,
@@ -42,35 +41,35 @@
             360,
             400
         ],
-        "life": 1,
+        "boss": false,
         "clife": 1,
-        "regeneration": 0,
-        "speed": 1900,
         "cspeed": 0,
         "dmg": 1,
+        "life": 1,
         "magic": 0,
+        "regeneration": 0,
+        "speed": 1900,
+        "status": {},
         "chance": {
-            "dodge": 50,
-            "silence": 100,
             "crit": 50,
-            "supercrit": 50,
-            "megacrit": 50
+            "dodge": 50,
+            "megacrit": 50,
+            "silence": 100,
+            "supercrit": 50
         },
         "gain": {
             "speed": 0.1,
             "chance": {
                 "crit": 0.03,
                 "dodge": 0.02,
-                "supercrit": 0.02,
-                "megacrit": 0.01
+                "megacrit": 0.01,
+                "supercrit": 0.02
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "blue_slime",
         "name": "Blue Slime",
-        "boss": false,
         "description": "I am not an evil slime",
         "max": [
             150,
@@ -78,43 +77,45 @@
             250,
             300
         ],
-        "life": 5,
+        "boss": false,
         "clife": 5,
-        "regeneration": 0.2,
-        "speed": 2000,
         "cspeed": 0,
         "dmg": 0.5,
+        "life": 5,
+        "regeneration": 0.2,
+        "speed": 2000,
+        "status": {},
         "chance": {
             "crit": 50
         },
         "gain": {
             "dmg": 0.01,
-            "speed": 1,
             "life": 0.01,
+            "speed": 1,
             "chance": {
                 "crit": 0.2
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "snake",
         "name": "Snake",
         "description": "Upon thy belly shalt thou go, and dust shalt thou eat all the days of thy life",
-        "boss": false,
         "max": [
             100,
             140,
             180,
             220
         ],
-        "life": 6,
+        "boss": false,
         "clife": 6,
-        "regeneration": 0,
-        "speed": 1500,
         "cspeed": 0,
         "dmg": 0.8,
+        "life": 6,
         "magic": 2,
+        "regeneration": 0,
+        "speed": 1500,
+        "status": {},
         "chance": {
             "poison": 50
         },
@@ -123,13 +124,11 @@
             "chance": {
                 "poison": 0.2
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "turtle",
         "name": "Turtle",
-        "boss": false,
         "description": "Lucky it's not the blue one.",
         "max": [
             200,
@@ -137,24 +136,32 @@
             220,
             300
         ],
-        "life": 10,
+        "boss": false,
         "clife": 10,
-        "speed": 3000,
         "cspeed": 0,
-        "regeneration": 1,
         "dmg": 1,
+        "life": 10,
+        "regeneration": 1,
+        "speed": 3000,
+        "status": {},
+        "resistance": {
+            "fireresistance": 2,
+            "poisonresistance": 2
+        },
         "gain": {
             "life": 0.2,
             "regeneration": 0.02,
-            "speed": -1
-        },
-        "status": {}
+            "speed": -1,
+            "resistance": {
+                "fireresistance": 0.01,
+                "poisonresistance": 0.01
+            }
+        }
     },
     {
         "id": "vampire",
         "name": "Vampire",
         "description": "Make sure you bring a stake.",
-        "boss": true,
         "max": [
             1,
             2,
@@ -162,12 +169,14 @@
             8,
             10
         ],
-        "life": 30,
+        "boss": true,
         "clife": 30,
-        "speed": 2500,
         "cspeed": 0,
-        "regeneration": 0,
         "dmg": 2,
+        "life": 30,
+        "regeneration": 0,
+        "speed": 2500,
+        "status": {},
         "effects": {
             "lifesteal": 100
         },
@@ -175,136 +184,137 @@
             "effects": {
                 "lifesteal": 8
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "boar",
         "name": "Boar",
         "description": "Hmm it smells like roasted boar.",
-        "boss": false,
         "max": [
             150,
             170,
             210,
             255
         ],
-        "life": 15,
+        "boss": false,
         "clife": 15,
-        "regeneration": 0.4,
-        "speed": 2500,
         "cspeed": 0,
         "dmg": 2,
+        "life": 15,
         "magic": 0,
+        "regeneration": 0.4,
+        "speed": 2500,
+        "status": {},
         "chance": {
             "stun": 10
         },
         "gain": {
-            "speed": 1,
-            "life": 0.04
-        },
-        "status": {}
+            "life": 0.04,
+            "speed": 1
+        }
     },
     {
         "id": "red_slime",
         "name": "Red Slime",
         "description": "I might not be a bad slime",
-        "boss": false,
         "max": [
             130,
             150,
             170,
             210
         ],
-        "life": 15,
+        "boss": false,
         "clife": 15,
-        "regeneration": 0.6,
-        "speed": 2000,
         "cspeed": 0,
         "dmg": 1.5,
+        "life": 15,
+        "regeneration": 0.6,
+        "speed": 2000,
+        "status": {},
         "chance": {
             "crit": 75,
             "supercrit": 25
         },
         "gain": {
             "dmg": 0.01,
-            "speed": 1,
             "life": 0.01,
+            "speed": 1,
             "chance": {
                 "supercrit": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "goblin",
         "name": "Goblin",
         "description": "I'll be reckless if it means I'll win",
-        "boss": false,
         "max": [
             140,
             160,
             200,
             240
         ],
-        "life": 10,
+        "boss": false,
         "clife": 10,
-        "regeneration": 0,
-        "speed": 1300,
         "cspeed": 0,
         "dmg": 1.8,
+        "life": 10,
         "magic": 2,
+        "regeneration": 0,
+        "speed": 1300,
+        "status": {},
         "effects": {
             "block": 1
         },
         "chance": {
-            "poison": 10,
-            "crit": 10
+            "crit": 10,
+            "poison": 10
         },
         "gain": {
             "recovery": 0.02,
             "effects": {
                 "block": 0.02
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "fire_elementar",
         "name": "Fire Elemental",
         "description": "Ready to set the world on fire? Heheheh...",
-        "boss": false,
         "max": [
             300,
             350,
             400,
             420
         ],
-        "life": 20,
+        "boss": false,
         "clife": 20,
-        "regeneration": 0,
-        "speed": 1800,
         "cspeed": 0,
         "dmg": 2,
+        "life": 20,
         "magic": 5,
+        "regeneration": 0,
+        "speed": 1800,
+        "status": {},
         "chance": {
-            "stun": 20,
-            "fire": 50
+            "fire": 50,
+            "stun": 20
+        },
+        "resistance": {
+            "fireresistance": 10
         },
         "gain": {
             "magic": 0.02,
             "chance": {
-                "stun": 0.02,
-                "fire": 0.2
+                "fire": 0.2,
+                "stun": 0.02
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "hydra",
         "name": "Hydra",
         "description": "The Lernaean Hydra or Hydra of Lerna (Greek: Λερναῖα Ὕδρα, Lernaîa Hýdra), more often known simply as the Hydra, is a serpentine water monster in Greek and Roman mythology. ",
-        "boss": true,
         "max": [
             1,
             2,
@@ -312,29 +322,32 @@
             5,
             8
         ],
-        "life": 40,
+        "boss": true,
         "clife": 40,
-        "speed": 2100,
         "cspeed": 0,
-        "regeneration": 3,
         "dmg": 1,
+        "life": 40,
         "magic": 12,
+        "regeneration": 3,
+        "speed": 2100,
+        "status": {},
         "chance": {
             "fire": 100
+        },
+        "resistance": {
+            "fireresistance": 20
         },
         "gain": {
             "magic": 2,
             "chance": {
                 "fire": 10
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "oger",
         "name": "Ogre",
-        "description": "Famous Ogre: 'Layers. Onions have layers. Ogres have layers. Onions have layers. You get it? We both have layers.'",
-        "boss": false,
+        "description": "'Layers. Onions have layers. Ogres have layers. Onions have layers. You get it? We both have layers.'-Famous Ogre",
         "max": [
             12,
             15,
@@ -342,15 +355,20 @@
             20,
             25
         ],
-        "life": 30,
+        "boss": false,
         "clife": 30,
-        "regeneration": 5,
-        "speed": 5000,
         "cspeed": 0,
         "dmg": 6,
+        "life": 30,
         "magic": 0,
+        "regeneration": 5,
+        "speed": 5000,
+        "status": {},
         "chance": {
             "stun": 50
+        },
+        "resistance": {
+            "poisonresistance": 20
         },
         "gain": {
             "life": 1,
@@ -359,113 +377,111 @@
             "chance": {
                 "stun": 0.5
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "thief",
         "name": "Thief",
         "description": "Thou shalt not steal.'",
-        "boss": false,
         "max": [
             150,
             160,
             180,
             200
         ],
-        "life": 15,
+        "boss": false,
         "clife": 15,
-        "regeneration": 0,
-        "speed": 500,
         "cspeed": 0,
         "dmg": 0.5,
+        "life": 15,
         "magic": 0,
+        "regeneration": 0,
+        "speed": 500,
+        "status": {},
         "chance": {
-            "double": 75,
-            "dodge": 25,
             "crit": 20,
+            "dodge": 25,
+            "double": 75,
             "supercrit": 5
         },
         "gain": {
             "speed": 4,
-            "chance": {
-                "double": 0.1,
-                "dodge": 0.05
-            },
             "effects": {
                 "precision": 0.05
+            },
+            "chance": {
+                "dodge": 0.05,
+                "double": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "spider",
         "name": "Spider",
         "description": "I am a spider so what?",
-        "boss": false,
         "max": [
             150,
             170,
             190,
             210
         ],
-        "life": 8,
+        "boss": false,
         "clife": 8,
-        "regeneration": 0,
-        "speed": 900,
         "cspeed": 0,
         "dmg": 1.5,
+        "life": 8,
         "magic": 10,
+        "regeneration": 0,
+        "speed": 900,
+        "status": {},
         "chance": {
-            "slow": 35,
             "crit": 20,
-            "poison": 50
+            "poison": 50,
+            "slow": 35
         },
         "gain": {
             "magic": 0.2,
             "chance": {
                 "slow": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "yellow_slime",
         "name": "Yellow Slime",
         "description": "I'm probably a bad slime",
-        "boss": false,
         "max": [
             140,
             160,
             180,
             200
         ],
-        "life": 20,
+        "boss": false,
         "clife": 20,
-        "regeneration": 1.6,
-        "speed": 2000,
         "cspeed": 0,
         "dmg": 3.5,
+        "life": 20,
+        "regeneration": 1.6,
+        "speed": 2000,
+        "status": {},
         "chance": {
             "crit": 100,
-            "supercrit": 50,
-            "megacrit": 25
+            "megacrit": 25,
+            "supercrit": 50
         },
         "gain": {
             "dmg": 0.01,
-            "speed": 1,
             "life": 0.01,
+            "speed": 1,
             "chance": {
                 "megacrit": 0.05
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "iron_golem",
         "name": "Iron Golem",
         "description": "You need four iron blocks and a pumpkin.",
-        "boss": true,
         "max": [
             1,
             2,
@@ -473,95 +489,106 @@
             5,
             8
         ],
-        "life": 40,
+        "boss": true,
         "clife": 40,
-        "speed": 2500,
         "cspeed": 0,
+        "dmg": 8,
+        "life": 40,
         "magic": 20,
         "regeneration": 0,
-        "dmg": 8,
+        "speed": 2500,
+        "status": {},
         "effects": {
             "block": 6
         },
         "chance": {
-            "fire": 20,
-            "crit": 40
+            "crit": 40,
+            "fire": 20
+        },
+        "resistance": {
+            "poisonresistance": 20
         },
         "gain": {
             "effects": {
                 "block": 2
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "water_elementar",
         "name": "Water Elementar",
         "description": "STR 18 (+4) DEX 14 (+2) CON 18 (+4) INT 5 (-3) WIS 10 (+0) CHA 8 (-1)",
-        "boss": false,
         "max": [
             130,
             150,
             160,
             180
         ],
-        "life": 30,
+        "boss": false,
         "clife": 10,
-        "regeneration": 3,
-        "speed": 1500,
         "cspeed": 0,
         "dmg": 4,
-        "chance": {
-            "crit": 50,
-            "supercrit": 20,
-            "megacrit": 5,
-            "silence": 60
-        },
+        "life": 30,
+        "regeneration": 3,
+        "speed": 1500,
+        "status": {},
         "effects": {
             "block": 4
         },
-        "gain": {
-            "regeneration": 0.03,
-            "speed": 2,
-            "dmg": 0.05
+        "chance": {
+            "crit": 50,
+            "megacrit": 5,
+            "silence": 60,
+            "supercrit": 20
         },
-        "status": {}
+        "gain": {
+            "dmg": 0.05,
+            "regeneration": 0.03,
+            "speed": 2
+        }
     },
     {
         "id": "hard_turtle",
         "name": "Hard Turtle",
         "description": "Mario! How dare you disturb my family vacation?!",
-        "boss": false,
         "max": [
             100,
             150,
             200,
             220
         ],
-        "life": 100,
+        "boss": false,
         "clife": 100,
-        "speed": 3000,
         "cspeed": 0,
+        "dmg": 15,
+        "life": 100,
         "regeneration": 10,
+        "speed": 3000,
+        "status": {},
         "effects": {
             "reflect": 30
         },
-        "dmg": 15,
+        "resistance": {
+            "fireresistance": 20,
+            "poisonresistance": 20
+        },
         "gain": {
             "life": 0.8,
             "regeneration": 0.1,
             "speed": -10,
             "effects": {
                 "reflect": 0.1
+            },
+            "resistance": {
+                "fireresistance": 0.1,
+                "poisonresistance": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "wind_elementar",
         "name": "Wind Elementar",
         "description": "Notice that the stiffest tree is most easily cracked, while the bamboo or willow survives by bending with the wind - Bruce Lee",
-        "boss": false,
         "max": [
             170,
             180,
@@ -569,36 +596,36 @@
             200,
             220
         ],
-        "life": 10,
+        "boss": false,
         "clife": 10,
-        "regeneration": 0,
-        "speed": 1000,
         "cspeed": 0,
         "dmg": 3.5,
-        "chance": {
-            "crit": 50,
-            "supercrit": 20,
-            "megacrit": 5,
-            "dodge": 50,
-            "silence": 10
-        },
+        "life": 10,
+        "regeneration": 0,
+        "speed": 1000,
+        "status": {},
         "effects": {
             "block": 3
         },
+        "chance": {
+            "crit": 50,
+            "dodge": 50,
+            "megacrit": 5,
+            "silence": 10,
+            "supercrit": 20
+        },
         "gain": {
-            "speed": 2,
             "dmg": 0.05,
+            "speed": 2,
             "chance": {
                 "dodge": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "assasin",
         "name": "Assassin",
         "description": "Nothing is true, everything is permitted.",
-        "boss": false,
         "max": [
             20,
             25,
@@ -606,77 +633,76 @@
             35,
             40
         ],
-        "life": 20,
+        "boss": false,
         "clife": 10,
-        "regeneration": 0,
-        "speed": 1000,
         "cspeed": 0,
         "dmg": 8,
+        "life": 20,
         "magic": 20,
+        "regeneration": 0,
+        "speed": 1000,
+        "status": {},
+        "effects": {
+            "block": 4,
+            "precision": 20
+        },
         "chance": {
             "dodge": 50,
-            "silence": 70,
             "instakill": 20,
-            "poison": 100
-        },
-        "effects": {
-            "precision": 20,
-            "block": 4
+            "poison": 100,
+            "silence": 70
         },
         "gain": {
             "regeneration": -0.5,
+            "effects": {
+                "precision": 0.5
+            },
             "chance": {
                 "instakill": 0.1,
                 "silence": 0.75
-            },
-            "effects": {
-                "precision": 0.5
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "chulthuluseye",
         "name": "Flying Eye",
         "description": "You feel an evil presence watching you...",
-        "boss": true,
         "max": [
             1,
             1,
             2,
             3
         ],
-        "life": 120,
+        "boss": true,
         "clife": 120,
-        "speed": 2500,
         "cspeed": 0,
-        "regeneration": 10,
         "dmg": 18,
+        "life": 120,
         "magic": 50,
+        "regeneration": 10,
+        "speed": 2500,
+        "status": {},
         "effects": {
             "block": 6
         },
         "chance": {
-            "fire": 30,
             "crit": 50,
-            "supercrit": 25,
+            "dodge": 30,
+            "fire": 30,
             "megacrit": 10,
             "poison": 30,
-            "dodge": 30,
             "silence": 40,
-            "slow": 100
+            "slow": 100,
+            "supercrit": 25
         },
         "gain": {
             "life": 20
-        },
-        "status": {}
+        }
     },
     {
         "id": "zombie",
         "name": "Zombie",
         "description": "BRAAAINN",
-        "prestige": 1,
-        "boss": false,
         "max": [
             0,
             100,
@@ -684,18 +710,21 @@
             140,
             200
         ],
-        "life": 60,
+        "boss": false,
         "clife": 60,
-        "regeneration": 5,
-        "speed": 1100,
         "cspeed": 0,
         "dmg": 12,
+        "life": 60,
         "magic": 40,
+        "prestige": 1,
+        "regeneration": 5,
+        "speed": 1100,
+        "status": {},
         "chance": {
-            "slow": 35,
+            "bleed": 10,
             "poison": 50,
             "rot": 50,
-            "bleed": 10
+            "slow": 35
         },
         "gain": {
             "dmg": 0.1,
@@ -703,15 +732,12 @@
             "chance": {
                 "rot": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "skeleton",
         "name": "Skeleton Bowman",
         "description": "Spooky scary skeletons",
-        "prestige": 1,
-        "boss": false,
         "max": [
             0,
             100,
@@ -719,22 +745,28 @@
             140,
             160
         ],
-        "life": 80,
+        "boss": false,
         "clife": 80,
-        "regeneration": 0,
-        "speed": 900,
         "cspeed": 0,
         "dmg": 15,
+        "life": 80,
         "magic": 0,
-        "chance": {
-            "rot": 25,
-            "crit": 20,
-            "supercrit": 10,
-            "dodge": 10
-        },
+        "prestige": 1,
+        "regeneration": 0,
+        "speed": 900,
+        "status": {},
         "effects": {
             "block": 5,
             "precision": 30
+        },
+        "chance": {
+            "crit": 20,
+            "dodge": 10,
+            "rot": 25,
+            "supercrit": 10
+        },
+        "resistance": {
+            "poisonresistance": 10
         },
         "gain": {
             "dmg": 0.1,
@@ -742,37 +774,37 @@
             "effects": {
                 "precision": 0.2
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "ghoul",
         "name": "Ghoul",
         "description": "We need to have a mask that we never take off.",
-        "prestige": 1,
-        "boss": false,
         "max": [
             0,
             100,
             150,
             200
         ],
-        "life": 200,
+        "boss": false,
         "clife": 200,
-        "regeneration": 5,
-        "speed": 1100,
         "cspeed": 0,
         "dmg": 30,
+        "life": 200,
         "magic": 0,
-        "chance": {
-            "rot": 100,
-            "crit": 20,
-            "supercrit": 10,
-            "bleed": 20,
-            "bury": 50
-        },
+        "prestige": 1,
+        "regeneration": 5,
+        "speed": 1100,
+        "status": {},
         "effects": {
             "lifesteal": 30
+        },
+        "chance": {
+            "bleed": 20,
+            "bury": 50,
+            "crit": 20,
+            "rot": 100,
+            "supercrit": 10
         },
         "gain": {
             "dmg": 0.1,
@@ -780,115 +812,119 @@
             "chance": {
                 "bleed": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "unholy_knight",
         "name": "Unholy Knight",
         "description": "Who is attacking my castle day after day without interruption?",
-        "prestige": 1,
-        "boss": false,
         "max": [
             0,
             20,
             25,
             30
         ],
-        "life": 300,
+        "boss": false,
         "clife": 300,
-        "regeneration": 10,
-        "speed": 800,
         "cspeed": 0,
         "dmg": 25,
+        "life": 300,
         "magic": 0,
-        "chance": {
-            "rot": 30,
-            "crit": 50,
-            "supercrit": 50,
-            "megacrit": 50,
-            "bleed": 20
-        },
+        "prestige": 1,
+        "regeneration": 10,
+        "speed": 800,
+        "status": {},
         "effects": {
             "block": 10
+        },
+        "chance": {
+            "bleed": 20,
+            "crit": 50,
+            "megacrit": 50,
+            "rot": 30,
+            "supercrit": 50
         },
         "gain": {
             "dmg": 0.5,
             "chance": {
                 "bleed": 1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "necromant",
         "name": "Necromancer",
         "description": "If there are many heroes, then we will replace them all. Let the entire world know that Necromancer is the true hero!",
-        "prestige": 1,
-        "boss": true,
         "max": [
             0,
             1,
             1,
             2
         ],
-        "life": 100,
+        "boss": true,
         "clife": 100,
-        "regeneration": 0,
-        "speed": 1000,
         "cspeed": 0,
         "dmg": 30,
+        "life": 100,
         "magic": 60,
-        "chance": {
-            "rot": 100,
-            "crit": 50,
-            "supercrit": 50,
-            "megacrit": 50,
-            "bleed": 20,
-            "poison": 10,
-            "fire": 10,
-            "stun": 20,
-            "resurrect": 10
-        },
+        "prestige": 1,
+        "regeneration": 0,
+        "speed": 1000,
+        "status": {},
         "effects": {
             "block": 30
         },
+        "chance": {
+            "bleed": 20,
+            "crit": 50,
+            "fire": 10,
+            "megacrit": 50,
+            "poison": 10,
+            "resurrect": 10,
+            "rot": 100,
+            "stun": 20,
+            "supercrit": 50
+        },
+        "resistance": {
+            "fireresistance": 10,
+            "poisonresistance": 10
+        },
         "gain": {
+            "dmg": -5,
+            "life": 10,
             "recovery": 2,
             "regeneration": 2,
-            "life": 10,
-            "dmg": -5,
             "chance": {
                 "resurrect": 10
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "jellyfish",
         "name": "Jellyfish",
         "description": "And where there is jellyfish, there is the Jellyfish Hunter.",
-        "prestige": 2,
-        "boss": false,
         "max": [
             0,
             0,
             180,
             200
         ],
-        "life": 120,
+        "boss": false,
         "clife": 120,
-        "regeneration": 10,
-        "speed": 500,
         "cspeed": 0,
         "dmg": 18,
+        "life": 120,
         "magic": 200,
+        "prestige": 2,
+        "regeneration": 10,
+        "speed": 500,
+        "status": {},
+        "effects": {
+            "block": 30
+        },
         "chance": {
             "poison": 70,
             "stun": 30
-        },
-        "effects": {
-            "block": 30
         },
         "gain": {
             "dmg": 0.5,
@@ -896,28 +932,28 @@
                 "poison": 0.1,
                 "stun": 0.05
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "hedgehog",
         "name": "Hedgehog",
         "description": "Hedgehog's the name. Speed isn't my game.",
-        "prestige": 2,
-        "boss": false,
         "max": [
             0,
             0,
             160,
             180
         ],
-        "life": 150,
+        "boss": false,
         "clife": 150,
-        "regeneration": 15,
-        "speed": 600,
         "cspeed": 0,
         "dmg": 20,
+        "life": 150,
         "magic": 0,
+        "prestige": 2,
+        "regeneration": 15,
+        "speed": 600,
+        "status": {},
         "effects": {
             "block": 55,
             "reflect": 30
@@ -926,28 +962,28 @@
             "effects": {
                 "reflect": 0.05
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "klez",
         "name": "Klez",
         "description": "3 2 1 BOTS",
-        "prestige": 2,
-        "boss": false,
         "max": [
             0,
             0,
             210,
             220
         ],
-        "life": 150,
+        "boss": false,
         "clife": 150,
-        "regeneration": 0,
-        "speed": 600,
         "cspeed": 0,
         "dmg": 30,
+        "life": 150,
         "magic": 0,
+        "prestige": 2,
+        "regeneration": 0,
+        "speed": 600,
+        "status": {},
         "effects": {
             "block": 55
         },
@@ -956,34 +992,34 @@
             "dodge": 50
         },
         "gain": {
-            "chance": {
-                "counter": 0.05
-            },
             "effects": {
                 "block": 0.1
+            },
+            "chance": {
+                "counter": 0.05
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "marine",
         "name": "Space Soldier",
         "description": "You wanna piece of me, boy?",
-        "prestige": 2,
-        "boss": false,
         "max": [
             0,
             0,
             220,
             240
         ],
-        "life": 150,
+        "boss": false,
         "clife": 150,
-        "regeneration": 0,
-        "speed": 200,
         "cspeed": 0,
         "dmg": 30,
+        "life": 150,
         "magic": 0,
+        "prestige": 2,
+        "regeneration": 0,
+        "speed": 200,
+        "status": {},
         "effects": {
             "block": 55
         },
@@ -996,115 +1032,122 @@
             "chance": {
                 "stim": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "darlek",
         "name": "strange Robot",
         "description": "EXTERMINATE",
-        "prestige": 2,
-        "boss": true,
         "max": [
             0,
             0,
             1,
             2
         ],
-        "life": 900,
+        "boss": true,
         "clife": 900,
-        "regeneration": 200,
-        "speed": 2000,
         "cspeed": 0,
         "dmg": 100,
+        "life": 900,
         "magic": 200,
+        "prestige": 2,
+        "regeneration": 200,
+        "speed": 2000,
+        "status": {},
         "effects": {
             "block": 100,
             "reflect": 30
         },
         "chance": {
-            "counter": 80,
             "bleed": 50,
+            "counter": 80,
             "fire": 50,
+            "instakill": 10,
             "poison": 50,
-            "stim": 30,
-            "slow": 100,
             "silence": 100,
-            "instakill": 10
+            "slow": 100,
+            "stim": 30
+        },
+        "resistance": {
+            "fireresistance": 20,
+            "poisonresistance": 20
         },
         "gain": {
-            "recovery": 10,
             "life": 30,
+            "recovery": 10,
             "chance": {
-                "stim": 10,
-                "bleed": 10
+                "bleed": 10,
+                "stim": 10
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "wolf",
         "name": "Twin-tailed Wolf",
         "description": "Found on the 1st floor",
-        "prestige": 3,
-        "boss": false,
         "max": [
             0,
             0,
             0,
             80
         ],
-        "life": 150,
+        "boss": false,
         "clife": 150,
-        "regeneration": 10,
-        "speed": 250,
         "cspeed": 0,
         "dmg": 45,
+        "life": 150,
         "magic": 0,
+        "prestige": 3,
+        "regeneration": 10,
+        "speed": 250,
+        "status": {},
         "effects": {
             "block": 50,
             "precision": 20
         },
         "chance": {
-            "stim": 30,
-            "invert": 40
+            "invert": 40,
+            "stim": 30
         },
         "gain": {
             "life": 0.3,
             "chance": {
                 "invert": 0.1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "cyclops",
         "name": "Cyclops",
         "description": "Arrr",
-        "prestige": 3,
-        "boss": false,
         "max": [
             0,
             0,
             0,
             20
         ],
-        "life": 550,
+        "boss": false,
         "clife": 550,
-        "regeneration": 100,
-        "speed": 700,
         "cspeed": 0,
         "dmg": 120,
+        "life": 550,
         "magic": 0,
+        "prestige": 3,
+        "regeneration": 100,
+        "speed": 700,
+        "status": {},
         "effects": {
             "block": 50,
             "precision": 20,
             "reflect": 10
         },
         "chance": {
+            "bury": 30,
             "counter": 30,
-            "stun": 45,
-            "bury": 30
+            "stun": 45
+        },
+        "resistance": {
+            "poisonresistance": 30
         },
         "gain": {
             "life": 10,
@@ -1113,166 +1156,173 @@
             "chance": {
                 "bury": 1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "wandering_monster",
         "name": "Wandering Monster",
         "description": "Play this card, with a Monster from your hand, when someone (including you!) is in combat.",
-        "prestige": 3,
-        "boss": false,
         "max": [
             0,
             0,
             0,
             220
         ],
-        "life": 250,
+        "boss": false,
         "clife": 250,
-        "regeneration": 60,
-        "speed": 540,
         "cspeed": 0,
         "dmg": 80,
+        "life": 250,
         "magic": 100,
+        "prestige": 3,
+        "regeneration": 60,
+        "speed": 540,
+        "status": {},
         "effects": {
             "block": 48,
             "precision": 25
         },
         "chance": {
-            "poison": 45,
+            "crit": 20,
             "fire": 30,
             "megacrit": 100,
-            "crit": 20,
-            "supercrit": 50,
+            "poison": 45,
             "silence": 50,
             "slow": 20,
-            "stim": 30
+            "stim": 30,
+            "supercrit": 50
         },
         "gain": {
-            "magic": 0.5,
-            "dmg": -0.01
-        },
-        "status": {}
+            "dmg": -0.01,
+            "magic": 0.5
+        }
     },
     {
         "id": "slav",
         "name": "Slav",
         "description": "Master of hardbass and apparently magic too.",
-        "prestige": 3,
-        "boss": false,
         "max": [
             0,
             0,
             0,
             500
         ],
-        "life": 350,
+        "boss": false,
         "clife": 350,
-        "regeneration": 60,
-        "speed": 440,
         "cspeed": 0,
         "dmg": 180,
+        "life": 350,
         "magic": 1000000,
+        "prestige": 3,
+        "regeneration": 60,
+        "speed": 440,
+        "status": {},
         "effects": {
             "block": 68,
             "precision": 35
         },
         "chance": {
+            "crit": 20,
             "dodge": 100,
             "megacrit": 20,
-            "crit": 20,
-            "supercrit": 20,
             "silence": 100,
-            "stim": 60
+            "stim": 60,
+            "supercrit": 20
+        },
+        "resistance": {
+            "poisonresistance": 10
         },
         "gain": {
             "dmg": 0.05
-        },
-        "status": {}
+        }
     },
     {
         "id": "shroom",
         "name": "Shroomy Boy",
         "description": "Just what I needed!",
-        "prestige": 3,
-        "boss": false,
         "max": [
             0,
             0,
             0,
             100
         ],
-        "life": 250,
+        "boss": false,
         "clife": 250,
-        "regeneration": 160,
-        "speed": 320,
         "cspeed": 0,
         "dmg": 80,
+        "life": 250,
         "magic": 220,
+        "prestige": 3,
+        "regeneration": 160,
+        "speed": 320,
+        "status": {},
         "effects": {
             "block": 38,
             "precision": 40
         },
         "chance": {
-            "poison": 320,
-            "instakill": 2
+            "instakill": 2,
+            "poison": 320
+        },
+        "resistance": {
+            "poisonresistance": 50
         },
         "gain": {
             "chance": {
-                "poison": 1,
-                "instakill": 0.01
+                "instakill": 0.01,
+                "poison": 1
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "chromeman",
         "name": "Chrome Avatar",
         "description": "Silver. Copper. Gold. Chrome. Long ago, the four nations lived together in harmony. Then, everything changed when the Gold Nation attacked.",
-        "prestige": 3,
-        "boss": true,
         "max": [
             0,
             0,
             0,
             1
         ],
-        "life": 500,
+        "boss": true,
         "clife": 500,
-        "regeneration": 0,
-        "speed": 220,
         "cspeed": 0,
         "dmg": 150,
+        "life": 500,
         "magic": 0,
+        "prestige": 3,
+        "regeneration": 0,
+        "speed": 220,
+        "status": {},
         "effects": {
             "block": 200,
             "precision": 160
         },
         "chance": {
             "counter": 40,
-            "fire": 255,
-            "dodge": 100,
-            "megacrit": 20,
             "crit": 20,
-            "supercrit": 20,
+            "dodge": 100,
+            "fire": 255,
+            "megacrit": 20,
             "silence": 100,
-            "stim": 60
+            "stim": 60,
+            "supercrit": 20
+        },
+        "resistance": {
+            "fireresistance": 100,
+            "poisonresistance": 100
         },
         "gain": {
             "speed": 100,
             "chance": {
                 "fire": 55
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "prior",
         "name": "Priors of the Uri",
         "description": "Fear not the Uri, fear the darkness that would conceal the knowledge of the universe. Believe in the truth of all things, and you too may find the Path to enlightenment",
-        "prestige": 4,
-        "boss": false,
         "max": [
             0,
             0,
@@ -1280,46 +1330,46 @@
             0,
             20
         ],
-        "life": 5000,
+        "boss": false,
         "clife": 5000,
-        "regeneration": 50,
-        "speed": 300,
         "cspeed": 0,
         "dmg": 0,
+        "life": 5000,
         "magic": 3000,
+        "prestige": 4,
+        "regeneration": 50,
+        "speed": 300,
+        "status": {},
         "effects": {
             "block": 250,
             "precision": 210
-        },
-        "resistance": {
-            "fire": 100,
-            "poison": 100
         },
         "chance": {
             "fire": 355,
             "silence": 100,
             "stim": 60
         },
+        "resistance": {
+            "fireresistance": 100,
+            "poisonresistance": 100
+        },
         "gain": {
             "speed": 1,
-            "chance": {
-                "fire": 1
-            },
             "effects": {
                 "precision": 0.1
             },
+            "chance": {
+                "fire": 1
+            },
             "resistance": {
-                "fire": 0.01
+                "fireresistance": 0.01
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "mawas",
         "name": "Mawas",
         "description": "Mawas were passionate scavengers, combing the deserts of Labooine for droids or scraps which they would capture and sell to the local residents",
-        "prestige": 4,
-        "boss": false,
         "max": [
             0,
             0,
@@ -1327,39 +1377,39 @@
             0,
             300
         ],
-        "life": 250,
+        "boss": false,
         "clife": 250,
-        "regeneration": 10,
-        "speed": 200,
         "cspeed": 0,
         "dmg": 250,
+        "life": 250,
         "magic": 40,
+        "prestige": 4,
+        "regeneration": 10,
+        "speed": 200,
+        "status": {},
         "effects": {
             "block": 280,
             "precision": 220
         },
         "chance": {
-            "fire": 20,
+            "disarm": 65,
             "dodge": 150,
-            "disarm": 65
+            "fire": 20
         },
         "gain": {
             "speed": 1,
-            "chance": {
-                "disarm": 0.05
-            },
             "effects": {
                 "precision": 0.1
+            },
+            "chance": {
+                "disarm": 0.05
             }
-        },
-        "status": {}
+        }
     },
     {
         "id": "ROAMEr",
         "name": "ROAMEr",
         "description": "Remote Observation And Manipulation device",
-        "prestige": 4,
-        "boss": false,
         "max": [
             0,
             0,
@@ -1367,31 +1417,108 @@
             0,
             200
         ],
-        "life": 350,
+        "boss": false,
         "clife": 350,
-        "regeneration": 0,
-        "speed": 150,
         "cspeed": 0,
         "dmg": 250,
+        "life": 350,
         "magic": 40,
+        "prestige": 4,
+        "regeneration": 0,
+        "speed": 150,
+        "status": {},
         "effects": {
             "block": 350,
             "precision": 220
         },
         "chance": {
-            "fire": 100,
+            "disarm": 55,
             "dodge": 180,
-            "disarm": 55
+            "fire": 100
         },
         "gain": {
             "dmg": 1,
-            "chance": {
-                "disarm": 0.05
-            },
             "effects": {
                 "precision": 0.1
+            },
+            "chance": {
+                "disarm": 0.05
             }
+        }
+    },
+    {
+        "id": "trebuchet",
+        "name": "Trebuchet",
+        "description": "How do you turn this on?",
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            20
+        ],
+        "boss": false,
+        "clife": 2350,
+        "cspeed": 0,
+        "dmg": 400,
+        "life": 2350,
+        "magic": 1000,
+        "prestige": 4,
+        "regeneration": 0,
+        "speed": 150,
+        "status": {},
+        "effects": {
+            "block": 350,
+            "precision": 220
         },
-        "status": {}
+        "chance": {
+            "fire": 800
+        },
+        "resistance": {
+            "fireresistance": -10
+        },
+        "gain": {
+            "dmg": 5
+        }
+    },
+    {
+        "id": "turret",
+        "name": "Turret",
+        "description": "eil a si ekac eht",
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            1
+        ],
+        "boss": true,
+        "clife": 2000,
+        "cspeed": 0,
+        "dmg": 1250,
+        "life": 2000,
+        "magic": 0,
+        "prestige": 4,
+        "regeneration": 0,
+        "speed": 120,
+        "status": {},
+        "effects": {
+            "block": 500,
+            "precision": 400
+        },
+        "chance": {
+            "disarm": 55,
+            "fire": 100,
+            "stim": 50
+        },
+        "gain": {
+            "dmg": 1,
+            "effects": {
+                "precision": 20
+            },
+            "chance": {
+                "stim": 20
+            }
+        }
     }
 ]

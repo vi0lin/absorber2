@@ -3,11 +3,11 @@
     <div>
       <img
         class="small"
-        :class="{ big: gettype(item.typ)=='m', shinny: co(item.id), deactive: can(item.id) }"
-        :src="getImgUrl(getreal(item.typ))"
-        @click="chooseskill(item.id)"
+        :class="{ big: item.typ.charAt(0) =='m', shinny: co(item.id), deactive: can(item.id) }"
+        :src="getImage"
+        @click="fun(item.id)"
       />
-      <TextToolTip :title="gettipp(item).name" :item="gettipp(item).desc" />
+      <TextToolTip :title="gettipp.name" :item="gettipp.desc" />
     </div>
     <div class="flex-colum">
       <Accordion :can="can" :co="co" :fun="fun" :key="i.id" :item="i" v-for="i of item.open" />
@@ -18,7 +18,6 @@
 <script>
 import TextToolTip from "./TextToolTip.vue";
 import Accordion from "./Accordion.vue";
-import choises from "./json/choises.json";
 
 export default {
   name: "Accordion",
@@ -44,33 +43,12 @@ export default {
       required: false
     }
   },
-  methods: {
-    getImgUrl(pet) {
-      var images = require.context("../assets/skills/", false, /\.png$/);
-      let img = "";
-      try {
-        img = images("./" + pet + ".png");
-        return img;
-      } catch (e) {
-        img = images("./dmg.png");
-        return img;
-      }
+  computed: {
+    getImage: function() {
+      return this.images.find(x => x.id == this.item.typ.substring(2)).img;
     },
-    gettype(r) {
-      return r.charAt(0);
-    },
-    getreal(r) {
-      return r.substring(2);
-    },
-    gettipp(i) {
-      try {
-        return choises.find(x => i.typ == x.id);
-      } catch {
-        return "none";
-      }
-    },
-    chooseskill(c) {
-      this.fun(c);
+    gettipp: function() {
+      return this.choiselist.find(x => this.item.typ == x.id);
     }
   }
 };

@@ -6,17 +6,11 @@
         <b>Stats:</b>
         <div class="fleo">
           <div class="fleo" :key="g" v-for="(n,g) in filtred(item)">
-            <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
-            <div class="fleo" v-if="g=='effects'||g=='chance'">
-              <div class="one" :key="gi" v-for="(gn,gi) in item[g]">
-                <img :src="getImgUrlS(gi)" />
-                <span>{{gn}}</span>
-              </div>
+            <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
+            <div class="fleo" v-if="g=='effects'||g=='chance'||g=='resistance'">
+              <Ability :class="g" :key="gi" v-for="(gn,gi) in item[g]" :pid="gi" :val="gn" />
             </div>
-            <div v-else class="one">
-              <img :src="getImgUrlS(g)" />
-              <span>{{n}}</span>
-            </div>
+            <Ability v-else :pid="g" class="basic" :val="n" />
           </div>
         </div>
       </div>
@@ -24,23 +18,30 @@
         <h2 class="title">{{item.name}}</h2>
         <b>Description:</b>
         <hr />
-        <img :src="getImgUrlS('description')" />
-        <span class="lol">{{item.description}}</span>
+        <Ability
+          class="basic"
+          style="white-space:normal;width:200px;height:auto;"
+          :pid="'description'"
+          :val="item.description"
+        />
       </div>
       <div v-else>
         <h2 class="title">{{item.name}}</h2>
         <b>Gain:</b>
         <div class="fleo">
           <div class="fleo" :key="g" v-for="(n,g) in item.gain">
-            <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
-            <div class="one" v-if="g!='effects'&&g!='chance'">
-              <img :src="getImgUrlS(g)" />
-              <span>{{n}}</span>
+            <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
+            <div v-if="g!='effects'&&g!='chance'&&g!='resistance'">
+              <Ability class="basic" :pid="g" :val="n" />
             </div>
-            <div class="one" v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
-              <img :src="getImgUrlS(gi)" />
-              <span>{{gn}}</span>
-            </div>
+            <Ability
+              v-else
+              :class="g"
+              :key="gi"
+              v-for="(gn,gi) in item.gain[g]"
+              :pid="gi"
+              :val="gn"
+            />
           </div>
         </div>
       </div>
@@ -49,9 +50,11 @@
 </template>
 
 <script>
-import tipps from "./json/tipps.json";
-
+import Ability from "./Ability.vue";
 export default {
+  components: {
+    Ability
+  },
   props: {
     item: {
       type: Object,
@@ -111,39 +114,26 @@ export default {
 
       return ob;
     },
-    getImgUrlS(pet) {
-      var images = require.context("../assets/skills/", false, /\.png$/);
-      let img = "";
-      try {
-        img = images("./" + pet + ".png");
-        return img;
-      } catch (e) {
-        img = images("./dmg.png");
-        return img;
-      }
-    },
     setReal() {
       let el = this;
       setTimeout(function() {
         let eposy = 0;
         let eposx = 0;
         try {
-          if (el.x > 500) {
-            eposy = el.target.left - 250;
-          } else {
-            eposy = el.target.left + el.target.width + 10;
-          }
+          eposy =
+            500 < el.x
+              ? el.target.left - 250
+              : el.target.left + el.target.width + 10;
 
-          if (el.y > 350) {
-            eposx = el.target.bottom - el.$el.scrollHeight;
-          } else {
-            eposx = el.target.top + 10;
-          }
+          eposx =
+            350 < el.y
+              ? el.target.bottom - el.$el.scrollHeight
+              : el.target.top + 10;
 
           el.$el.style.top = eposx + "px";
           el.$el.style.left = eposy + "px";
         } catch {}
-      }, 10);
+      }, 20);
     },
     setDimensions(e, el) {
       el.create = true;
@@ -216,24 +206,11 @@ export default {
 .title {
   margin: 0px;
 }
-.one {
-  margin-top: 2px;
-  height: 40px;
-  width: 100px;
-  line-height: 40px;
-  white-space: nowrap;
-  border: 0.5px solid lightgrey;
-}
 
 .fleo {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-
-img {
-  margin: 4px;
-  float: left;
 }
 
 .wiste {

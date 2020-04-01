@@ -56,7 +56,7 @@
         }
     },
     {
-        "id": "s_regen",
+        "id": "s_regeneration",
         "desc": "Adds 0.3 regeneration",
         "name": "Small regeneration boost",
         "gain": {
@@ -64,7 +64,7 @@
         }
     },
     {
-        "id": "m_regen",
+        "id": "m_regeneration",
         "desc": "Adds 1 regeneration",
         "name": "Minor regeneration boost",
         "gain": {
@@ -128,7 +128,7 @@
         }
     },
     {
-        "id": "s_scrit",
+        "id": "s_supercrit",
         "desc": "Adds 2% supercrit",
         "name": "Small supercrit boost",
         "gain": {
@@ -148,7 +148,7 @@
         }
     },
     {
-        "id": "s_mcrit",
+        "id": "s_megacrit",
         "desc": "Adds 2% megacrit",
         "name": "Small megacrit boost",
         "gain": {
@@ -194,6 +194,36 @@
         "gain": {
             "chance": {
                 "dodge": 2
+            }
+        }
+    },
+    {
+        "id": "s_poisonresistance",
+        "desc": "Adds 2% poison resistance",
+        "name": "Small poison resistance boost",
+        "gain": {
+            "resistance": {
+                "poisonresistance": 2
+            }
+        }
+    },
+    {
+        "id": "s_fireresistance",
+        "desc": "Adds 2% fire resistance",
+        "name": "Small fire resistance boost",
+        "gain": {
+            "resistance": {
+                "fireresistance": 2
+            }
+        }
+    },
+    {
+        "id": "s_bleedresistance",
+        "desc": "Adds 2% bleed resistance",
+        "name": "Small bleed resistance boost",
+        "gain": {
+            "resistance": {
+                "bleedresistance": 2
             }
         }
     },

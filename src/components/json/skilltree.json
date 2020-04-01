@@ -2,39 +2,48 @@
     {
         "id": "s_dmg0",
         "typ": "s_dmg",
+        "parent": "first",
         "open": [
             {
                 "id": "s_dmg1",
                 "typ": "s_dmg",
+                "parent": "s_dmg0",
                 "open": [
                     {
                         "id": "s_dmg2",
                         "typ": "s_dmg",
+                        "parent": "s_dmg1",
                         "open": [
                             {
                                 "id": "s_instakill0",
                                 "typ": "s_instakill",
+                                "parent": "s_dmg2",
                                 "open": [
                                     {
                                         "id": "s_silence0",
                                         "typ": "s_silence",
+                                        "parent": "s_instakill0",
                                         "open": []
                                     },
                                     {
                                         "id": "s_crit1",
                                         "typ": "s_crit",
+                                        "parent": "s_instakill0",
                                         "open": [
                                             {
-                                                "id": "s_scrit1",
-                                                "typ": "s_scrit",
+                                                "id": "s_supercrit1",
+                                                "typ": "s_supercrit",
+                                                "parent": "s_crit1",
                                                 "open": [
                                                     {
-                                                        "id": "s_mcrit1",
-                                                        "typ": "s_mcrit",
+                                                        "id": "s_megacrit1",
+                                                        "typ": "s_megacrit",
+                                                        "parent": "s_supercrit1",
                                                         "open": [
                                                             {
                                                                 "id": "m_crit1",
                                                                 "typ": "m_crit",
+                                                                "parent": "s_megacrit1",
                                                                 "open": []
                                                             }
                                                         ]
@@ -48,10 +57,12 @@
                             {
                                 "id": "s_silence1",
                                 "typ": "s_silence",
+                                "parent": "s_dmg2",
                                 "open": [
                                     {
                                         "id": "s_instakill1",
                                         "typ": "s_instakill",
+                                        "parent": "s_silence1",
                                         "open": []
                                     }
                                 ]
@@ -59,10 +70,12 @@
                             {
                                 "id": "s_lifesteal0",
                                 "typ": "s_lifesteal",
+                                "parent": "s_dmg2",
                                 "open": [
                                     {
                                         "id": "s_lifesteal1",
                                         "typ": "s_lifesteal",
+                                        "parent": "s_lifesteal0",
                                         "open": []
                                     }
                                 ]
@@ -72,14 +85,17 @@
                     {
                         "id": "s_bleed1",
                         "typ": "s_bleed",
+                        "parent": "s_dmg1",
                         "open": [
                             {
                                 "id": "s_dodge1",
                                 "typ": "s_dodge",
+                                "parent": "s_bleed1",
                                 "open": [
                                     {
                                         "id": "s_stun2",
                                         "typ": "s_stun",
+                                        "parent": "s_dodge1",
                                         "open": []
                                     }
                                 ]
@@ -89,10 +105,12 @@
                     {
                         "id": "s_dodge0",
                         "typ": "s_dodge",
+                        "parent": "s_dmg1",
                         "open": [
                             {
                                 "id": "s_bleed2",
                                 "typ": "s_bleed",
+                                "parent": "s_dodge0",
                                 "open": []
                             }
                         ]
@@ -102,18 +120,22 @@
             {
                 "id": "s_crit0",
                 "typ": "s_crit",
+                "parent": "s_dmg0",
                 "open": [
                     {
-                        "id": "s_scrit0",
-                        "typ": "s_scrit",
+                        "id": "s_supercrit0",
+                        "typ": "s_supercrit",
+                        "parent": "s_crit0",
                         "open": [
                             {
-                                "id": "s_mcrit0",
-                                "typ": "s_mcrit",
+                                "id": "s_megacrit0",
+                                "typ": "s_megacrit",
+                                "parent": "s_supercrit0",
                                 "open": [
                                     {
                                         "id": "m_crit0",
                                         "typ": "m_crit",
+                                        "parent": "s_megacrit0",
                                         "open": []
                                     }
                                 ]
@@ -127,27 +149,33 @@
     {
         "id": "s_magic0",
         "typ": "s_magic",
+        "parent": "first",
         "open": [
             {
                 "id": "s_fire0",
                 "typ": "s_fire",
+                "parent": "s_magic0",
                 "open": [
                     {
                         "id": "s_fire1",
                         "typ": "s_fire",
+                        "parent": "s_fire0",
                         "open": [
                             {
                                 "id": "m_magic0",
                                 "typ": "m_magic",
+                                "parent": "s_fire1",
                                 "open": []
                             },
                             {
                                 "id": "s_stun1",
                                 "typ": "s_stun",
+                                "parent": "s_fire1",
                                 "open": [
                                     {
                                         "id": "s_resurrect0",
                                         "typ": "s_resurrect",
+                                        "parent": "s_stun1",
                                         "open": []
                                     }
                                 ]
@@ -157,10 +185,12 @@
                     {
                         "id": "s_bury0",
                         "typ": "s_bury",
+                        "parent": "s_fire0",
                         "open": [
                             {
                                 "id": "s_bury1",
                                 "typ": "s_bury",
+                                "parent": "s_bury0",
                                 "open": []
                             }
                         ]
@@ -170,19 +200,23 @@
             {
                 "id": "s_poison0",
                 "typ": "s_poison",
+                "parent": "s_magic0",
                 "open": [
                     {
                         "id": "s_poison1",
                         "typ": "s_poison",
+                        "parent": "s_poison0",
                         "open": [
                             {
                                 "id": "m_magic1",
                                 "typ": "m_magic",
+                                "parent": "s_poison1",
                                 "open": []
                             },
                             {
                                 "id": "s_stun0",
                                 "typ": "s_stun",
+                                "parent": "s_poison1",
                                 "open": []
                             }
                         ]
@@ -190,14 +224,17 @@
                     {
                         "id": "s_rot0",
                         "typ": "s_rot",
+                        "parent": "s_poison0",
                         "open": [
                             {
                                 "id": "s_poison2",
                                 "typ": "s_poison",
+                                "parent": "s_rot0",
                                 "open": [
                                     {
                                         "id": "s_rot1",
                                         "typ": "s_rot",
+                                        "parent": "s_poison2",
                                         "open": []
                                     }
                                 ]
@@ -211,19 +248,23 @@
     {
         "id": "s_speed0",
         "typ": "s_speed",
+        "parent": "first",
         "open": [
             {
                 "id": "s_stim0",
                 "typ": "s_stim",
+                "parent": "s_speed0",
                 "open": [
                     {
                         "id": "s_stim1",
                         "typ": "s_stim",
+                        "parent": "s_stim0",
                         "open": []
                     },
                     {
                         "id": "s_precision0",
                         "typ": "s_precision",
+                        "parent": "s_stim0",
                         "open": []
                     }
                 ]
@@ -231,14 +272,17 @@
             {
                 "id": "s_speed1",
                 "typ": "s_speed",
+                "parent": "s_speed0",
                 "open": [
                     {
                         "id": "s_precision1",
                         "typ": "s_precision",
+                        "parent": "s_speed1",
                         "open": [
                             {
                                 "id": "s_double0",
                                 "typ": "s_double",
+                                "parent": "s_precision1",
                                 "open": []
                             }
                         ]
@@ -248,14 +292,17 @@
             {
                 "id": "s_slow0",
                 "typ": "s_slow",
+                "parent": "s_speed0",
                 "open": [
                     {
                         "id": "s_slow1",
                         "typ": "s_slow",
+                        "parent": "s_slow0",
                         "open": [
                             {
                                 "id": "s_precision2",
                                 "typ": "s_precision",
+                                "parent": "s_slow1",
                                 "open": []
                             }
                         ]
@@ -265,14 +312,17 @@
             {
                 "id": "s_precision3",
                 "typ": "s_precision",
+                "parent": "s_speed0",
                 "open": [
                     {
                         "id": "s_speed2",
                         "typ": "s_speed",
+                        "parent": "s_precision3",
                         "open": [
                             {
                                 "id": "s_double1",
                                 "typ": "s_double",
+                                "parent": "s_speed2",
                                 "open": []
                             }
                         ]
@@ -284,30 +334,37 @@
     {
         "id": "s_life0",
         "typ": "s_life",
+        "parent": "first",
         "open": [
             {
                 "id": "s_life1",
                 "typ": "s_life",
+                "parent": "s_life0",
                 "open": [
                     {
                         "id": "s_life2",
                         "typ": "s_life",
+                        "parent": "s_life1",
                         "open": [
                             {
                                 "id": "s_life3",
                                 "typ": "s_life",
+                                "parent": "s_life2",
                                 "open": [
                                     {
                                         "id": "m_life0",
                                         "typ": "m_life",
+                                        "parent": "s_life3",
                                         "open": [
                                             {
                                                 "id": "s_block1",
                                                 "typ": "s_block",
+                                                "parent": "m_life0",
                                                 "open": [
                                                     {
                                                         "id": "s_resurrect1",
                                                         "typ": "s_resurrect",
+                                                        "parent": "s_block1",
                                                         "open": []
                                                     }
                                                 ]
@@ -317,14 +374,17 @@
                                     {
                                         "id": "s_recovery0",
                                         "typ": "s_recovery",
+                                        "parent": "s_life3",
                                         "open": [
                                             {
-                                                "id": "s_regen0",
-                                                "typ": "s_regen",
+                                                "id": "s_regeneration0",
+                                                "typ": "s_regeneration",
+                                                "parent": "s_recovery0",
                                                 "open": [
                                                     {
                                                         "id": "m_recovery0",
                                                         "typ": "m_recovery",
+                                                        "parent": "s_regeneration0",
                                                         "open": []
                                                     }
                                                 ]
@@ -336,14 +396,30 @@
                             {
                                 "id": "s_counter0",
                                 "typ": "s_counter",
+                                "parent": "s_life2",
                                 "open": [
                                     {
                                         "id": "s_block2",
                                         "typ": "s_block",
+                                        "parent": "s_counter0",
                                         "open": [
                                             {
                                                 "id": "s_reflect0",
                                                 "typ": "s_reflect",
+                                                "parent": "s_block2",
+                                                "open": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "s_poisonresistance0",
+                                        "typ": "s_poisonresistance",
+                                        "parent": "s_counter0",
+                                        "open": [
+                                            {
+                                                "id": "s_poisonresistance1",
+                                                "typ": "s_poisonresistance",
+                                                "parent": "s_poisonresistance0",
                                                 "open": []
                                             }
                                         ]
@@ -353,16 +429,32 @@
                         ]
                     },
                     {
-                        "id": "s_regen1",
-                        "typ": "s_regen",
+                        "id": "s_regeneration1",
+                        "typ": "s_regeneration",
+                        "parent": "s_life1",
                         "open": [
                             {
                                 "id": "s_recovery1",
                                 "typ": "s_recovery",
+                                "parent": "s_regeneration1",
                                 "open": [
                                     {
-                                        "id": "m_regen0",
-                                        "typ": "m_regen",
+                                        "id": "m_regeneration0",
+                                        "typ": "m_regeneration",
+                                        "parent": "s_recovery1",
+                                        "open": []
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "s_bleedresistance0",
+                                "typ": "s_bleedresistance",
+                                "parent": "s_regeneration1",
+                                "open": [
+                                    {
+                                        "id": "s_bleedresistance1",
+                                        "typ": "s_bleedresistance",
+                                        "parent": "s_bleedresistance0",
                                         "open": []
                                     }
                                 ]
@@ -374,27 +466,45 @@
             {
                 "id": "s_block0",
                 "typ": "s_block",
+                "parent": "s_life0",
                 "open": [
                     {
                         "id": "s_reflect1",
                         "typ": "s_reflect",
+                        "parent": "s_block0",
                         "open": [
                             {
                                 "id": "s_counter1",
                                 "typ": "s_counter",
+                                "parent": "s_reflect1",
                                 "open": [
                                     {
                                         "id": "s_stun3",
                                         "typ": "s_stun",
+                                        "parent": "s_counter1",
                                         "open": [
                                             {
                                                 "id": "s_resurrect2",
                                                 "typ": "s_resurrect",
+                                                "parent": "s_stun3",
                                                 "open": []
                                             }
                                         ]
                                     }
                                 ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "s_fireresistance0",
+                        "typ": "s_fireresistance",
+                        "parent": "s_block0",
+                        "open": [
+                            {
+                                "id": "s_fireresistance1",
+                                "typ": "s_fireresistance",
+                                "parent": "s_fireresistance0",
+                                "open": []
                             }
                         ]
                     }

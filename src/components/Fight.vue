@@ -7,18 +7,14 @@
       <hr />
       <div class="fleo">
         <div :key="g" v-for="(n,g) in filtred(item)">
-          <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
-          <div class="fleo" v-if="g=='effects'||g=='chance'">
-            <div class="one" :key="gi" v-for="(gn,gi) in item[g]">
-              <img :src="getImgUrlS(gi)" />
-              <span>{{gn}}</span>
+          <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
+          <div class="fleo" v-if="g=='effects'||g=='chance'||g=='resistance'">
+            <div :key="gi" v-for="(gn,gi) in item[g]">
+              <Ability :class="g" :pid="gi" :val="gn" />
             </div>
           </div>
           <div v-else>
-            <div class="one">
-              <img :src="getImgUrlS(g)" />
-              <span>{{n}}</span>
-            </div>
+            <Ability class="basic" :pid="g" :val="n" />
           </div>
         </div>
       </div>
@@ -27,14 +23,12 @@
       <hr />
       <div class="fleo">
         <div class="fleo" :key="g" v-for="(n,g) in item.gain">
-          <hr style="width:200px;" v-if="g=='effects'||g=='chance'" />
-          <div class="one" v-if="g!='effects'&&g!='chance'">
-            <img :src="getImgUrlS(g)" />
-            <span>{{n}}</span>
+          <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
+          <div v-if="g!='effects'&&g!='chance'&&g!='resistance'">
+            <Ability class="basic" :pid="g" :val="n" />
           </div>
-          <div class="one" v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
-            <img :src="getImgUrlS(gi)" />
-            <span>{{gn}}</span>
+          <div v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
+            <Ability :class="g" :pid="gi" :val="gn" />
           </div>
         </div>
       </div>
@@ -42,8 +36,12 @@
         <br />
         <b>Description:</b>
         <hr />
-        <img :src="getImgUrlS('description')" />
-        <span class="lol">{{item.description}}</span>
+        <Ability
+          class="basic"
+          style="white-space:normal;width:200px;height:auto;"
+          :pid="'description'"
+          :val="item.description"
+        />
       </div>
     </div>
     <div class="row2 middle">
@@ -74,7 +72,7 @@
         <div class="flex">
           <div v-show="value>0" class="kiste" :key="key" v-for="(value, key) in this.item.status">
             {{value}}
-            <img class="icon" :src="getImgUrlB(key)" :alt="key" />
+            <img class="icon" :src="getImgUrl('b'+key)" :alt="key" />
           </div>
         </div>
       </div>
@@ -98,14 +96,15 @@ import {
   getLast
 } from "./functions.js";
 
+import Ability from "./Ability.vue";
 import { displayEnemyStats } from "./displayfunc.js";
 import { dmgind } from "./gloabals.js";
 import TextToolTip from "./TextToolTip.vue";
-import tipps from "./json/tipps.json";
 
 export default {
   components: {
-    Progressbar
+    Progressbar,
+    Ability
   },
   props: {
     item: {
@@ -124,38 +123,8 @@ export default {
     getLast(j, p) {
       return getLast(j, p);
     },
-    getImgUrl(pet) {
-      var images = require.context("../assets/enemys/", false, /\.png$/);
-      let img = "";
-      try {
-        img = images("./" + pet + ".png");
-        return img;
-      } catch (e) {
-        img = images("./goblin.png");
-        return img;
-      }
-    },
-    getImgUrlB(pet) {
-      var images = require.context("../assets/buffs/", false, /\.png$/);
-      let img = "";
-      try {
-        img = images("./" + pet + ".png");
-        return img;
-      } catch (e) {
-        img = images("./poison.png");
-        return img;
-      }
-    },
-    getImgUrlS(pet) {
-      var images = require.context("../assets/skills/", false, /\.png$/);
-      let img = "";
-      try {
-        img = images("./" + pet + ".png");
-        return img;
-      } catch (e) {
-        img = images("./dmg.png");
-        return img;
-      }
+    getImgUrl(id) {
+      return this.images.find(x => x.id == id).img;
     },
     filtred(arr) {
       let allowed = [
@@ -255,6 +224,7 @@ export default {
 .gain {
   border: 1px solid red;
 }
+
 .iconz {
   float: left;
   margin-right: 10px;
@@ -278,24 +248,10 @@ export default {
   margin: 0px;
 }
 
-.one {
-  margin-top: 2px;
-  height: 40px;
-  width: 100px;
-  line-height: 40px;
-  white-space: nowrap;
-  border: 0.5px solid lightgrey;
-}
-
 .fleo {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-
-.one img {
-  margin: 4px;
-  float: left;
 }
 
 .rows {
@@ -410,38 +366,5 @@ export default {
   width: 16px;
   margin: 0px;
   float: right;
-}
-
-@media screen and (max-device-width: 500px) {
-  .row1 {
-    overflow: auto;
-    max-height: 320px;
-    float: left;
-    width: 30%;
-    border-radius: 5px;
-    min-width: unset;
-    min-height: unset;
-  }
-
-  .row2 {
-    float: left;
-    width: 50%;
-    margin: 20px;
-  }
-  .row3 {
-    overflow: auto;
-    max-height: 100px;
-    min-height: unset;
-    float: left;
-    width: 100%;
-    border-radius: 5px;
-  }
-
-  .rows {
-    margin-top: 10px;
-    flex-wrap: wrap;
-    display: flex;
-    align-content: space-between;
-  }
 }
 </style>

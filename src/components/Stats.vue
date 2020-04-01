@@ -1,5 +1,5 @@
 <template>
-  <div style="padding-bottom:50px;">
+  <div class="stats">
     <input class="faker" v-model="$parent.player.name" />
     <div>
       <button v-show="$parent.player.go" class="btn" @click="$parent.displayfinish">
@@ -14,35 +14,43 @@
     <div class="flex">
       <div class="kiste">
         <span class="title">Base</span>
-        <div :key="key" v-for="(value, key) in show(this.$parent.player)">
-          <div class="valbox">
-            <div>
-              <img class="icon" v-if="key" :src="getImgUrl(key)" />
-              <span class="val">{{value}}</span>
-            </div>
-            <Tooltip2 :item="key" />
-          </div>
-        </div>
+        <Ability
+          class="basic"
+          :key="key"
+          v-for="(value, key) in show(this.$parent.player)"
+          :val="value"
+          :pid="key"
+        />
       </div>
       <div v-show="Object.keys(this.$parent.player.chance).length !== 0" class="kiste">
         <span class="title">Chances</span>
-        <div :key="key+value" v-for="(key,value) in this.$parent.player.chance">
-          <div class="valbox">
-            <span class="val">{{key}}</span>
-            <img class="icon" v-if="value" :src="getImgUrl(value)" />
-          </div>
-          <Tooltip2 :item="value" />
-        </div>
+        <Ability
+          class="chance"
+          :key="key+value"
+          v-for="(value, key) in this.$parent.player.chance"
+          :val="value"
+          :pid="key"
+        />
       </div>
       <div v-show="Object.keys(this.$parent.player.effects).length !== 0" class="kiste">
         <span class="title">Effects</span>
-        <div :key="key+value" v-for="(key,value) in this.$parent.player.effects">
-          <div class="valbox">
-            <span class="val">{{key}}</span>
-            <img class="icon" v-if="value" :src="getImgUrl(value)" />
-          </div>
-          <Tooltip2 :item="value" />
-        </div>
+        <Ability
+          class="effects"
+          :key="key+value"
+          v-for="(value, key) in this.$parent.player.effects"
+          :val="value"
+          :pid="key"
+        />
+      </div>
+      <div v-show="Object.keys(this.$parent.player.resistance).length !== 0" class="kiste">
+        <span class="title">Resistance</span>
+        <Ability
+          class="resistance"
+          :key="key+value"
+          v-for="(value, key) in this.$parent.player.resistance"
+          :val="value"
+          :pid="key"
+        />
       </div>
       <div class="kiste">
         <span class="title">Highscore</span>
@@ -50,7 +58,7 @@
           <div v-show="key>0">
             <div class="valbox">
               <span class="val">{{key}}</span>
-              <img class="icon" v-if="value" :src="getImgUrlH(value)" />
+              <img class="icon" v-if="value" :src="getImgUrl(value)" />
             </div>
             <TextToolTip :title="getRealEnemyName(value)" :item="'killed in '+key+' seconds'" />
           </div>
@@ -64,6 +72,19 @@
             <span class="val">{{key}}</span>
           </div>
           <TextToolTip :title="displayeskills2(value).name" :item="displayeskills2(value).desc" />
+        </div>
+      </div>
+      <div class="kiste" style="width:650px;" v-if="companions.length>0">
+        <span style="width:650px;" class="title">Kongpanions</span>
+        <div
+          :class="{scomp:isSelectedC(value.id),comp:!isSelectedC(value.id)}"
+          @click="selectComp(value.id)"
+          :key="key"
+          v-for="(value, key) in companions"
+        >
+          <img width="110" :src="value.normal_icon_url_small" />
+          <div>{{value.name}}</div>
+          <Ability :val="getboni(value.tags).value" :pid="getboni(value.tags).key" />
         </div>
       </div>
       <div class="ecke">
@@ -102,25 +123,34 @@
 
 <script>
 import j from "./json/player.js";
-import tipp from "./json/tipps.json";
-import Tooltip2 from "./Tooltip2.vue";
-import enemylist from "./json/enemys.json";
 import TextToolTip from "./TextToolTip.vue";
-import choiseslist from "./json/choises.json";
 import { debug } from "./gloabals.js";
 import { copyToClipboard, getClipBoard } from "./functions";
+import { getboni } from "./displayfunc";
+import Ability from "./Ability.vue";
 
 export default {
-  components: { Tooltip2, TextToolTip },
+  components: { TextToolTip, Ability },
   data() {
     return {
       pl: null,
       dchance: null,
       deffects: null,
-      dhighscore: null
+      dhighscore: null,
+      companions: []
     };
   },
   methods: {
+    getboni(tags) {
+      return getboni(tags);
+    },
+    selectComp(e) {
+      this.$parent.player.companion = e;
+      this.$parent.recalculate(this.$parent.player);
+    },
+    isSelectedC(comp) {
+      return !(this.$parent.player.companion != comp);
+    },
     reverse(str) {
       return str
         .split("")
@@ -148,13 +178,12 @@ export default {
       this.$parent.log.push("<div>Save was downloaded</div>");
     },
     getRealEnemyName(id) {
-      return enemylist.find(x => x.id == id).name;
+      return this.enemieslist.find(x => x.id == id).name;
     },
     importSave() {
       let el = this;
       this.$refs.import.addEventListener("change", function() {
         if (this.files && this.files[0]) {
-          var myFile = this.files[0];
           var reader = new FileReader();
 
           reader.addEventListener("load", function(e) {
@@ -169,7 +198,7 @@ export default {
             el.$parent.log.push("<div>Save was loaded</div>");
           });
 
-          reader.readAsBinaryString(myFile);
+          reader.readAsBinaryString(this.files[0]);
         }
       });
       this.saveGame();
@@ -179,12 +208,7 @@ export default {
 
       list.reduce(function(rv, x) {
         x = x.substring(0, x.length - 1);
-
-        if (!(x in obj)) {
-          obj[x] = 1;
-        } else {
-          obj[x]++;
-        }
+        x in obj ? obj[x]++ : (obj[x] = 1);
       }, {});
       return obj;
     },
@@ -202,63 +226,18 @@ export default {
     closereset() {
       this.$parent.overlay = false;
     },
-    displayeffect(a) {
-      let b = "";
-      return (
-        0 < this.$parent.player.effects[a] &&
-          (b += a + ": " + this.$parent.player.effects[a]),
-        b
-      );
-    },
-    displayechance(a) {
-      let b = "";
-      return (
-        0 < this.$parent.player.chance[a] &&
-          (b += a + ": " + this.$parent.player.chance[a] + "%"),
-        b
-      );
-    },
-    displayescore(a) {
-      let b = "";
-      return (
-        0 < this.$parent.player.highscore[a] &&
-          (b += a + ": " + this.$parent.player.highscore[a]),
-        b
-      );
-    },
     displayeskills(a) {
-      let t = choiseslist.find(b => b.id === a).id;
-      return t.substring(2);
+      return this.choiselist.find(b => b.id === a).id.substring(2);
     },
     displayeskills2(a) {
-      let t = choiseslist.find(b => b.id === a);
-      return t;
+      return this.choiselist.find(b => b.id === a);
     },
     openskilltree() {
       this.$parent.skilltree = true;
       this.$parent.overlay = true;
     },
-    getImgUrl(pet) {
-      var images = require.context("../assets/skills/", false, /\.png$/);
-      let img = "";
-      try {
-        img = images("./" + pet + ".png");
-        return img;
-      } catch (e) {
-        img = images("./dmg.png");
-        return img;
-      }
-    },
-    getImgUrlH(pet) {
-      var images = require.context("../assets/enemys/", false, /\.png$/);
-      let img = "";
-      try {
-        img = images("./" + pet + ".png");
-        return img;
-      } catch (e) {
-        img = images("./chulthuluseye.png");
-        return img;
-      }
+    getImgUrl(id) {
+      return this.images.find(x => x.id == id).img;
     },
     show(p) {
       let pl = JSON.parse(JSON.stringify(p));
@@ -266,15 +245,13 @@ export default {
       delete pl.status;
       delete pl.counter;
       delete pl.go;
-
+      delete pl.companion;
       delete pl.skills;
-
       delete pl.time;
       delete pl.auto;
       delete pl.debug;
       delete pl.tutorial;
       delete pl.order;
-
       delete pl.cspeed;
       delete pl.clife;
       delete pl.lastEnemy;
@@ -283,14 +260,28 @@ export default {
       delete pl.effects;
       delete pl.highscore;
       delete pl.chance;
-
       return pl;
     }
+  },
+  created() {
+    // if (this.kongregate != null) {
+    //if (!this.kongregate.services.isGuest()) {
+    //this.kongregate.services.getUsername()
+    let el = this;
+    $.getJSON("https://api.kongregate.com/api/kongpanions/index.json", function(
+      data
+    ) {
+      data.success && (el.companions = data.kongpanions);
+    });
   }
 };
 </script>
 
 <style scoped>
+.stats {
+  padding-bottom: 50px;
+}
+
 .title {
   width: 310px;
   margin: 4px;
@@ -363,5 +354,22 @@ export default {
   width: 100%;
   height: 100%;
   margin: 0px;
+}
+.comp {
+  margin: 5px;
+  border: 2px dotted grey;
+  padding: 5px;
+}
+.comp img {
+  width: 100px;
+}
+.scomp img {
+  width: 100px;
+}
+.scomp {
+  margin: 5px;
+  width: 100px;
+  border: 3px solid yellow;
+  padding: 4px;
 }
 </style>

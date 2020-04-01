@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-show="show &&item!=null" class="wiste">
+    <div v-show="show && item != null" class="wiste">
       <div class="title">{{title}}</div>
       <hr v-show="title!=null" />
       <div>{{item}}</div>
@@ -51,24 +51,26 @@ export default {
       el.show = false;
     };
 
-    this.$el.parentElement.firstChild.addEventListener(
-      "mouseenter",
-      this.elistender
-    );
-    this.$el.parentElement.firstChild.addEventListener(
-      "mouseleave",
-      this.llistender
-    );
+    $(this.$el)
+      .parent()
+      .first()
+      .on("mouseenter", this.elistender);
+
+    $(this.$el)
+      .parent()
+      .first()
+      .on("mouseleave", this.llistender);
   },
   beforeDestroy() {
-    this.$el.parentElement.firstChild.removeEventListener(
-      "mouseenter",
-      this.elistender
-    );
-    this.$el.parentElement.firstChild.removeEventListener(
-      "mouseleave",
-      this.llistender
-    );
+    $(this.$el)
+      .parent()
+      .first()
+      .off("mouseenter", this.elistender);
+
+    $(this.$el)
+      .parent()
+      .first()
+      .off("mouseleave", this.llistender);
   }
 };
 </script>

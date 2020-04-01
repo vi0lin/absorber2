@@ -20,12 +20,32 @@ body,
 html,
 #app {
   user-select: none;
-  image-rendering: optimizeQuality;
   background: grey;
   width: 100%;
   margin: 0px;
   padding: 0px;
   font-family: "MedievalSharp", cursive;
+}
+
+.resistance {
+  background: lightcoral;
+}
+.effects {
+  background: lightcyan;
+}
+.chance {
+  background: lightgreen;
+}
+
+.basic {
+  background: lightyellow;
+}
+
+#app {
+  width: 900px;
+  height: 600px;
+  border: 1px solid red;
+  overflow: auto;
 }
 
 ::-webkit-scrollbar {

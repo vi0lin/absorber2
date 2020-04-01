@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="credits">
-      <a class="abs" style="right:20px" target="_blank" href="https://discord.gg/gUwvjw2">
+      <a class="abs" style="right:320px" target="_blank" href="https://discord.gg/gUwvjw2">
         <img class="icon" :src="require('@/assets/icons/discord.png')" alt="discord" />
       </a>
       <a class="abs" target="_blank" style="right:80px" href="https://www.buymeacoffee.com/a4bl2n1">
@@ -26,6 +26,15 @@
       <a class="abs" target="_blank" style="right:20px" href="https://www.patreon.com/schlauewurst">
         <img class="icon" :src="require('@/assets/icons/patreon.jpg')" alt="patreon" />
       </a>
+      <a
+        class="abs"
+        target="_blank"
+        style="right:260px"
+        href="https://shop.spreadshirt.de/Absorber/"
+      >
+        <img class="icon" :src="require('@/assets/icons/spreadshirt.png')" alt="spreadshirt" />
+      </a>
+
       <div class="abs" style="left:20px">{{this.$parent.player.version}}</div>
     </div>
   </div>

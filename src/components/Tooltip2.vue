@@ -1,13 +1,13 @@
 <template>
   <transition name="fade">
-    <div v-show="show" class="wiste" v-html="maketext(item)"></div>
+    <div v-show="show" class="wiste">
+      <div class="title">{{item}}</div>
+      <div v-html="maketext(item)"></div>
+    </div>
   </transition>
 </template>
 
 <script>
-import tipps from "./json/tipps.json";
-import choise from "./json/choises.json";
-
 export default {
   props: {
     item: {
@@ -25,12 +25,8 @@ export default {
   methods: {
     maketext(l) {
       try {
-        let tipp = tipps.find(x => x.id === l);
-        let out =
-          "<div style='font-size: 25px;margin-bottom: 5px;text-transform: capitalize;'>" +
-          l +
-          "</div>";
-        out += "<div><b>Description:</b><hr/>" + tipp.desc + "</div><br>";
+        let tipp = this.tippslist.find(x => x.id === l);
+        let out = "<div><b>Description:</b><hr/>" + tipp.desc + "</div>";
         out += "<div><b>Calculation:</b><hr/>" + tipp.form + "</div>";
         return out;
       } catch {
@@ -69,29 +65,37 @@ export default {
       el.show = false;
     };
 
-    this.$el.parentElement.firstChild.addEventListener(
-      "mouseenter",
-      this.elistender
-    );
-    this.$el.parentElement.firstChild.addEventListener(
-      "mouseleave",
-      this.llistender
-    );
+    $(this.$el)
+      .parent()
+      .first()
+      .on("mouseenter", this.elistender);
+
+    $(this.$el)
+      .parent()
+      .first()
+      .on("mouseleave", this.llistender);
   },
   beforeDestroy() {
-    this.$el.parentElement.firstChild.removeEventListener(
-      "mouseenter",
-      this.elistender
-    );
-    this.$el.parentElement.firstChild.removeEventListener(
-      "mouseleave",
-      this.llistender
-    );
+    $(this.$el)
+      .parent()
+      .first()
+      .off("mouseenter", this.elistender);
+
+    $(this.$el)
+      .parent()
+      .first()
+      .off("mouseleave", this.llistender);
   }
 };
 </script>
 
 <style scoped>
+.title {
+  font-size: 25px;
+  margin-bottom: 5px;
+  text-transform: capitalize;
+}
+
 .wiste {
   padding: 10px;
   position: fixed;
@@ -100,7 +104,7 @@ export default {
   pointer-events: none;
   z-index: 10;
   min-width: 100px;
-  width: 180px;
+  width: 230px;
   white-space: normal;
 }
 
