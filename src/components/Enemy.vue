@@ -80,10 +80,6 @@ export default {
   components: {
     Tooltip
   },
-  mounted() {
-    this.$parent.$parent.player.counter[this.value.id] == null &&
-      (this.$parent.$parent.player.counter[this.value.id] = 0);
-  },
   methods: {
     handleDragStart(e) {
       this.$parent.dragSrcEl = e.target.id;

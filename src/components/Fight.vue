@@ -167,6 +167,9 @@ export default {
     }
   },
   mounted() {
+    this.$parent.player.counter[this.$parent.enemy.id] == null &&
+      (this.$parent.player.counter[this.$parent.enemy.id] = 0);
+
     this.$parent.recovery = false;
 
     let player = this.$parent.player,
