@@ -1,6 +1,6 @@
 <template>
-  <div v-if="!loading">
-    <div>
+  <div :class="{ all: this.beta }" v-if="!loading">
+    <div :style="{ backgroundImage: 'url(' + require('@/assets/icons/background.png') + ')' }">
       <div class="fixed">
         <button
           :class="{ active: this.active=='fight' }"
@@ -38,9 +38,9 @@
       </div>
     </div>
     <div class="status">
-      <div v-show="value>0" class="kiste" :key="key" v-for="(value, key) in this.player.status">
-        <img class="icons" :src="getImgUrl('b'+key)" :alt="key" />
-        <span class="itext">{{value}}</span>
+      <div v-show="value>0" :key="key" v-for="(value, key) in this.player.status">
+        <img :src="getImgUrl('b'+key)" :alt="key" />
+        <span>{{value}}</span>
       </div>
     </div>
     <Progressbar :max="player.life" :val="player.clife" :ab="true" />
@@ -97,7 +97,7 @@ export default {
       kongregate: null,
       overlay: false,
       skilltree: false,
-      beta: true,
+      beta: false,
       cntrlIsPressed: false,
       shiftIsPressed: false,
       log: log,
@@ -132,18 +132,15 @@ export default {
       player.sspeed = 0;
       this.enemy = null;
 
-      console.log(pl.companion);
-      if (player.companion != null) {
-        let boni = getboni(this.complist.find(x => x.id == pl.companion).tags);
-        if (boni.chance) {
-          if (player.chance[boni.key] == undefined) {
-            player.chance[boni.key] = boni.value;
-          } else {
-            player.chance[boni.key] += boni.value;
-          }
-        } else {
-          player[boni.key] += boni.value;
-        }
+      if (null != player.companion) {
+        let a = getboni(this.complist.find(a => a.id == pl.companion).tags);
+        a.chance
+          ? player.chance[a.key] == null
+            ? (player.chance[a.key] = a.value)
+            : (player.chance[a.key] += a.value)
+          : "speed" == a.key
+          ? (player[a.key] -= a.value)
+          : (player[a.key] += a.value);
       }
 
       player.order =
@@ -347,7 +344,7 @@ export default {
             this.player.counter[e.id] <
             this.getLast(e.max, this.player.prestige)
           ) {
-            this.enemy = e;
+            this.enemy = respawn(e);
             break;
           }
         }
@@ -358,7 +355,7 @@ export default {
             this.player.counter[last.id] <
             this.getLast(last.max, this.player.prestige)
           ) {
-            this.enemy = last;
+            this.enemy = respawn(last);
           } else {
             this.enemy = null;
             this.active = "dungeon";
@@ -464,9 +461,11 @@ export default {
 </script>
 
 <style scoped>
+.all {
+  border: 3px solid red;
+}
 .box {
-  padding: 10px;
-  padding-top: 80px;
+  padding-top: 74px;
 }
 .fixed {
   border: 1px solid black;
@@ -485,25 +484,31 @@ export default {
   right: 10px;
 }
 
-.kiste {
-  background: darkgrey;
-  padding: 1px;
-  border: 1px solid black;
-  line-height: 32px;
-}
-
-.itext {
-  color: white;
-  font-stretch: bold;
-  padding: 0px 2px;
-}
-
 .status {
   position: fixed;
   margin: 5px 5px;
-  height: 34px;
+  height: 40px;
   bottom: 60px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+}
+
+.status > div {
+  background: darkgrey;
+  padding: 1px 5px 1px 2px;
+  border: 1px solid black;
+  box-shadow: inset -1px -1px 2px grey;
+  border-radius: 5px;
+  margin: 0px 5px;
+}
+
+.status > div > span {
+  line-height: 36px;
+  color: white;
+  font-stretch: bold;
+}
+.status > div > img {
+  float: left;
+  margin-right: 2px;
 }
 </style>

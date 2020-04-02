@@ -1,7 +1,7 @@
 <template>
   <div class="stats">
     <input class="faker" v-model="$parent.player.name" />
-    <div>
+    <div style="display:flex">
       <button v-show="$parent.player.go" class="btn" @click="$parent.displayfinish">
         Prestige
         <img class="icons" :src="require('@/assets/icons/star.png')" alt="reset" />
@@ -302,14 +302,18 @@ export default {
 }
 
 .faker {
-  background: grey;
-  border: none;
+  display: block;
+  width: 790px;
+  border: 1px solid black;
+  box-shadow: inset 0 0 4px grey;
+  border-radius: 10px;
+  background: lightgrey;
   outline: none;
   padding: 10px;
   margin: 10px;
   font-size: 30px;
   font-weight: bold;
-  cursor: default;
+  cursor: text;
   font-family: "MedievalSharp", cursive;
 }
 
@@ -324,8 +328,16 @@ export default {
   padding: 10px;
   margin: 5px;
   border: 1px solid black;
-  background-color: whitesmoke;
+  background-color: lightgray;
+  border-radius: 5px;
+  box-shadow: inset 0 0 4px grey;
   min-width: 100px;
+}
+
+.icons {
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
 }
 
 .valbox {
@@ -341,7 +353,7 @@ export default {
   flex-direction: column;
   position: fixed;
   bottom: 65px;
-  right: 0px;
+  right: 40px;
 }
 
 .import {

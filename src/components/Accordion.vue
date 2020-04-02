@@ -9,7 +9,7 @@
       />
       <TextToolTip :title="gettipp.name" :item="gettipp.desc" />
     </div>
-    <div class="flex-colum">
+    <div v-if="item.open.length>0" class="flex-colum">
       <Accordion :can="can" :co="co" :fun="fun" :key="i.id" :item="i" v-for="i of item.open" />
     </div>
   </div>
@@ -56,13 +56,9 @@ export default {
 
 <style scoped>
 .flex-colum {
-  border: 1px solid darkgrey;
+  border: 1px dotted darkgrey;
   display: flex;
   flex-flow: row wrap;
-}
-
-.right {
-  float: right;
 }
 .small {
   cursor: pointer;
@@ -78,8 +74,7 @@ export default {
   cursor: default;
 }
 .shinny {
-  border: 1px solid yellow;
+  filter: drop-shadow(0px 0px 12px yellow) brightness(150%);
   cursor: default;
-  border-radius: 20px;
 }
 </style>

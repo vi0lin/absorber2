@@ -11,13 +11,10 @@
             300
         ],
         "boss": false,
-        "clife": 2,
-        "cspeed": 0,
         "dmg": 0.3,
         "life": 2,
         "regeneration": 0,
         "speed": 1000,
-        "status": {},
         "effects": {
             "lifesteal": 50
         },
@@ -42,14 +39,11 @@
             400
         ],
         "boss": false,
-        "clife": 1,
-        "cspeed": 0,
         "dmg": 1,
         "life": 1,
         "magic": 0,
         "regeneration": 0,
         "speed": 1900,
-        "status": {},
         "chance": {
             "crit": 50,
             "dodge": 50,
@@ -78,13 +72,10 @@
             300
         ],
         "boss": false,
-        "clife": 5,
-        "cspeed": 0,
         "dmg": 0.5,
         "life": 5,
         "regeneration": 0.2,
         "speed": 2000,
-        "status": {},
         "chance": {
             "crit": 50
         },
@@ -108,14 +99,11 @@
             220
         ],
         "boss": false,
-        "clife": 6,
-        "cspeed": 0,
         "dmg": 0.8,
         "life": 6,
         "magic": 2,
         "regeneration": 0,
         "speed": 1500,
-        "status": {},
         "chance": {
             "poison": 50
         },
@@ -137,13 +125,10 @@
             300
         ],
         "boss": false,
-        "clife": 10,
-        "cspeed": 0,
         "dmg": 1,
         "life": 10,
         "regeneration": 1,
         "speed": 3000,
-        "status": {},
         "resistance": {
             "fireresistance": 2,
             "poisonresistance": 2
@@ -170,13 +155,10 @@
             10
         ],
         "boss": true,
-        "clife": 30,
-        "cspeed": 0,
         "dmg": 2,
         "life": 30,
         "regeneration": 0,
         "speed": 2500,
-        "status": {},
         "effects": {
             "lifesteal": 100
         },
@@ -197,14 +179,11 @@
             255
         ],
         "boss": false,
-        "clife": 15,
-        "cspeed": 0,
         "dmg": 2,
         "life": 15,
         "magic": 0,
         "regeneration": 0.4,
         "speed": 2500,
-        "status": {},
         "chance": {
             "stun": 10
         },
@@ -224,13 +203,10 @@
             210
         ],
         "boss": false,
-        "clife": 15,
-        "cspeed": 0,
         "dmg": 1.5,
         "life": 15,
         "regeneration": 0.6,
         "speed": 2000,
-        "status": {},
         "chance": {
             "crit": 75,
             "supercrit": 25
@@ -255,14 +231,11 @@
             240
         ],
         "boss": false,
-        "clife": 10,
-        "cspeed": 0,
         "dmg": 1.8,
         "life": 10,
         "magic": 2,
         "regeneration": 0,
         "speed": 1300,
-        "status": {},
         "effects": {
             "block": 1
         },
@@ -288,14 +261,11 @@
             420
         ],
         "boss": false,
-        "clife": 20,
-        "cspeed": 0,
         "dmg": 2,
         "life": 20,
         "magic": 5,
         "regeneration": 0,
         "speed": 1800,
-        "status": {},
         "chance": {
             "fire": 50,
             "stun": 20
@@ -323,14 +293,11 @@
             8
         ],
         "boss": true,
-        "clife": 40,
-        "cspeed": 0,
         "dmg": 1,
         "life": 40,
         "magic": 12,
         "regeneration": 3,
         "speed": 2100,
-        "status": {},
         "chance": {
             "fire": 100
         },
@@ -356,14 +323,11 @@
             25
         ],
         "boss": false,
-        "clife": 30,
-        "cspeed": 0,
         "dmg": 6,
         "life": 30,
         "magic": 0,
         "regeneration": 5,
         "speed": 5000,
-        "status": {},
         "chance": {
             "stun": 50
         },
@@ -390,14 +354,11 @@
             200
         ],
         "boss": false,
-        "clife": 15,
-        "cspeed": 0,
         "dmg": 0.5,
         "life": 15,
         "magic": 0,
         "regeneration": 0,
         "speed": 500,
-        "status": {},
         "chance": {
             "crit": 20,
             "dodge": 25,
@@ -426,14 +387,11 @@
             210
         ],
         "boss": false,
-        "clife": 8,
-        "cspeed": 0,
         "dmg": 1.5,
         "life": 8,
         "magic": 10,
         "regeneration": 0,
         "speed": 900,
-        "status": {},
         "chance": {
             "crit": 20,
             "poison": 50,
@@ -457,13 +415,10 @@
             200
         ],
         "boss": false,
-        "clife": 20,
-        "cspeed": 0,
         "dmg": 3.5,
         "life": 20,
         "regeneration": 1.6,
         "speed": 2000,
-        "status": {},
         "chance": {
             "crit": 100,
             "megacrit": 25,
@@ -490,14 +445,11 @@
             8
         ],
         "boss": true,
-        "clife": 40,
-        "cspeed": 0,
         "dmg": 8,
         "life": 40,
         "magic": 20,
         "regeneration": 0,
         "speed": 2500,
-        "status": {},
         "effects": {
             "block": 6
         },
@@ -525,13 +477,10 @@
             180
         ],
         "boss": false,
-        "clife": 10,
-        "cspeed": 0,
         "dmg": 4,
         "life": 30,
         "regeneration": 3,
         "speed": 1500,
-        "status": {},
         "effects": {
             "block": 4
         },
@@ -558,13 +507,10 @@
             220
         ],
         "boss": false,
-        "clife": 100,
-        "cspeed": 0,
         "dmg": 15,
         "life": 100,
         "regeneration": 10,
         "speed": 3000,
-        "status": {},
         "effects": {
             "reflect": 30
         },
@@ -597,13 +543,10 @@
             220
         ],
         "boss": false,
-        "clife": 10,
-        "cspeed": 0,
         "dmg": 3.5,
         "life": 10,
         "regeneration": 0,
         "speed": 1000,
-        "status": {},
         "effects": {
             "block": 3
         },
@@ -634,14 +577,11 @@
             40
         ],
         "boss": false,
-        "clife": 10,
-        "cspeed": 0,
         "dmg": 8,
         "life": 20,
         "magic": 20,
         "regeneration": 0,
         "speed": 1000,
-        "status": {},
         "effects": {
             "block": 4,
             "precision": 20
@@ -674,14 +614,11 @@
             3
         ],
         "boss": true,
-        "clife": 120,
-        "cspeed": 0,
         "dmg": 18,
         "life": 120,
         "magic": 50,
         "regeneration": 10,
         "speed": 2500,
-        "status": {},
         "effects": {
             "block": 6
         },
@@ -711,15 +648,12 @@
             200
         ],
         "boss": false,
-        "clife": 60,
-        "cspeed": 0,
         "dmg": 12,
         "life": 60,
         "magic": 40,
         "prestige": 1,
         "regeneration": 5,
         "speed": 1100,
-        "status": {},
         "chance": {
             "bleed": 10,
             "poison": 50,
@@ -746,15 +680,12 @@
             160
         ],
         "boss": false,
-        "clife": 80,
-        "cspeed": 0,
         "dmg": 15,
         "life": 80,
         "magic": 0,
         "prestige": 1,
         "regeneration": 0,
         "speed": 900,
-        "status": {},
         "effects": {
             "block": 5,
             "precision": 30
@@ -787,15 +718,12 @@
             200
         ],
         "boss": false,
-        "clife": 200,
-        "cspeed": 0,
         "dmg": 30,
         "life": 200,
         "magic": 0,
         "prestige": 1,
         "regeneration": 5,
         "speed": 1100,
-        "status": {},
         "effects": {
             "lifesteal": 30
         },
@@ -825,15 +753,12 @@
             30
         ],
         "boss": false,
-        "clife": 300,
-        "cspeed": 0,
         "dmg": 25,
         "life": 300,
         "magic": 0,
         "prestige": 1,
         "regeneration": 10,
         "speed": 800,
-        "status": {},
         "effects": {
             "block": 10
         },
@@ -848,6 +773,9 @@
             "dmg": 0.5,
             "chance": {
                 "bleed": 1
+            },
+            "resistance": {
+                "bleedresistance": 0.5
             }
         }
     },
@@ -862,15 +790,12 @@
             2
         ],
         "boss": true,
-        "clife": 100,
-        "cspeed": 0,
         "dmg": 30,
         "life": 100,
         "magic": 60,
         "prestige": 1,
         "regeneration": 0,
         "speed": 1000,
-        "status": {},
         "effects": {
             "block": 30
         },
@@ -887,7 +812,8 @@
         },
         "resistance": {
             "fireresistance": 10,
-            "poisonresistance": 10
+            "poisonresistance": 10,
+            "bleedresistance": 10
         },
         "gain": {
             "dmg": -5,
@@ -910,15 +836,12 @@
             200
         ],
         "boss": false,
-        "clife": 120,
-        "cspeed": 0,
         "dmg": 18,
         "life": 120,
         "magic": 200,
         "prestige": 2,
         "regeneration": 10,
         "speed": 500,
-        "status": {},
         "effects": {
             "block": 30
         },
@@ -945,15 +868,12 @@
             180
         ],
         "boss": false,
-        "clife": 150,
-        "cspeed": 0,
         "dmg": 20,
         "life": 150,
         "magic": 0,
         "prestige": 2,
         "regeneration": 15,
         "speed": 600,
-        "status": {},
         "effects": {
             "block": 55,
             "reflect": 30
@@ -975,15 +895,12 @@
             220
         ],
         "boss": false,
-        "clife": 150,
-        "cspeed": 0,
         "dmg": 30,
         "life": 150,
         "magic": 0,
         "prestige": 2,
         "regeneration": 0,
         "speed": 600,
-        "status": {},
         "effects": {
             "block": 55
         },
@@ -1011,15 +928,12 @@
             240
         ],
         "boss": false,
-        "clife": 150,
-        "cspeed": 0,
         "dmg": 30,
         "life": 150,
         "magic": 0,
         "prestige": 2,
         "regeneration": 0,
         "speed": 200,
-        "status": {},
         "effects": {
             "block": 55
         },
@@ -1045,15 +959,12 @@
             2
         ],
         "boss": true,
-        "clife": 900,
-        "cspeed": 0,
         "dmg": 100,
         "life": 900,
         "magic": 200,
         "prestige": 2,
         "regeneration": 200,
         "speed": 2000,
-        "status": {},
         "effects": {
             "block": 100,
             "reflect": 30
@@ -1092,15 +1003,12 @@
             80
         ],
         "boss": false,
-        "clife": 150,
-        "cspeed": 0,
         "dmg": 45,
         "life": 150,
         "magic": 0,
         "prestige": 3,
         "regeneration": 10,
         "speed": 250,
-        "status": {},
         "effects": {
             "block": 50,
             "precision": 20
@@ -1127,15 +1035,12 @@
             20
         ],
         "boss": false,
-        "clife": 550,
-        "cspeed": 0,
         "dmg": 120,
         "life": 550,
         "magic": 0,
         "prestige": 3,
         "regeneration": 100,
         "speed": 700,
-        "status": {},
         "effects": {
             "block": 50,
             "precision": 20,
@@ -1169,15 +1074,12 @@
             220
         ],
         "boss": false,
-        "clife": 250,
-        "cspeed": 0,
         "dmg": 80,
         "life": 250,
         "magic": 100,
         "prestige": 3,
         "regeneration": 60,
         "speed": 540,
-        "status": {},
         "effects": {
             "block": 48,
             "precision": 25
@@ -1208,15 +1110,12 @@
             500
         ],
         "boss": false,
-        "clife": 350,
-        "cspeed": 0,
         "dmg": 180,
         "life": 350,
         "magic": 1000000,
         "prestige": 3,
         "regeneration": 60,
         "speed": 440,
-        "status": {},
         "effects": {
             "block": 68,
             "precision": 35
@@ -1247,15 +1146,12 @@
             100
         ],
         "boss": false,
-        "clife": 250,
-        "cspeed": 0,
         "dmg": 80,
         "life": 250,
         "magic": 220,
         "prestige": 3,
         "regeneration": 160,
         "speed": 320,
-        "status": {},
         "effects": {
             "block": 38,
             "precision": 40
@@ -1285,15 +1181,12 @@
             1
         ],
         "boss": true,
-        "clife": 500,
-        "cspeed": 0,
         "dmg": 150,
         "life": 500,
         "magic": 0,
         "prestige": 3,
         "regeneration": 0,
         "speed": 220,
-        "status": {},
         "effects": {
             "block": 200,
             "precision": 160
@@ -1331,23 +1224,20 @@
             20
         ],
         "boss": false,
-        "clife": 5000,
-        "cspeed": 0,
         "dmg": 0,
-        "life": 5000,
-        "magic": 3000,
+        "life": 2000,
+        "magic": 1000,
         "prestige": 4,
-        "regeneration": 50,
+        "regeneration": 20,
         "speed": 300,
-        "status": {},
         "effects": {
-            "block": 250,
+            "block": 180,
             "precision": 210
         },
         "chance": {
-            "fire": 355,
-            "silence": 100,
-            "stim": 60
+            "fire": 450,
+            "stim": 60,
+            "poison": 450
         },
         "resistance": {
             "fireresistance": 100,
@@ -1362,7 +1252,8 @@
                 "fire": 1
             },
             "resistance": {
-                "fireresistance": 0.01
+                "fireresistance": 0.01,
+                "poisonresistance": 0.01
             }
         }
     },
@@ -1375,18 +1266,15 @@
             0,
             0,
             0,
-            300
+            200
         ],
         "boss": false,
-        "clife": 250,
-        "cspeed": 0,
-        "dmg": 250,
+        "dmg": 100,
         "life": 250,
         "magic": 40,
         "prestige": 4,
         "regeneration": 10,
         "speed": 200,
-        "status": {},
         "effects": {
             "block": 280,
             "precision": 220
@@ -1418,15 +1306,12 @@
             200
         ],
         "boss": false,
-        "clife": 350,
-        "cspeed": 0,
-        "dmg": 250,
+        "dmg": 80,
         "life": 350,
         "magic": 40,
         "prestige": 4,
         "regeneration": 0,
         "speed": 150,
-        "status": {},
         "effects": {
             "block": 350,
             "precision": 220
@@ -1458,15 +1343,12 @@
             20
         ],
         "boss": false,
-        "clife": 2350,
-        "cspeed": 0,
-        "dmg": 400,
+        "dmg": 200,
         "life": 2350,
         "magic": 1000,
         "prestige": 4,
         "regeneration": 0,
-        "speed": 150,
-        "status": {},
+        "speed": 500,
         "effects": {
             "block": 350,
             "precision": 220
@@ -1493,23 +1375,19 @@
             1
         ],
         "boss": true,
-        "clife": 2000,
-        "cspeed": 0,
-        "dmg": 1250,
+        "dmg": 30,
         "life": 2000,
         "magic": 0,
         "prestige": 4,
         "regeneration": 0,
         "speed": 120,
-        "status": {},
         "effects": {
             "block": 500,
             "precision": 400
         },
         "chance": {
-            "disarm": 55,
-            "fire": 100,
-            "stim": 50
+            "disarm": 30,
+            "stim": 250
         },
         "gain": {
             "dmg": 1,

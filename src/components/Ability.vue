@@ -1,7 +1,9 @@
 <template>
   <div class="one">
     <img :src="getImage" />
-    <span>{{val}}</span>
+    <transition name="fade" mode="out-in">
+      <span :key="val">{{val}}</span>
+    </transition>
     <Tooltip2 v-if="tooltip" :item="pid" />
   </div>
 </template>
@@ -37,16 +39,29 @@ export default {
 
 <style scoped>
 .one {
-  margin-top: 2px;
+  margin: 1px;
   height: 40px;
   width: 100px;
   line-height: 40px;
   white-space: nowrap;
-  border: 0.5px solid lightgrey;
+  box-shadow: inset 0 0 2px #000000;
 }
 
 .one img {
   margin: 4px;
   float: left;
+}
+
+.fade-enter-active {
+  animation: fade 0.5s;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>

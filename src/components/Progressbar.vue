@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="{ bspeed: this.speed, abp:this.ab }" class="myProgress" ref="myProgress">
-      <span class="middle">{{rounded(val)}}</span>
+      <span :key="rounded" class="middle">{{rounded}}</span>
       <div class="myBar" ref="myBar" :class="{ fspeed: this.speed, abar:this.ab }"></div>
     </div>
   </div>
@@ -33,14 +33,13 @@ export default {
       this.$refs.myBar.style.width = pz + "%";
     }
   },
-  methods: {
-    rounded(t) {
-      return Math.round((t + Number.EPSILON) * 100) / 100;
+  computed: {
+    rounded: function() {
+      return Math.round((this.val + Number.EPSILON) * 100) / 100;
     }
   },
   mounted() {
-    let pz = (this.val / this.max) * 100;
-    this.$refs.myBar.style.width = pz + "%";
+    this.$refs.myBar.style.width = (this.val / this.max) * 100 + "%";
   }
 };
 </script>
@@ -54,10 +53,12 @@ export default {
   border: 1px solid black;
   border-radius: 5px;
   max-width: 100%;
+  box-shadow: inset -2px -2px 4px #cc0000;
 }
 
 .bspeed {
   background: lightgray;
+  box-shadow: inset -2px -2px 4px grey;
 }
 
 .myBar {
@@ -65,11 +66,13 @@ export default {
   width: 1%;
   height: 30px;
   border-radius: 2px;
-  background-color: green;
+  background-color: #00cc00;
+  box-shadow: inset -2px -2px 4px #009900;
 }
 
 .fspeed {
   background: white;
+  box-shadow: inset -2px -2px 4px lightgray;
 }
 
 .middle {

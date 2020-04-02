@@ -44,7 +44,7 @@ html,
 #app {
   width: 900px;
   height: 600px;
-  border: 1px solid red;
+
   overflow: auto;
 }
 
@@ -74,10 +74,11 @@ html,
   outline: none;
   border: none;
   cursor: pointer;
-  background: #d6d6d6;
+  background: #a5a5a5;
   transition: 0.1s;
-  box-shadow: 0 5px #999;
+  box-shadow: 0 5px #636363;
   display: block;
+  border: 0.5px solid darkslategrey;
 }
 
 .btn img {

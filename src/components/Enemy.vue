@@ -1,51 +1,67 @@
 <template>
   <div>
-    <div
-      :class="{ ready: checkready(value) }"
-      @click="selectEnemy(value)"
-      class="kiste"
-      v-if="$parent.$parent.player.prestige<3"
-    >
-      <div>
-        {{getcount(value.id)}} / {{getLast(value.max,$parent.$parent.player.prestige)}}
-        <br />
-        <img v-if="value.id" class="image" :src="getImage" :alt="value.name" />
-        <br />
-        {{value.name}}
+    <div style="display:flex">
+      <div
+        :class="{ ready: checkready(value) }"
+        @click="selectEnemy(value)"
+        @click.middle="cheat(value)"
+        class="kiste"
+        v-if="$parent.$parent.player.prestige<3"
+      >
+        <div>
+          <transition name="fade" mode="out-in">
+            <span :key="getcount">{{getcount}}</span>
+          </transition>/
+          <transition name="fade" mode="out-in">
+            <span :key="getLast">{{getLast}}</span>
+          </transition>
+          <br />
+          <img v-if="value.id" class="image" :src="getImage" :alt="value.name" />
+          <br />
+          {{value.name}}
+        </div>
+        <Tooltip
+          :shift="$parent.$parent.shiftIsPressed"
+          :ctrl="$parent.$parent.cntrlIsPressed"
+          :item="value"
+        />
       </div>
+      <div
+        v-else
+        :class="{ ready: checkready(value) }"
+        @click.middle="cheat(value)"
+        @click="selectEnemy(value)"
+        @dragstart="handleDragStart"
+        @dragend="handleDragEnd"
+        @dragover="handleDragOver"
+        @dragenter="handleDragEnter"
+        @dragleave="handleDragLeave"
+        @drop="handleDrop"
+        draggable="true"
+        class="kiste"
+        :id="value.id"
+      >
+        <div>
+          <transition name="fade" mode="out-in">
+            <span :key="getcount">{{getcount}}</span>
+          </transition>/
+          <transition name="fade" mode="out-in">
+            <span :key="getLast">{{getLast}}</span>
+          </transition>
+
+          <br />
+          <img v-if="value.id" class="image" :src="getImage" :alt="value.name" />
+          <br />
+          {{value.name}}
+        </div>
+      </div>
+
       <Tooltip
         :shift="$parent.$parent.shiftIsPressed"
         :ctrl="$parent.$parent.cntrlIsPressed"
         :item="value"
       />
     </div>
-    <div
-      v-else
-      :class="{ ready: checkready(value) }"
-      @click="selectEnemy(value)"
-      @dragstart="handleDragStart"
-      @dragend="handleDragEnd"
-      @dragover="handleDragOver"
-      @dragenter="handleDragEnter"
-      @dragleave="handleDragLeave"
-      @drop="handleDrop"
-      :id="value.id"
-      draggable="true"
-      class="kiste"
-    >
-      <div>
-        {{getcount(value.id)}} / {{getLast(value.max,$parent.$parent.player.prestige)}}
-        <br />
-        <img v-if="value.id" class="image" :src="getImage" :alt="value.name" />
-        <br />
-        {{value.name}}
-      </div>
-    </div>
-    <Tooltip
-      :shift="$parent.$parent.shiftIsPressed"
-      :ctrl="$parent.$parent.cntrlIsPressed"
-      :item="value"
-    />
   </div>
 </template>
 
@@ -63,6 +79,10 @@ export default {
   },
   components: {
     Tooltip
+  },
+  mounted() {
+    this.$parent.$parent.player.counter[this.value.id] == null &&
+      (this.$parent.$parent.player.counter[this.value.id] = 0);
   },
   methods: {
     handleDragStart(e) {
@@ -82,11 +102,12 @@ export default {
     },
     handleDrop(e) {
       e.stopPropagation && e.stopPropagation();
+
       if (e.target.id != this.$parent.dragSrcEl) {
         let ord = this.$parent.$parent.player.order;
-        let lastindex = ord.indexOf(this.$parent.dragSrcEl);
-        ord[ord.indexOf(e.target.id)] = this.$parent.dragSrcEl;
-        ord[lastindex] = e.target.id;
+        let saveid = this.$parent.dragSrcEl;
+        ord.splice(ord.indexOf(saveid), 1);
+        ord.splice(ord.indexOf(e.target.id), 0, saveid);
         this.$parent.$forceUpdate();
       }
       return false;
@@ -95,14 +116,15 @@ export default {
       $(".kiste").removeClass("over");
       $(".kiste").css("opacity", "1");
     },
-    getcount(t) {
-      this.$parent.$parent.player.counter[t] == null &&
-        (this.$parent.$parent.player.counter[t] = 0);
-
-      return this.$parent.$parent.player.counter[t];
-    },
-    getLast(j, p) {
-      return getLast(j, p);
+    cheat(e) {
+      if (
+        this.$parent.$parent.player.name == "showmethemoney" &&
+        this.$parent.$parent.beta
+      ) {
+        this.$parent.$parent.player.counter[e.id] =
+          getLast(e.max, this.$parent.$parent.player.prestige) - 1;
+        this.$parent.$parent.recalculate(this.$parent.$parent.player);
+      }
     },
     checkready(a) {
       return (
@@ -113,15 +135,23 @@ export default {
     },
     selectEnemy(t) {
       if (!this.checkready(t)) {
-        this.$parent.$parent.enemy = t;
+        this.$parent.$parent.enemy = respawn(t);
         this.$parent.$parent.active = "fight";
-        respawn(this.$parent.$parent.enemy);
       }
     }
   },
   computed: {
     getImage: function() {
       return this.images.find(x => x.id == this.value.id).img;
+    },
+    getcount: function() {
+      if (this.$parent.$parent.player.counter[this.value.id] == null) {
+        return 0;
+      }
+      return this.$parent.$parent.player.counter[this.value.id];
+    },
+    getLast: function() {
+      return getLast(this.value.max, this.$parent.$parent.player.prestige);
     }
   }
 };
@@ -139,7 +169,8 @@ export default {
   border: 1px solid black;
   text-align: center;
   width: 80px;
-  min-height: 130px;
+  min-height: 140px;
+  box-shadow: inset -2px -2px 2px #76bdd5;
 }
 .kiste:hover {
   background: rgb(186, 233, 248);
@@ -160,5 +191,27 @@ export default {
 
 .image {
   width: 70px;
+  height: auto;
+}
+
+.ready {
+  background: lightcoral;
+  box-shadow: inset -2px -2px 2px #ec5f5f;
+}
+.ready:hover {
+  background: lightcoral;
+}
+
+.fade-enter-active {
+  animation: fade 0.4s;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>

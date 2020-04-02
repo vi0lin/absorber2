@@ -3,8 +3,12 @@ import {
     dmgind,
 } from "./gloabals.js"
 
+function RoundToInt(e) {
+    return Math.round(100 * (e + Number.EPSILON)) / 100;
+}
+
 function changeLife(a, b, c, d) {
-    b = Math.round(100 * (b + Number.EPSILON)) / 100;
+    b = RoundToInt(b);
 
     if (isNaN(b)) return;
 
@@ -40,18 +44,19 @@ function showIndicator(c, d, e, f) {
 function checkDot(a, b, c) {
     if (0 < a.status.poison) {
         let damage = b.magic / 4;
-        if (a.resistance.poisonresistance != undefined) {
-            log.push(`<div>${a.name} resisted<span style="green"> ${damage * a.resistance.poisonresistance} poison</span> damage</div>`);
-            damage = damage - (damage * a.resistance.poisonresistance)
+        if (a.resistance != undefined && a.resistance.poisonresistance != undefined) {
+            log.push(`<div>${a.name} resisted<span style="green"> ${RoundToInt(damage * (a.resistance.poisonresistance / 100))} poison</span> damage</div>`);
+            damage = damage - damage * (a.resistance.poisonresistance / 100)
         }
         changeLife(a, damage, "poison", "damage", c);
         a.status.poison--
     }
     if (0 < a.status.fire) {
         let damage = b.magic / 3;
-        if (a.resistance.fireresistance != undefined) {
-            log.push(`<div>${a.name} resisted<span style="orange"> ${damage * a.resistance.fireresistance} fire</span> damage</div>`);
-            damage = damage - (damage * a.resistance.fireresistance)
+
+        if (a.resistance != undefined && a.resistance.fireresistance != undefined) {
+            log.push(`<div>${a.name} resisted<span style="orange"> ${RoundToInt(damage * (a.resistance.fireresistance / 100))} fire</span> damage</div>`);
+            damage = damage - damage * (a.resistance.fireresistance / 100)
         }
 
         changeLife(a, damage, "fire", "damage", c);
@@ -59,9 +64,9 @@ function checkDot(a, b, c) {
     }
     if (0 < a.status.bleed) {
         let damage = b.dmg / 10;
-        if (a.resistance.bleedresistance != undefined) {
-            log.push(`<div>${a.name} resisted<span style="crimson"> ${damage * a.resistance.bleedresistance} bleeding</span>  damage</div>`);
-            damage = damage - (damage * a.resistance.bleedresistance)
+        if (a.resistance != undefined && a.resistance.bleedresistance != undefined) {
+            log.push(`<div>${a.name} resisted<span style="crimson"> ${RoundToInt(damage * (a.resistance.bleedresistance / 100))} bleeding</span>  damage</div>`);
+            damage = damage - damage * (a.resistance.bleedresistance / 100)
         }
         changeLife(a, damage, "bleed", "damage", c);
         a.status.bleed--
@@ -126,7 +131,8 @@ function CheckDotChance(name, a, b) {
         let table = [
             { id: "fire", color: "orange", verb: "burned" },
             { id: "bleed", color: "crimson", verb: "sliced" },
-            { id: "poison", color: "green", verb: "poisoned" }];
+            { id: "poison", color: "green", verb: "poisoned" },
+            { id: "disarm", color: "yellow", verb: "disarmed" }];
 
         let obj = table.find(x => name == x.id);
 
@@ -152,6 +158,10 @@ function checkBleed(a, b) {
 
 function checkFire(a, b) {
     CheckDotChance("fire", a, b)
+}
+
+function checkDisarm(a, b) {
+    CheckDotChance("disarm", a, b)
 }
 
 function checkInstakill(a, b) {
@@ -279,13 +289,13 @@ export function checkTurn(target, attacker, disfi, exit, kong) {
                 return;
             }
 
-
             checkInvert(target, attacker)
             checkStim(target, attacker)
             checkRot(target, attacker)
             checkPoison(target, attacker)
             checkBleed(target, attacker)
             checkFire(target, attacker)
+            checkDisarm(target, attacker)
             checkSlow(target, attacker)
             checkStun(target, attacker)
             checkSilence(target, attacker)
@@ -302,21 +312,24 @@ export function checkTurn(target, attacker, disfi, exit, kong) {
 
     let block = checkBlock(attacker)
 
-    if (target.version != null) {
-        animateObject("animated");
+    if (checkDisarmTurn(target)) {
+        log.push(`<div>${target.name} is <span style="color:yellow">disarmed</span> and does not attack<div>`);
+        return;
     }
 
     checkCrit(crit, attacker, target, block)
 
     att && setTimeout(() => {
         try {
-            dmgind.shift(),
-                log.push(`<div>${target.name} attacks second time<div>`),
-                checkCrit(crit, scrit, mcrit, attacker, target, block)
+            dmgind.shift();
+            log.push(`<div>${target.name} attacks second time<div>`);
+            checkCrit(crit, scrit, mcrit, attacker, target, block);
         } catch{ }
     }, 500);
 
     checkCounter(target, attacker)
+
+    target.version != null && animateObject("animated");
 
     checkDeath(target, attacker, disfi, exit, kong)
 }
@@ -393,23 +406,19 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
     }
 
     for (let a in attacker.gain)
-        if ("effects" != a && "chance" != a && "speed" != a)
+        if ("effects" != a && "chance" != a && "speed" != a && "resistance" != a)
             target[a] += attacker.gain[a];
         else if ("speed" == a) {
             if (attacker.gain[a] > 0) {
                 if (target[a] > 110) {
                     target[a] -= attacker.gain[a];
                 } else {
-
                     target.sspeed += attacker.gain[a];
                 }
             } else {
-
                 if (target.sspeed > 0) {
-
                     target.sspeed += attacker.gain[a];
                 } else {
-
                     target[a] -= attacker.gain[a];
                 }
             }
@@ -431,7 +440,6 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
                 target.resistance[b] == null
                     ? target.resistance[b] = attacker.gain.resistance[b]
                     : target.resistance[b] += attacker.gain.resistance[b];
-
 
     target.counter[attacker.id]++;
 
@@ -472,9 +480,12 @@ export function getLastBoss(t) {
         case 3:
             lastBoss = "chromeman"
             break;
+        case 4:
+            lastBoss = "turret"
+            break;
 
         default:
-            lastBoss = "chromeman"
+            lastBoss = "turret"
             break;
     }
     return lastBoss
@@ -507,12 +518,12 @@ export function respawn(t) {
     t.clife = t.life;
     t.cspeed = 0;
     t.status = {
-        slow: 0, poison: 0, fire: 0, stun: 0, silence: 0, rot: 0, bleed: 0, bury: 0, stim: 0, invert: 0, disarm: 0
+        "slow": 0, "poison": 0, "fire": 0, "stun": 0, "silence": 0, "rot": 0, "bleed": 0, "bury": 0, "stim": 0, "invert": 0, "disarm": 0
     }
+    return t;
 }
 
 function checkPlayerDeath(a, b, d) {
-
     if (a.chance != null) {
         if (checkChance(a.chance.resurrect, "resurrect")) {
             log.push(`<div>${a.name} resurrected</div>`)
@@ -535,6 +546,14 @@ function checkBuryTurn(a) {
 function checkStunTurn(a) {
     if (a.status.stun > 0) {
         a.status.stun--;
+        return true;
+    }
+    return false;
+}
+
+function checkDisarmTurn(a) {
+    if (a.status.disarm > 0) {
+        a.status.disarm--;
         return true;
     }
     return false;

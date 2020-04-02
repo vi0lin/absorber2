@@ -2,6 +2,7 @@
   <div class="rows">
     <div class="row1 box">
       <h2 class="title">{{item.name}}</h2>
+      <div style="border: 1px solid red" v-show="$parent.beta">{{item.status}}</div>
       <br />
       <b>Stats:</b>
       <hr />
@@ -46,9 +47,9 @@
     </div>
     <div class="row2 middle">
       <div>
-        <div>
+        <div class="kasten">
           <div
-            style="text-align:center"
+            style="text-align:center;margin-top:10px"
           >{{this.$parent.player.counter[item.id]}}/{{getLast(this.item.max,this.$parent.player.prestige)}}</div>
           <div class="name">{{item.name}}</div>
         </div>
@@ -87,17 +88,8 @@
 
 <script>
 import Progressbar from "./Progressbar.vue";
-import {
-  checkTurn,
-  absorbEnemy,
-  respawn,
-  checkPlayerDeath,
-  checkCleared,
-  getLast
-} from "./functions.js";
-
+import { checkTurn, respawn, getLast } from "./functions.js";
 import Ability from "./Ability.vue";
-import { displayEnemyStats } from "./displayfunc.js";
 import { dmgind } from "./gloabals.js";
 import TextToolTip from "./TextToolTip.vue";
 
@@ -150,14 +142,7 @@ export default {
 
       return ob;
     },
-    getinfo(i) {
-      let tipp = tipps.find(x => x.id == i);
-      if (tipp != undefined) {
-        return tipp.desc;
-      } else {
-        return "No Description";
-      }
-    },
+
     getLog() {
       return this.$parent.log.slice(-9).reverse();
     },
@@ -221,27 +206,20 @@ export default {
 </script>
 
 <style scoped>
-.gain {
-  border: 1px solid red;
-}
-
-.iconz {
-  float: left;
-  margin-right: 10px;
-  height: 32px;
-  width: 32px;
-}
-
-.lol {
-  line-height: 32px;
-}
-
 .box {
+  box-shadow: inset 0 0 4px grey;
+  border: 1px solid black;
   padding: 10px;
-  background: darkgrey;
-  width: 100%;
+  background: lightgray;
   min-width: 220px;
   min-height: 400px;
+}
+
+.kasten {
+  box-shadow: inset 0 0 4px grey;
+  border: 1px solid black;
+  background: lightgray;
+  border-radius: 10px;
 }
 
 .title {
@@ -329,10 +307,10 @@ export default {
     opacity: 0;
   }
 }
+
 .name {
   text-align: center;
   padding: 10px;
-  color: white;
   font-size: 20px;
 }
 

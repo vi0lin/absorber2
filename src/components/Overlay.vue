@@ -22,35 +22,50 @@
     </div>
     <div v-show="skilltree">
       <div class="overlay" :style="'background-color:' +this.color">
-        <div class="kiste">
+        <div
+          class="kiste"
+          :style="{ backgroundImage: 'url(' + require('@/assets/icons/background.png') + ')' }"
+        >
           <button class="btn close" @click="close">X</button>
           <div class="points">Points: {{this.$parent.player.points}}</div>
           <button class="btn reset" @click="resetskills">Reset</button>
-          <div style="display:flex;flex-flow:column wrap; margin: 100px 10px;">
-            <Accordion
-              :can="this.canBeChoosen"
-              :co="this.choosen"
-              :fun="this.chooseskill"
-              :item="st[0]"
-            />
-            <Accordion
-              :can="this.canBeChoosen"
-              :co="this.choosen"
-              :fun="this.chooseskill"
-              :item="st[1]"
-            />
-            <Accordion
-              :can="this.canBeChoosen"
-              :co="this.choosen"
-              :fun="this.chooseskill"
-              :item="st[2]"
-            />
-            <Accordion
-              :can="this.canBeChoosen"
-              :co="this.choosen"
-              :fun="this.chooseskill"
-              :item="st[3]"
-            />
+          <div class="allskills">
+            <div>
+              <div>Damage</div>
+              <Accordion
+                :can="this.canBeChoosen"
+                :co="this.choosen"
+                :fun="this.chooseskill"
+                :item="st[0]"
+              />
+            </div>
+            <div>
+              <div>Magic</div>
+              <Accordion
+                :can="this.canBeChoosen"
+                :co="this.choosen"
+                :fun="this.chooseskill"
+                :item="st[1]"
+              />
+            </div>
+            <div>
+              <div>Speed</div>
+              <Accordion
+                :can="this.canBeChoosen"
+                :co="this.choosen"
+                :fun="this.chooseskill"
+                :item="st[2]"
+              />
+            </div>
+            <div>
+              <div>Health</div>
+              <Accordion
+                :can="this.canBeChoosen"
+                :co="this.choosen"
+                :fun="this.chooseskill"
+                :item="st[3]"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -119,6 +134,29 @@ export default {
 </script>
 
 <style scoped>
+.allskills {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 100px 10px;
+}
+
+.allskills > div {
+  background: lightgray;
+  margin-left: 10px;
+  padding: 20px;
+  display: block;
+  min-width: 300px;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: inset 0 0 4px grey;
+  margin: 5px;
+}
+
+.allskills > div > div:first-of-type {
+  font-size: 25px;
+  margin-bottom: 15px;
+}
+
 .bc {
   width: 100%;
   height: 100%;
@@ -158,9 +196,10 @@ export default {
 .close {
   padding: 5px 10px;
   position: fixed;
-  background: darkred;
+  background: red;
   right: 30px;
   top: 20px;
+  box-shadow: 0 4px #660000;
 }
 
 .close:hover {
@@ -174,6 +213,8 @@ export default {
   right: 100px;
   top: 30px;
   border-radius: 5px;
+  box-shadow: inset 0 0 4px grey;
+  border: 1px solid black;
 }
 .kiste {
   position: relative;
@@ -193,5 +234,13 @@ export default {
   background: red;
   right: 230px;
   top: 20px;
+  box-shadow: 0 4px #cc0000;
+}
+.reset:hover {
+  background: #cc0000;
+  box-shadow: 0 4px #b30000;
+}
+.reset:active {
+  box-shadow: 0 1px #b30000;
 }
 </style>
