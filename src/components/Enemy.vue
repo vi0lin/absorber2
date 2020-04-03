@@ -3,33 +3,7 @@
     <div style="display:flex">
       <div
         :class="{ ready: checkready(value) }"
-        @click="selectEnemy(value)"
-        @click.middle="cheat(value)"
-        class="kiste"
-        v-if="$parent.$parent.player.prestige<3"
-      >
-        <div>
-          <transition name="fade" mode="out-in">
-            <span :key="getcount">{{getcount}}</span>
-          </transition>/
-          <transition name="fade" mode="out-in">
-            <span :key="getLast">{{getLast}}</span>
-          </transition>
-          <br />
-          <img v-if="value.id" class="image" :src="getImage" :alt="value.name" />
-          <br />
-          {{value.name}}
-        </div>
-        <Tooltip
-          :shift="$parent.$parent.shiftIsPressed"
-          :ctrl="$parent.$parent.cntrlIsPressed"
-          :item="value"
-        />
-      </div>
-      <div
-        v-else
-        :class="{ ready: checkready(value) }"
-        @click.middle="cheat(value)"
+        @click.middle="cheat"
         @click="selectEnemy(value)"
         @dragstart="handleDragStart"
         @dragend="handleDragEnd"
@@ -37,25 +11,18 @@
         @dragenter="handleDragEnter"
         @dragleave="handleDragLeave"
         @drop="handleDrop"
-        draggable="true"
+        :draggable="isDragable()"
         class="kiste"
         :id="value.id"
       >
         <div>
-          <transition name="fade" mode="out-in">
-            <span :key="getcount">{{getcount}}</span>
-          </transition>/
-          <transition name="fade" mode="out-in">
-            <span :key="getLast">{{getLast}}</span>
-          </transition>
-
+          <div>{{min}} / {{max}}</div>
           <br />
           <img v-if="value.id" class="image" :src="getImage" :alt="value.name" />
           <br />
           {{value.name}}
         </div>
       </div>
-
       <Tooltip
         :shift="$parent.$parent.shiftIsPressed"
         :ctrl="$parent.$parent.cntrlIsPressed"
@@ -67,7 +34,7 @@
 
 <script>
 import Tooltip from "./Tooltip.vue";
-import { getLast } from "./functions";
+
 import { respawn } from "./functions";
 export default {
   name: "Enemy",
@@ -75,12 +42,31 @@ export default {
     value: {
       type: Object,
       required: true
+    },
+    min: {
+      type: Number,
+      required: true
+    },
+    max: {
+      type: Number,
+      required: true
+    }
+  },
+  watch: {
+    min: function(newVal, oldVal) {
+      newVal = oldVal;
+    },
+    max: function(newVal, oldVal) {
+      newVal = oldVal;
     }
   },
   components: {
     Tooltip
   },
   methods: {
+    isDragable() {
+      return this.$parent.$parent.player.prestige > 4;
+    },
     handleDragStart(e) {
       this.$parent.dragSrcEl = e.target.id;
       $(e.target).css("opacity", "0.5");
@@ -112,22 +98,17 @@ export default {
       $(".kiste").removeClass("over");
       $(".kiste").css("opacity", "1");
     },
-    cheat(e) {
+    cheat() {
       if (
         this.$parent.$parent.player.name == "showmethemoney" &&
         this.$parent.$parent.beta
       ) {
-        this.$parent.$parent.player.counter[e.id] =
-          getLast(e.max, this.$parent.$parent.player.prestige) - 1;
+        this.$parent.$parent.player.counter[this.value.id] = max - 1;
         this.$parent.$parent.recalculate(this.$parent.$parent.player);
       }
     },
     checkready(a) {
-      return (
-        null != a &&
-        this.$parent.$parent.player.counter[a.id] >=
-          getLast(a.max, this.$parent.$parent.player.prestige)
-      );
+      return null != a && this.min >= this.max;
     },
     selectEnemy(t) {
       if (!this.checkready(t)) {
@@ -139,15 +120,6 @@ export default {
   computed: {
     getImage: function() {
       return this.images.find(x => x.id == this.value.id).img;
-    },
-    getcount: function() {
-      if (this.$parent.$parent.player.counter[this.value.id] == null) {
-        return 0;
-      }
-      return this.$parent.$parent.player.counter[this.value.id];
-    },
-    getLast: function() {
-      return getLast(this.value.max, this.$parent.$parent.player.prestige);
     }
   }
 };
@@ -159,17 +131,20 @@ export default {
   font-size: 14px;
   user-select: none;
   cursor: pointer;
-  background: lightblue;
+  background: whitesmoke;
   margin: 10px;
   padding: 10px;
   border: 1px solid black;
   text-align: center;
   width: 80px;
   min-height: 140px;
-  box-shadow: inset -2px -2px 2px #76bdd5;
+  box-shadow: inset -2px -2px 2px lightgray;
+  transition: 0.1s;
 }
 .kiste:hover {
-  background: rgb(186, 233, 248);
+  background: lightgray;
+  box-shadow: inset -2px -2px 2px grey;
+  transform: translate(0px, -10px);
 }
 
 .kiste img {
@@ -196,6 +171,8 @@ export default {
 }
 .ready:hover {
   background: lightcoral;
+  box-shadow: inset -2px -2px 2px #ec5f5f;
+  transform: translate(0px, 0px);
 }
 
 .fade-enter-active {

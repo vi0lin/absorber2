@@ -1,6 +1,6 @@
 <template>
-  <div :class="{ all: this.beta }" v-if="!loading">
-    <div :style="{ backgroundImage: 'url(' + require('@/assets/icons/background.png') + ')' }">
+  <div v-if="!loading">
+    <div>
       <div class="fixed">
         <button
           :class="{ active: this.active=='fight' }"
@@ -32,7 +32,7 @@
       </div>
       <div class="box">
         <Stats v-show="this.active == 'stats'" />
-        <Dungeon v-show="this.active == 'dungeon'" />
+        <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
         <Log v-show="this.active == 'log'" />
         <Fight v-if="this.enemy!=null" v-show="this.active == 'fight'" :item="this.enemy" />
       </div>
@@ -82,8 +82,8 @@ export default {
   watch: {
     player: {
       deep: true,
-      handler(e) {
-        RoundAll(e, this.player);
+      handler(n, o) {
+        n = o;
       }
     }
   },
@@ -97,7 +97,6 @@ export default {
       kongregate: null,
       overlay: false,
       skilltree: false,
-      beta: false,
       cntrlIsPressed: false,
       shiftIsPressed: false,
       log: log,
@@ -115,12 +114,13 @@ export default {
       return this.images.find(x => x.id == id).img;
     },
     recalculate(pl) {
+      this.loading = true;
+      this.player = null;
       let player = JSON.parse(JSON.stringify(ep));
       player.counter = pl.counter;
       player.auto = pl.auto;
       player.companion = pl.companion;
       pl.prestige != null && (player.prestige = pl.prestige);
-
       player.name = pl.name;
       player.go = pl.go;
       player.skills = pl.skills;
@@ -222,12 +222,17 @@ export default {
         }
       }
 
+      while (this.enemieslist.length > player.order.length) {
+        player.order.push(this.enemieslist[player.order.length].id);
+      }
+
       player.points = player.prestige - player.skills.length;
 
       0 < player.counter[getLastBoss(player)] && (player.go = !0);
 
       this.player = player;
       respawn(this.player);
+      this.loading = false;
     },
     openTab(t) {
       this.active = t;
@@ -358,6 +363,7 @@ export default {
             this.enemy = respawn(last);
           } else {
             this.enemy = null;
+            this.player.auto = false;
             this.active = "dungeon";
           }
         }
@@ -431,7 +437,7 @@ export default {
 
     setInterval(() => {
       this.save();
-    }, 60000);
+    }, 15000);
 
     setInterval(() => {
       this.player.time += 1;
@@ -461,11 +467,8 @@ export default {
 </script>
 
 <style scoped>
-.all {
-  border: 3px solid red;
-}
 .box {
-  padding-top: 74px;
+  padding-top: 54px;
 }
 .fixed {
   border: 1px solid black;

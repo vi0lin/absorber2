@@ -2,7 +2,7 @@
   <div class="one">
     <img :src="getImage" />
     <transition name="fade" mode="out-in">
-      <span :key="val">{{val}}</span>
+      <span :key="rounded(val)">{{rounded(val)}}</span>
     </transition>
     <Tooltip2 v-if="tooltip" :item="pid" />
   </div>
@@ -27,6 +27,11 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    }
+  },
+  methods: {
+    rounded(i) {
+      return Math.ceil(i);
     }
   },
   computed: {

@@ -167,7 +167,7 @@ export default {
       this.$parent.save();
     },
     exportSave() {
-      if (this.$parent.beta) {
+      if (this.beta) {
         copyToClipboard(JSON.stringify(this.$parent.player));
       } else {
         copyToClipboard(
@@ -280,6 +280,8 @@ export default {
 <style scoped>
 .stats {
   padding-bottom: 50px;
+  margin: 10px;
+  margin-top: 40px;
 }
 
 .title {

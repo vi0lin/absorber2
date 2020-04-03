@@ -82,14 +82,6 @@ export default {
     };
   },
   methods: {
-    getinfo(i) {
-      let tipp = tipps.find(x => x.id == i);
-      if (tipp != undefined) {
-        return tipp.desc;
-      } else {
-        return "No Description";
-      }
-    },
     filtred(arr) {
       let allowed = [
         "description",
@@ -132,12 +124,12 @@ export default {
 
           el.$el.style.top = eposx + "px";
           el.$el.style.left = eposy + "px";
+          el.show = true;
         } catch {}
       }, 20);
     },
     setDimensions(e, el) {
       el.create = true;
-      el.show = true;
       el.target = e.target.getBoundingClientRect();
       el.x = e.clientX;
       el.y = e.clientY;

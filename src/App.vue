@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div :class="{beta:beta}" id="app">
     <Index />
   </div>
 </template>
@@ -41,10 +41,10 @@ html,
   background: lightyellow;
 }
 
-#app {
-  width: 900px;
-  height: 600px;
-
+.beta {
+  border: 3px solid red;
+  width: 894px !IMPORTANT;
+  height: 594px !IMPORTANT;
   overflow: auto;
 }
 

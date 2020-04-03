@@ -967,12 +967,12 @@
         "speed": 2000,
         "effects": {
             "block": 100,
-            "reflect": 30
+            "reflect": 20
         },
         "chance": {
-            "bleed": 50,
-            "counter": 80,
-            "fire": 50,
+            "bleed": 40,
+            "counter": 60,
+            "fire": 40,
             "instakill": 10,
             "poison": 50,
             "silence": 100,
@@ -1323,10 +1323,8 @@
         },
         "gain": {
             "dmg": 1,
-            "effects": {
-                "precision": 0.1
-            },
             "chance": {
+                "fire": 0.05,
                 "disarm": 0.05
             }
         }
@@ -1375,11 +1373,11 @@
             1
         ],
         "boss": true,
-        "dmg": 30,
+        "dmg": 120,
         "life": 2000,
         "magic": 0,
         "prestige": 4,
-        "regeneration": 0,
+        "regeneration": 50,
         "speed": 120,
         "effects": {
             "block": 500,

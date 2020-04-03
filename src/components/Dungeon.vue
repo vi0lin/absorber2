@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div :style="{ backgroundImage: 'url(' + require('@/assets/icons/background2.png') + ')' }">
     <div class="moreroom">
       <div>
-        <div style="margin-top:20px" class="text">
+        <div style="margin-top:20px;margin-bottom:10px" class="text">
           <button v-show="$parent.player.prestige>=3" class="btn dun" @click="resetOrder()">
             <img :src="require('@/assets/icons/order.png')" alt="auto" />
             <span>Reset Order</span>
@@ -25,8 +25,8 @@
         </div>
       </div>
       <div class="flex">
-        <div :key="key" v-for="(value, key) in getPrestigeEnemys()">
-          <Enemy :value="value" />
+        <div :key="key" v-for="(value, key) in getPrestigeEnemys">
+          <Enemy :min="getcount(value.id)" :max="getLast(value.max)" :value="value" />
         </div>
       </div>
       <div
@@ -38,7 +38,7 @@
 
 <script>
 import Enemy from "./Enemy.vue";
-
+import { getLast } from "./functions";
 export default {
   components: { Enemy },
   data() {
@@ -53,18 +53,22 @@ export default {
     resetOrder() {
       this.$parent.player.order = this.enemieslist.map(({ id: a }) => a);
     },
+    getcount(id) {
+      this.$parent.player.counter[id] == null &&
+        (this.$parent.player.counter[id] = 0);
+      return this.$parent.player.counter[id];
+    },
+    getLast(v) {
+      return getLast(v, this.$parent.player.prestige);
+    }
+  },
+  computed: {
     getPrestigeEnemys() {
       let list = [],
         el = this;
 
       for (let a of this.$parent.player.order) {
         list.push(this.enemieslist.find(b => a == b.id));
-      }
-
-      while (this.enemieslist.length > this.$parent.player.order.length) {
-        this.$parent.player.order.push(
-          this.enemieslist[this.$parent.player.order.length].id
-        );
       }
 
       return list.filter(function(x) {
@@ -80,6 +84,7 @@ export default {
 
 <style scoped>
 .moreroom {
+  padding-top: 10px;
   padding-bottom: 80px;
 }
 

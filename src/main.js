@@ -16,6 +16,8 @@ Vue.prototype.bufflist = bufflist
 Vue.prototype.skillist = skillist
 Vue.prototype.images = []
 
+Vue.prototype.beta = true
+
 new Vue({
   render: h => h(App),
 }).$mount('#app')

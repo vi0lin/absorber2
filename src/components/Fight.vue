@@ -1,8 +1,11 @@
 <template>
-  <div class="rows">
+  <div
+    class="rows"
+    :style="{ backgroundImage: 'url(' + require('@/assets/icons/background.png') + ')' }"
+  >
     <div class="row1 box">
       <h2 class="title">{{item.name}}</h2>
-      <div style="border: 1px solid red" v-show="$parent.beta">{{item.status}}</div>
+      <div style="border: 1px solid red" v-show="beta">{{item.status}}</div>
       <br />
       <b>Stats:</b>
       <hr />
@@ -49,9 +52,8 @@
       <div>
         <div class="kasten">
           <div
-            style="text-align:center;margin-top:10px"
+            style="text-align:center;margin:10px"
           >{{this.$parent.player.counter[item.id]}}/{{getLast(this.item.max,this.$parent.player.prestige)}}</div>
-          <div class="name">{{item.name}}</div>
         </div>
         <div style="width:200px">
           <img
@@ -144,7 +146,7 @@ export default {
     },
 
     getLog() {
-      return this.$parent.log.slice(-9).reverse();
+      return this.$parent.log.slice(-12).reverse();
     },
     exit() {
       if (
@@ -154,10 +156,7 @@ export default {
         this.$parent.setNextEnemy();
       } else {
         this.$parent.enemy = null;
-        this.$parent.active = "dungeon";
-        try {
-          this.$parent.tenemyo = null;
-        } catch {}
+        this.$parent.active == "fight" && (this.$parent.active = "dungeon");
       }
     },
     won() {
@@ -167,10 +166,9 @@ export default {
     }
   },
   mounted() {
+    this.$parent.recovery = false;
     this.$parent.player.counter[this.$parent.enemy.id] == null &&
       (this.$parent.player.counter[this.$parent.enemy.id] = 0);
-
-    this.$parent.recovery = false;
 
     let player = this.$parent.player,
       classlist = this.$refs.eimage.classList;
@@ -236,27 +234,34 @@ export default {
 }
 
 .rows {
-  margin: 10px;
+  display: block;
+  height: 500px;
+  padding: 10px;
   display: flex;
   align-content: space-between;
+  margin-top: 20px;
 }
 
 .row1 {
   overflow: auto;
-  max-height: 320px;
+  height: 420px;
   float: left;
   width: 20%;
   border-radius: 5px;
 }
 
 .row2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 420px;
   float: left;
   width: 60%;
 }
 
 .row3 {
   overflow: auto;
-  max-height: 320px;
+  height: 420px;
   float: left;
   width: 20%;
   border-radius: 5px;
