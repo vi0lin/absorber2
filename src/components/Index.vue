@@ -1,62 +1,67 @@
 <template>
-  <div v-if="!loading">
-    <div>
-      <div class="fixed">
-        <button
-          :class="{ active: this.active=='fight' }"
-          v-if="this.enemy!=null"
-          @click="openTab('fight')"
-          class="btn"
-        >
-          <img :src="require('@/assets/icons/auto.png')" alt="fight" />
-          Fight
-        </button>
-        <button :class="{ active: this.active=='dungeon' }" @click="openTab('dungeon')" class="btn">
-          <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
-          Dungeon
-        </button>
-        <button :class="{ active: this.active=='stats' }" @click="openTab('stats')" class="btn">
-          <img :src="require('@/assets/icons/hero.png')" alt="stats" />
-          Stats
-        </button>
-        <button :class="{ active: this.active=='log' }" @click="openTab('log')" class="btn">
-          <img :src="require('@/assets/icons/log.png')" alt="log" />
-          Log
-        </button>
-        <button class="btn" v-show="this.enemy!=null" @click="exitFight()">
-          <img :src="require('@/assets/icons/door.png')" alt="back" />
-          Exit
-        </button>
+  <div>
+    <div v-if="!loading">
+      <div>
+        <div class="fixed">
+          <button
+            :class="{ active: this.active=='fight' }"
+            v-if="this.enemy!=null"
+            @click="openTab('fight')"
+            class="btn"
+          >
+            <img :src="require('@/assets/icons/auto.png')" alt="fight" />
+            Fight
+          </button>
+          <button
+            :class="{ active: this.active=='dungeon' }"
+            @click="openTab('dungeon')"
+            class="btn"
+          >
+            <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
+            Dungeon
+          </button>
+          <button :class="{ active: this.active=='stats' }" @click="openTab('stats')" class="btn">
+            <img :src="require('@/assets/icons/hero.png')" alt="stats" />
+            Stats
+          </button>
+          <button :class="{ active: this.active=='log' }" @click="openTab('log')" class="btn">
+            <img :src="require('@/assets/icons/log.png')" alt="log" />
+            Log
+          </button>
+          <button class="btn" v-show="this.enemy!=null" @click="exitFight()">
+            <img :src="require('@/assets/icons/door.png')" alt="back" />
+            Exit
+          </button>
 
-        <div class="time">{{gettime(player.time)}}</div>
+          <div class="time">{{gettime(player.time)}}</div>
+        </div>
+        <div class="box">
+          <Stats v-show="this.active == 'stats'" />
+          <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
+          <Log v-show="this.active == 'log'" />
+          <Fight v-if="this.enemy!=null" v-show="this.active == 'fight'" :item="this.enemy" />
+        </div>
       </div>
-      <div class="box">
-        <Stats v-show="this.active == 'stats'" />
-        <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
-        <Log v-show="this.active == 'log'" />
-        <Fight v-if="this.enemy!=null" v-show="this.active == 'fight'" :item="this.enemy" />
+      <div class="status">
+        <div v-show="value>0" :key="key" v-for="(value, key) in this.player.status">
+          <img :src="getImgUrl('b'+key)" :alt="key" />
+          <span>{{value}}</span>
+        </div>
       </div>
+      <Progressbar :max="player.life" :val="player.clife" :ab="true" />
+      <Progressbar
+        v-show="this.enemy!=null"
+        :max="player.speed"
+        :val="player.cspeed"
+        :speed="true"
+        :ab="true"
+      />
+      <Overlay :skilltree="skilltree" ref="ov" v-show="this.overlay" />
     </div>
-    <div class="status">
-      <div v-show="value>0" :key="key" v-for="(value, key) in this.player.status">
-        <img :src="getImgUrl('b'+key)" :alt="key" />
-        <span>{{value}}</span>
-      </div>
-    </div>
-    <Progressbar :max="player.life" :val="player.clife" :ab="true" />
-    <Progressbar
-      v-show="this.enemy!=null"
-      :max="player.speed"
-      :val="player.cspeed"
-      :speed="true"
-      :ab="true"
-    />
-    <Overlay :skilltree="skilltree" ref="ov" v-show="this.overlay" />
   </div>
 </template>
 <script>
 import p from "./json/player.js";
-import ep from "./json/playerempty.js";
 import Stats from "./Stats.vue";
 import Dungeon from "./Dungeon.vue";
 import Log from "./Log.vue";
@@ -68,7 +73,7 @@ import { RoundAll, getboni } from "./displayfunc";
 import { respawn, getLast, getNodeById, getLastBoss } from "./functions.js";
 import { log } from "./gloabals.js";
 
-document.referrer.includes("kongregate.com") && kongregateAPI.loadAPI();
+kongregateAPI.loadAPI();
 
 export default {
   components: {
@@ -84,6 +89,9 @@ export default {
       deep: true,
       handler(n, o) {
         n = o;
+        n.life < 0 && (n.life = 1);
+        n.regeneration < 0 && (n.regeneration = 1);
+        n.recovery < 0 && (n.recovery = 1);
       }
     }
   },
@@ -115,25 +123,49 @@ export default {
     },
     recalculate(pl) {
       this.loading = true;
-      this.player = null;
-      let player = JSON.parse(JSON.stringify(ep));
-      player.counter = pl.counter;
-      player.auto = pl.auto;
-      player.companion = pl.companion;
-      pl.prestige != null && (player.prestige = pl.prestige);
-      player.name = pl.name;
-      player.go = pl.go;
-      player.skills = pl.skills;
-      player.lastEnemy = pl.lastEnemy;
-      player.time = pl.time;
-      player.tutorial = pl.tutorial;
-      player.highscore = pl.highscore;
-      player.speed = 2500;
-      player.sspeed = 0;
       this.enemy = null;
 
+      let player = {};
+
+      //reset everything
+      player.effects = {};
+      player.chance = {};
+      player.resistance = {};
+      player.life = 10;
+      player.clife = 10;
+      player.speed = 2500;
+      player.cspeed = 0;
+      player.magic = 1;
+      player.regeneration = 0;
+      player.recovery = 1;
+      player.dmg = 1;
+      player.sspeed = 0;
+      player.status = {};
+
+      //copy from save
+      player.highscore = pl.highscore;
+      if (pl.counter.length <= 0) {
+        for (let en of this.enemieslist) {
+          player.counter[en.id] = 0;
+        }
+      } else {
+        player.counter = pl.counter;
+      }
+
+      player.go = pl.go;
+      player.skills = pl.skills;
+      player.name = pl.name;
+      player.prestige = pl.prestige;
+      player.companion = pl.companion;
+      player.version = pl.version;
+      player.lastEnemy = pl.lastEnemy;
+      player.auto = pl.auto;
+      player.time = pl.time;
+      player.go = pl.go;
+      player.order = pl.order;
+
       if (null != player.companion) {
-        let a = getboni(this.complist.find(a => a.id == pl.companion).tags);
+        let a = getboni(this.complist.find(a => a.id == player.companion).tags);
         a.chance
           ? player.chance[a.key] == null
             ? (player.chance[a.key] = a.value)
@@ -300,24 +332,21 @@ export default {
     },
     getLast: (j, p) => getLast(j, p),
     hardreset() {
-      this.recalculate(JSON.parse(JSON.stringify(ep)));
+      this.player.skills = [];
+      this.player.prestige = -1;
+      this.reset(this.player);
       this.overlay = false;
       this.save();
     },
     reset() {
       this.player.prestige++;
-      this.player.points++;
-      let pres = this.player.prestige;
-      let skills = this.player.skills;
-      let name = this.player.name;
-      let order = this.player.order;
-      this.player = JSON.parse(JSON.stringify(ep));
-      this.player.name = name;
-      this.player.order = order;
       this.player.tutorial = 6;
-      this.player.prestige = pres;
-      this.player.skills = skills;
       this.player.time = 0;
+      this.player.go = false;
+
+      for (let en of this.enemieslist) {
+        this.player.counter[en.id] = 0;
+      }
 
       this.recalculate(this.player);
       this.overlay = false;
@@ -370,8 +399,25 @@ export default {
       }
     },
     save() {
-      if (typeof Storage !== "undefined") {
-        localStorage.setItem("saveGame", JSON.stringify(this.player));
+      if (typeof Storage !== "undefined" && !this.loading) {
+        let save = JSON.parse(JSON.stringify(this.player));
+
+        delete save.effects;
+        delete save.chance;
+        delete save.resistance;
+        delete save.life;
+        delete save.clife;
+        delete save.speed;
+        delete save.cspeed;
+        delete save.magic;
+        delete save.regeneration;
+        delete save.recovery;
+        delete save.dmg;
+        delete save.status;
+        delete save.points;
+        delete save.sspeed;
+
+        localStorage.setItem("saveGame", JSON.stringify(save));
       }
     },
     resetStatus(p) {
@@ -397,13 +443,18 @@ export default {
     }
   },
   mounted() {
-    this.preloading();
     let el = this;
-
-    document.referrer.includes("kongregate.com") &&
+    try {
       kongregateAPI.loadAPI(function() {
         el.kongregate = kongregateAPI.getAPI();
       });
+    } catch (e) {
+      console.log(e);
+    }
+
+    console.log(el.kongregate);
+
+    this.preloading();
 
     $.getJSON("https://api.kongregate.com/api/kongpanions/index.json", function(
       data
@@ -417,14 +468,6 @@ export default {
       6 != el.player.tutorial && el.tutorial();
     });
 
-    if (
-      this.kongregate != null &&
-      !this.kongregate.services.isGuest() &&
-      player.name == "Rimuro"
-    ) {
-      player.name = this.kongregate.services.getUsername();
-    }
-
     window.addEventListener("keydown", function() {
       "17" == event.which && (el.cntrlIsPressed = !0);
       "16" == event.which && (el.shiftIsPressed = !0);
@@ -434,6 +477,10 @@ export default {
       el.cntrlIsPressed = false;
       el.shiftIsPressed = false;
     });
+
+    if (this.kongregate != undefined) {
+      console.log(this.kongregate.services.getUsername());
+    }
 
     setInterval(() => {
       this.save();
@@ -467,6 +514,17 @@ export default {
 </script>
 
 <style scoped>
+.loading {
+  background: black;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
 .box {
   padding-top: 54px;
 }

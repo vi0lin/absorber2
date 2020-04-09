@@ -1,41 +1,55 @@
 <template>
-  <div class="flex">
-    <div class="box">
-      <div :key="l" v-for="(c,l) in getLog()">
-        <div class="one" v-html="c"></div>
+  <div
+    class="log"
+    :style="{ backgroundImage: 'url(' + require('@/assets/icons/background2.png') + ')' }"
+  >
+    <div class="flex">
+      <div class="box">
+        <div :key="l" v-for="(c,l) in getLog()">
+          <div class="one" v-html="c"></div>
+        </div>
       </div>
-    </div>
-    <div class="credits">
-      <a class="abs" style="right:320px" target="_blank" href="https://discord.gg/gUwvjw2">
-        <img :src="require('@/assets/icons/discord.png')" alt="discord" />
-      </a>
-      <a class="abs" target="_blank" style="right:80px" href="https://www.buymeacoffee.com/a4bl2n1">
-        <img :src="require('@/assets/icons/coffe.svg')" alt="buy me a coffe" />
-      </a>
-      <a
-        class="abs"
-        target="_blank"
-        style="right:140px"
-        href="https://www.facebook.com/Schlau3Wurst"
-      >
-        <img :src="require('@/assets/icons/facebook.png')" alt="facebook" />
-      </a>
-      <a class="abs" target="_blank" style="right:200px" href="https://twitter.com/schlauewurst">
-        <img :src="require('@/assets/icons/twitter.png')" alt="Twitter" />
-      </a>
-      <a class="abs" target="_blank" style="right:20px" href="https://www.patreon.com/schlauewurst">
-        <img :src="require('@/assets/icons/patreon.jpg')" alt="patreon" />
-      </a>
-      <a
-        class="abs"
-        target="_blank"
-        style="right:260px"
-        href="https://shop.spreadshirt.de/Absorber/"
-      >
-        <img :src="require('@/assets/icons/spreadshirt.png')" alt="spreadshirt" />
-      </a>
-
-      <div class="abs" style="left:20px">{{this.$parent.player.version}}</div>
+      <div class="credits">
+        <a class="abs" style="right:320px" target="_blank" href="https://discord.gg/gUwvjw2">
+          <img :src="require('@/assets/icons/discord.png')" alt="discord" />
+        </a>
+        <a
+          class="abs"
+          target="_blank"
+          style="right:80px"
+          href="https://www.buymeacoffee.com/a4bl2n1"
+        >
+          <img :src="require('@/assets/icons/coffe.svg')" alt="buy me a coffe" />
+        </a>
+        <a
+          class="abs"
+          target="_blank"
+          style="right:140px"
+          href="https://www.facebook.com/Schlau3Wurst"
+        >
+          <img :src="require('@/assets/icons/facebook.png')" alt="facebook" />
+        </a>
+        <a class="abs" target="_blank" style="right:200px" href="https://twitter.com/schlauewurst">
+          <img :src="require('@/assets/icons/twitter.png')" alt="Twitter" />
+        </a>
+        <a
+          class="abs"
+          target="_blank"
+          style="right:20px"
+          href="https://www.patreon.com/schlauewurst"
+        >
+          <img :src="require('@/assets/icons/patreon.jpg')" alt="patreon" />
+        </a>
+        <a
+          class="abs"
+          target="_blank"
+          style="right:260px"
+          href="https://shop.spreadshirt.de/Absorber/"
+        >
+          <img :src="require('@/assets/icons/spreadshirt.png')" alt="spreadshirt" />
+        </a>
+        <div class="abs" style="left:20px">{{this.$parent.player.version}}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -51,6 +65,9 @@ export default {
 </script>
 
 <style scoped>
+.log {
+  margin-top: 20px;
+}
 .flex {
   justify-content: center;
 }
@@ -61,7 +78,7 @@ export default {
 
 .box {
   box-shadow: inset 0 0 4px grey;
-  background: darkgrey;
+  background: whitesmoke;
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;

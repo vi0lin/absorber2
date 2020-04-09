@@ -230,6 +230,7 @@ export default {
 }
 
 .reset {
+  z-index: 1;
   position: fixed;
   background: red;
   right: 230px;

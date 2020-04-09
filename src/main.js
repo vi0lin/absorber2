@@ -16,7 +16,7 @@ Vue.prototype.bufflist = bufflist
 Vue.prototype.skillist = skillist
 Vue.prototype.images = []
 
-Vue.prototype.beta = true
+Vue.prototype.beta = false
 
 new Vue({
   render: h => h(App),

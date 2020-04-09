@@ -31,7 +31,11 @@ export default {
   },
   methods: {
     rounded(i) {
-      return Math.ceil(i);
+      if (typeof i == "number") {
+        return parseFloat((Math.round(i * 100) / 100).toFixed(2));
+      } else {
+        return i;
+      }
     }
   },
   computed: {

@@ -52,20 +52,12 @@ export default {
       required: true
     }
   },
-  watch: {
-    min: function(newVal, oldVal) {
-      newVal = oldVal;
-    },
-    max: function(newVal, oldVal) {
-      newVal = oldVal;
-    }
-  },
   components: {
     Tooltip
   },
   methods: {
     isDragable() {
-      return this.$parent.$parent.player.prestige > 4;
+      return this.$parent.$parent.player.prestige >= 3;
     },
     handleDragStart(e) {
       this.$parent.dragSrcEl = e.target.id;
@@ -99,11 +91,8 @@ export default {
       $(".kiste").css("opacity", "1");
     },
     cheat() {
-      if (
-        this.$parent.$parent.player.name == "showmethemoney" &&
-        this.$parent.$parent.beta
-      ) {
-        this.$parent.$parent.player.counter[this.value.id] = max - 1;
+      if (this.$parent.$parent.player.name == "showmethemoney" && this.beta) {
+        this.$parent.$parent.player.counter[this.value.id] = this.max;
         this.$parent.$parent.recalculate(this.$parent.$parent.player);
       }
     },

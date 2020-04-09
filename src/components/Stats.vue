@@ -6,7 +6,7 @@
         Prestige
         <img class="icons" :src="require('@/assets/icons/star.png')" alt="reset" />
       </button>
-      <button v-show="$parent.player.prestige>0" class="btn" @click="this.openskilltree">
+      <button v-show="$parent.player.prestige>0" class="btn" @click="openskilltree">
         Skills
         <img class="icons" :src="require('@/assets/icons/skills.png')" alt="skills" />
       </button>
@@ -17,44 +17,44 @@
         <Ability
           class="basic"
           :key="key"
-          v-for="(value, key) in show(this.$parent.player)"
+          v-for="(value, key) in show($parent.player)"
           :val="value"
           :pid="key"
         />
       </div>
-      <div v-show="Object.keys(this.$parent.player.chance).length !== 0" class="kiste">
+      <div v-show="Object.keys($parent.player.chance).length !== 0" class="kiste">
         <span class="title">Chances</span>
         <Ability
           class="chance"
           :key="key+value"
-          v-for="(value, key) in this.$parent.player.chance"
+          v-for="(value, key) in $parent.player.chance"
           :val="value"
           :pid="key"
         />
       </div>
-      <div v-show="Object.keys(this.$parent.player.effects).length !== 0" class="kiste">
+      <div v-show="Object.keys($parent.player.effects).length !== 0" class="kiste">
         <span class="title">Effects</span>
         <Ability
           class="effects"
           :key="key+value"
-          v-for="(value, key) in this.$parent.player.effects"
+          v-for="(value, key) in $parent.player.effects"
           :val="value"
           :pid="key"
         />
       </div>
-      <div v-show="Object.keys(this.$parent.player.resistance).length !== 0" class="kiste">
+      <div v-show="Object.keys($parent.player.resistance).length !== 0" class="kiste">
         <span class="title">Resistance</span>
         <Ability
           class="resistance"
           :key="key+value"
-          v-for="(value, key) in this.$parent.player.resistance"
+          v-for="(value, key) in $parent.player.resistance"
           :val="value"
           :pid="key"
         />
       </div>
       <div class="kiste">
         <span class="title">Highscore</span>
-        <div :key="key+value" v-for="(key,value ) in this.$parent.player.highscore">
+        <div :key="key+value" v-for="(key,value ) in $parent.player.highscore">
           <div v-show="key>0">
             <div class="valbox">
               <span class="val">{{key}}</span>
@@ -64,9 +64,9 @@
           </div>
         </div>
       </div>
-      <div v-show="Object.keys(this.$parent.player.skills).length !== 0" class="kiste fux">
+      <div v-show="Object.keys($parent.player.skills).length !== 0" class="kiste fux">
         <span class="title">Skills</span>
-        <div :key="value" v-for="(key,value) in groupSkills(this.$parent.player.skills)">
+        <div :key="value" v-for="(key,value) in groupSkills($parent.player.skills)">
           <div class="valbox">
             <img class="icon" :src="require('@/assets/skills/'+displayeskills(value)+'.png')" />
             <span class="val">{{key}}</span>
@@ -122,7 +122,6 @@
 </template>
 
 <script>
-import j from "./json/player.js";
 import TextToolTip from "./TextToolTip.vue";
 import { debug } from "./gloabals.js";
 import { copyToClipboard, getClipBoard } from "./functions";
@@ -133,7 +132,6 @@ export default {
   components: { TextToolTip, Ability },
   data() {
     return {
-      pl: null,
       dchance: null,
       deffects: null,
       dhighscore: null,
@@ -264,15 +262,22 @@ export default {
     }
   },
   created() {
-    // if (this.kongregate != null) {
-    //if (!this.kongregate.services.isGuest()) {
-    //this.kongregate.services.getUsername()
-    let el = this;
-    $.getJSON("https://api.kongregate.com/api/kongpanions/index.json", function(
-      data
-    ) {
-      data.success && (el.companions = data.kongpanions);
-    });
+    if (this.kongregate != null) {
+      if (!this.kongregate.services.isGuest()) {
+        let user = this.kongregate.services.getUsername();
+        let el = this;
+        let link =
+          "https://api.kongregate.com/api/kongpanions.json?username=" + user;
+        $.getJSON("link", function(data) {
+          if (data.success) {
+            el.companions = data.kongpanions;
+            if (el.$parent.player.companion == 0) {
+              el.$parent.player.companion = el.companions[0].id;
+            }
+          }
+        });
+      }
+    }
   }
 };
 </script>
