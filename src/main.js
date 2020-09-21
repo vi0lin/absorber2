@@ -3,6 +3,7 @@ import App from './App.vue'
 import enemieslist from "./components/json/enemys.json";
 import tippslist from "./components/json/tipps.json";
 import choiselist from "./components/json/choises.json";
+import changelog from "./components/json/changelog.json";
 import bufflist from "./components/json/bufflist.json";
 import skillist from "./components/json/skilltree.json";
 
@@ -14,6 +15,7 @@ Vue.prototype.tippslist = tippslist
 Vue.prototype.choiselist = choiselist
 Vue.prototype.bufflist = bufflist
 Vue.prototype.skillist = skillist
+Vue.prototype.changelog = changelog
 Vue.prototype.images = []
 
 Vue.prototype.beta = false

@@ -116,6 +116,11 @@
           <img :src="require('@/assets/icons/reset.png')" alt="reset" />
           Hardreset
         </button>
+
+        <button class="btn hard" @click="opensoft">
+          <img :src="require('@/assets/icons/softreset.png')" alt="reset" />
+          Softreset
+        </button>
       </div>
     </div>
   </div>
@@ -135,7 +140,7 @@ export default {
       dchance: null,
       deffects: null,
       dhighscore: null,
-      companions: []
+      companions: [],
     };
   },
   methods: {
@@ -150,10 +155,7 @@ export default {
       return !(this.$parent.player.companion != comp);
     },
     reverse(str) {
-      return str
-        .split("")
-        .reverse()
-        .join("");
+      return str.split("").reverse().join("");
     },
     loadGame() {
       if (null != localStorage.getItem("saveGame")) {
@@ -176,15 +178,15 @@ export default {
       this.$parent.log.push("<div>Save was downloaded</div>");
     },
     getRealEnemyName(id) {
-      return this.enemieslist.find(x => x.id == id).name;
+      return this.enemieslist.find((x) => x.id == id).name;
     },
     importSave() {
       let el = this;
-      this.$refs.import.addEventListener("change", function() {
+      this.$refs.import.addEventListener("change", function () {
         if (this.files && this.files[0]) {
           var reader = new FileReader();
 
-          reader.addEventListener("load", function(e) {
+          reader.addEventListener("load", function (e) {
             let r = {};
             try {
               r = JSON.parse(e.target.result);
@@ -204,7 +206,7 @@ export default {
     groupSkills(list) {
       let obj = {};
 
-      list.reduce(function(rv, x) {
+      list.reduce(function (rv, x) {
         x = x.substring(0, x.length - 1);
         x in obj ? obj[x]++ : (obj[x] = 1);
       }, {});
@@ -216,7 +218,18 @@ export default {
       ov.place = "30%";
       ov.obj = [
         { text: "yes", func: this.$parent.hardreset },
-        { text: "no", func: this.closereset }
+        { text: "no", func: this.closereset },
+      ];
+      ov.img = "icons/reset";
+      this.$parent.overlay = true;
+    },
+    opensoft() {
+      let ov = this.$parent.$refs.ov.$data;
+      ov.text = "Do you really want to wipe your current run?";
+      ov.place = "30%";
+      ov.obj = [
+        { text: "yes", func: this.$parent.softreset },
+        { text: "no", func: this.closereset },
       ];
       ov.img = "icons/reset";
       this.$parent.overlay = true;
@@ -225,17 +238,17 @@ export default {
       this.$parent.overlay = false;
     },
     displayeskills(a) {
-      return this.choiselist.find(b => b.id === a).id.substring(2);
+      return this.choiselist.find((b) => b.id === a).id.substring(2);
     },
     displayeskills2(a) {
-      return this.choiselist.find(b => b.id === a);
+      return this.choiselist.find((b) => b.id === a);
     },
     openskilltree() {
       this.$parent.skilltree = true;
       this.$parent.overlay = true;
     },
     getImgUrl(id) {
-      return this.images.find(x => x.id == id).img;
+      return this.images.find((x) => x.id == id).img;
     },
     show(p) {
       let pl = JSON.parse(JSON.stringify(p));
@@ -259,26 +272,30 @@ export default {
       delete pl.highscore;
       delete pl.chance;
       return pl;
-    }
+    },
   },
   created() {
-    if (this.kongregate != null) {
-      if (!this.kongregate.services.isGuest()) {
-        let user = this.kongregate.services.getUsername();
-        let el = this;
-        let link =
-          "https://api.kongregate.com/api/kongpanions.json?username=" + user;
-        $.getJSON("link", function(data) {
-          if (data.success) {
-            el.companions = data.kongpanions;
-            if (el.$parent.player.companion == 0) {
-              el.$parent.player.companion = el.companions[0].id;
+    let boot = setInterval(() => {
+      console.log(this.$parent.kongregate);
+      if (this.$parent.kongregate != null) {
+        if (!this.$parent.kongregate.services.isGuest()) {
+          let user = this.$parent.kongregate.services.getUsername();
+          let el = this;
+          let link =
+            "https://api.kongregate.com/api/kongpanions.json?username=" + user;
+          $.getJSON(link, function (data) {
+            if (data.success) {
+              el.companions = data.kongpanions;
+              if (el.$parent.player.companion == 0) {
+                el.$parent.player.companion = el.companions[0].id;
+              }
             }
-          }
-        });
+          });
+        }
+        clearInterval(boot);
       }
-    }
-  }
+    }, 500);
+  },
 };
 </script>
 
@@ -376,7 +393,7 @@ export default {
 }
 .comp {
   margin: 5px;
-  border: 2px dotted grey;
+  border: 3px dotted grey;
   padding: 5px;
 }
 .comp img {
@@ -389,6 +406,6 @@ export default {
   margin: 5px;
   width: 100px;
   border: 3px solid yellow;
-  padding: 4px;
+  padding: 5px;
 }
 </style>

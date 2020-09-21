@@ -54,6 +54,7 @@ export default {
   line-height: 40px;
   white-space: nowrap;
   box-shadow: inset 0 0 2px #000000;
+  padding:5px; 
 }
 
 .one img {

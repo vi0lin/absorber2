@@ -406,8 +406,33 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
     }
 
     for (let a in attacker.gain)
-        if ("effects" != a && "chance" != a && "speed" != a && "resistance" != a)
+        if ("effects" != a && "chance" != a && "speed" != a && "resistance" != a && "life" !=a && "regeneration" !=a && "recovery" !=a){
             target[a] += attacker.gain[a];
+        }
+        else if ("life" == a) {
+            if((target[a] + attacker.gain[a]) <= 0){
+                target[a] = 1
+            }
+            else{
+                target[a] += attacker.gain[a];
+            }
+        }
+        else if ("regeneration" == a) {
+            if((target[a] + attacker.gain[a]) <= 0){
+                target[a] = 1
+            }
+            else{
+                target[a] += attacker.gain[a];
+            }
+        }
+        else if ("recovery" == a) {
+            if((target[a] + attacker.gain[a]) <= 0){
+                target[a] = 1
+            }
+            else{
+                target[a] += attacker.gain[a];
+            }
+        }
         else if ("speed" == a) {
             if (attacker.gain[a] > 0) {
                 if (target[a] > 110) {

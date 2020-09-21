@@ -36,7 +36,7 @@
           <div class="time">{{gettime(player.time)}}</div>
         </div>
         <div class="box">
-          <Stats v-show="this.active == 'stats'" />
+          <Stats  ref="stats" v-show="this.active == 'stats'" />
           <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
           <Log v-show="this.active == 'log'" />
           <Fight v-if="this.enemy!=null" v-show="this.active == 'fight'" :item="this.enemy" />
@@ -73,8 +73,6 @@ import { RoundAll, getboni } from "./displayfunc";
 import { respawn, getLast, getNodeById, getLastBoss } from "./functions.js";
 import { log } from "./gloabals.js";
 
-kongregateAPI.loadAPI();
-
 export default {
   components: {
     Stats,
@@ -83,17 +81,6 @@ export default {
     Log,
     Overlay,
     Fight
-  },
-  watch: {
-    player: {
-      deep: true,
-      handler(n, o) {
-        n = o;
-        n.life < 0 && (n.life = 1);
-        n.regeneration < 0 && (n.regeneration = 1);
-        n.recovery < 0 && (n.recovery = 1);
-      }
-    }
   },
   data() {
     return {
@@ -141,6 +128,7 @@ export default {
       player.dmg = 1;
       player.sspeed = 0;
       player.status = {};
+      player.version = p.version;
 
       //copy from save
       player.highscore = pl.highscore;
@@ -338,6 +326,12 @@ export default {
       this.overlay = false;
       this.save();
     },
+    softreset() {
+      this.player.skills = [];
+      this.reset(this.player);
+      this.overlay = false;
+      this.save();
+    },
     reset() {
       this.player.prestige++;
       this.player.tutorial = 6;
@@ -443,16 +437,21 @@ export default {
     }
   },
   mounted() {
-    let el = this;
+    let el = this, kongregate;
     try {
+      console.log(kongregateAPI);
       kongregateAPI.loadAPI(function() {
-        el.kongregate = kongregateAPI.getAPI();
+        kongregate = kongregateAPI.getAPI();
+
+        
+        el.kongregate = kongregate;
+        console.log(el.kongregate.services.getUsername());
       });
     } catch (e) {
       console.log(e);
     }
 
-    console.log(el.kongregate);
+ 
 
     this.preloading();
 
@@ -478,10 +477,6 @@ export default {
       el.shiftIsPressed = false;
     });
 
-    if (this.kongregate != undefined) {
-      console.log(this.kongregate.services.getUsername());
-    }
-
     setInterval(() => {
       this.save();
     }, 15000);
@@ -506,6 +501,7 @@ export default {
             this.player.auto && this.setNextEnemy());
       }
     }, 1000);
+
   },
   beforeDestroy() {
     clearInterval(this.htimer);

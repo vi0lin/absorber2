@@ -48,7 +48,18 @@
         >
           <img :src="require('@/assets/icons/spreadshirt.png')" alt="spreadshirt" />
         </a>
-        <div class="abs" style="left:20px">{{this.$parent.player.version}}</div>
+        <div
+          @click="openChange()"
+          class="abs clickable"
+          style="left:20px"
+        >{{this.$parent.player.version}}</div>
+      </div>
+    </div>
+    <div v-show="openedChange" class="box overlay">
+      <div class="close" @click="closeChange()">x</div>
+      <div :key="l.version" v-for="l in getChangeLog()">
+        <h3>{{l.version}}</h3>
+        <div :key="number" v-for="(text, number) in l.info">{{text}}</div>
       </div>
     </div>
   </div>
@@ -56,22 +67,51 @@
 
 <script>
 export default {
+  data() {
+    return {
+      openedChange: false,
+    };
+  },
   methods: {
+    closeChange() {
+      this.openedChange = false;
+    },
+    openChange() {
+      this.openedChange = !this.openedChange ;
+    },
     getLog() {
       return this.$parent.log.slice(-60).reverse();
-    }
-  }
+    },
+    getChangeLog() {
+      return this.changelog;
+    },
+  },
 };
 </script>
 
 <style scoped>
+
 .log {
   margin-top: 20px;
 }
 .flex {
   justify-content: center;
 }
-
+.close {
+  position: sticky;
+  background: red;
+  border: 1px solid black;
+  float: right;
+  padding: 2px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.close:hover {
+  background: pink;
+}
+.clickable {
+  cursor: pointer;
+}
 .one {
   margin: 4px;
 }
@@ -106,5 +146,14 @@ export default {
   width: 32px;
   height: 32px;
   padding: 2px;
+}
+
+.overlay {
+  position: absolute;
+  top: 100px;
+  left: 30px;
+  min-height: 300px;
+  height: 300px;
+  overflow-y: scroll;
 }
 </style>
