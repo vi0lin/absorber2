@@ -439,17 +439,13 @@ export default {
   mounted() {
     let el = this, kongregate;
     try {
-      console.log(kongregateAPI);
       kongregateAPI.loadAPI(function() {
         kongregate = kongregateAPI.getAPI();
 
         
         el.kongregate = kongregate;
-        console.log(el.kongregate.services.getUsername());
       });
-    } catch (e) {
-      console.log(e);
-    }
+    } catch {    }
 
  
 

@@ -83,7 +83,38 @@
       <Progressbar :val="item.clife" :max="item.life" />
     </div>
     <div class="row3 box">
-      <div :key="key" v-for="(l,key) in getLog()" v-html="l"></div>
+      <div class="flex">
+        <button
+          :class="{ active: this.smallbox=='stats' }"
+          @click="chooseSmallBox('stats')"
+          class="btn small"
+        >Stats</button>
+        <button
+          :class="{ active: this.smallbox=='log' }"
+          @click="chooseSmallBox('log')"
+          class="btn small"
+        >Log</button>
+      </div>
+      <div v-if="this.smallbox=='stats'">
+        <h2 class="title">{{$parent.player.name}}</h2>
+        <br />
+        <b>Stats:</b>
+        <hr />
+        <div class="fleo">
+          <div class="fleo" :key="g" v-for="(n,g) in item.gain">
+            <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
+            <div v-if="g!='effects'&&g!='chance'&&g!='resistance'">
+              <Ability class="basic" :pid="g" :val="$parent.player[g]" />
+            </div>
+            <div v-else :key="gi" v-for="(gn,gi) in $parent.player[g]">
+              <Ability :class="g" :pid="gi" :val="gn" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="this.smallbox=='log'">
+        <div :key="key" v-for="(l,key) in getLog()" v-html="l"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -98,27 +129,32 @@ import TextToolTip from "./TextToolTip.vue";
 export default {
   components: {
     Progressbar,
-    Ability
+    Ability,
   },
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       timer1: null,
       timer2: null,
-      dmgind: dmgind
+      dmgind: dmgind,
+      smallbox: "stats",
     };
   },
   methods: {
+    chooseSmallBox(v) {
+      this.smallbox = v;
+      console.log($(this));
+    },
     getLast(j, p) {
       return getLast(j, p);
     },
     getImgUrl(id) {
-      return this.images.find(x => x.id == id).img;
+      return this.images.find((x) => x.id == id).img;
     },
     filtred(arr) {
       let allowed = [
@@ -131,11 +167,11 @@ export default {
         "status",
         "gain",
         "max",
-        "prestige"
+        "prestige",
       ];
 
       let ob = Object.keys(arr)
-        .filter(key => !allowed.includes(key))
+        .filter((key) => !allowed.includes(key))
         .reduce((obj, key) => {
           obj[key] = arr[key];
 
@@ -163,7 +199,7 @@ export default {
       this.$parent.player.go = true;
       this.$parent.player.auto = false;
       this.$parent.displayfinish();
-    }
+    },
   },
   mounted() {
     this.$parent.recovery = false;
@@ -202,7 +238,7 @@ export default {
     clearInterval(this.timer2);
     this.$parent.recovery = true;
     respawn(this.item);
-  }
+  },
 };
 </script>
 
@@ -215,7 +251,11 @@ export default {
   min-width: 220px;
   min-height: 400px;
 }
-
+.small {
+  padding: 2px;
+  margin: 0px 4px 10px 4px;
+  line-height: normal;
+}
 .kasten {
   box-shadow: inset 0 0 4px grey;
   border: 1px solid black;

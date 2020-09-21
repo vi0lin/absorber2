@@ -276,7 +276,6 @@ export default {
   },
   created() {
     let boot = setInterval(() => {
-      console.log(this.$parent.kongregate);
       if (this.$parent.kongregate != null) {
         if (!this.$parent.kongregate.services.isGuest()) {
           let user = this.$parent.kongregate.services.getUsername();
