@@ -8,6 +8,7 @@ function RoundToInt(e) {
 }
 
 function changeLife(a, b, c, d) {
+
     b = RoundToInt(b);
 
     if (isNaN(b)) return;
@@ -17,6 +18,10 @@ function changeLife(a, b, c, d) {
     "damage" == d
         ? a.clife -= b
         : a.clife += b;
+
+    if (c == "regeneration") {
+        return;
+    }
 
     0 < b && showIndicator(b, c, a, d);
 }
@@ -36,7 +41,7 @@ function showIndicator(c, d, e, f) {
 
     if (null == e.version) {
         dmgind.push({ text: c, color: g });
-        setTimeout(() => { try { dmgind.shift() } catch{ } }, 500)
+        setTimeout(() => { try { dmgind.shift() } catch { } }, 500)
     }
 
 }
@@ -77,17 +82,19 @@ function checkDot(a, b, c) {
 }
 
 function checkRegeneration(a, b, c) {
+
+    console.log(a.regeneration / 100);
     if (a.status.invert > 0) {
-        changeLife(a, a.regeneration, "invert", "damage", b, c)
+        changeLife(a, a.regeneration / 100, "invert", "damage", b, c)
         a.status.invert--;
     }
     else if (a.status.bury > 0) {
         (a.regeneration * 4) + a.clife <= a.life
-            ? changeLife(a, (a.regeneration * 4), "regeneration", "heal", b, c)
+            ? changeLife(a, (a.regeneration / 50), "regeneration", "heal", b, c)
             : changeLife(a, a.life - a.clife, "regeneration", "heal", b, c)
     } else {
         a.regeneration + a.clife <= a.life
-            ? changeLife(a, a.regeneration, "regeneration", "heal", b, c)
+            ? changeLife(a, a.regeneration / 100, "regeneration", "heal", b, c)
             : changeLife(a, a.life - a.clife, "regeneration", "heal", b, c)
     }
 }
@@ -246,6 +253,10 @@ function checkRotTurn(a) {
 
 export function checkTurn(target, attacker, disfi, exit, kong) {
 
+    if (!checkRotTurn(target)) {
+        checkRegeneration(target)
+    }
+
     if (checkSpeed(target)) {
         return;
     }
@@ -261,9 +272,7 @@ export function checkTurn(target, attacker, disfi, exit, kong) {
         return;
     }
 
-    if (!checkRotTurn(target)) {
-        checkRegeneration(target)
-    }
+
 
     checkBuryTurn(target)
 
@@ -324,7 +333,7 @@ export function checkTurn(target, attacker, disfi, exit, kong) {
             dmgind.shift();
             log.push(`<div>${target.name} attacks second time<div>`);
             checkCrit(crit, scrit, mcrit, attacker, target, block);
-        } catch{ }
+        } catch { }
     }, 500);
 
     checkCounter(target, attacker)
@@ -375,8 +384,8 @@ function checkLifesteal(a, b, c, d) {
 function checkSpeed(a) {
     let sp = 100;
 
-    0 < a.status.slow && (sp -= 20);
-    0 < a.status.stim && (sp += 20);
+    0 < a.status.slow && (sp -= 50);
+    0 < a.status.stim && (sp += 50);
 
     a.cspeed += sp;
 
@@ -389,7 +398,7 @@ function checkSpeed(a) {
 
 function animateObject(b) {
     $("#enemy").addClass(b)
-    setTimeout(() => { try { $("#enemy").removeClass(b) } catch{ } }, 500)
+    setTimeout(() => { try { $("#enemy").removeClass(b) } catch { } }, 500)
 }
 
 function checkEnemyDeath(target, attacker, func, res, kong) {
@@ -406,30 +415,30 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
     }
 
     for (let a in attacker.gain)
-        if ("effects" != a && "chance" != a && "speed" != a && "resistance" != a && "life" !=a && "regeneration" !=a && "recovery" !=a){
+        if ("effects" != a && "chance" != a && "speed" != a && "resistance" != a && "life" != a && "regeneration" != a && "recovery" != a) {
             target[a] += attacker.gain[a];
         }
         else if ("life" == a) {
-            if((target[a] + attacker.gain[a]) <= 0){
+            if ((target[a] + attacker.gain[a]) <= 0) {
                 target[a] = 1
             }
-            else{
+            else {
                 target[a] += attacker.gain[a];
             }
         }
         else if ("regeneration" == a) {
-            if((target[a] + attacker.gain[a]) <= 0){
+            if ((target[a] + attacker.gain[a]) <= 0) {
                 target[a] = 1
             }
-            else{
+            else {
                 target[a] += attacker.gain[a];
             }
         }
         else if ("recovery" == a) {
-            if((target[a] + attacker.gain[a]) <= 0){
+            if ((target[a] + attacker.gain[a]) <= 0) {
                 target[a] = 1
             }
-            else{
+            else {
                 target[a] += attacker.gain[a];
             }
         }
@@ -477,7 +486,7 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
             try {
                 kong.stats.submit(attacker.id, target.time);
             }
-            catch{ }
+            catch { }
         }
 
         attacker.id == getLastBoss(target) && func();

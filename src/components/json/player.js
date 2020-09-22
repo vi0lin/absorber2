@@ -18,7 +18,7 @@ var player = {
     "time": 0,
     "auto": false,
     "lastEnemy": "bat",
-    "version": 1.6,
+    "version": 1.7,
     "highscore": {
         "vampire": -1,
         "hydra": -1,

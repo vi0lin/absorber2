@@ -1,4 +1,14 @@
-[
+[    {
+    "version": "1.7",
+    "info": [
+        "Buffed Hard Turtle",
+        "Again fixing Buggs",
+        "Made every image smaller",
+        "Buffed Slow and Stim",
+        "Changed the way regeneration works",
+        "Added InFight Stats"
+    ]
+},
     {
         "version": "1.6",
         "info": [

@@ -519,11 +519,11 @@
             "poisonresistance": 20
         },
         "gain": {
-            "life": 0.8,
-            "regeneration": 0.1,
+            "life": 1.8,
+            "regeneration": 0.3,
             "speed": -10,
             "effects": {
-                "reflect": 0.1
+                "reflect": 0.2
             },
             "resistance": {
                 "fireresistance": 0.1,

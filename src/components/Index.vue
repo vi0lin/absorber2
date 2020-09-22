@@ -253,6 +253,7 @@ export default {
       this.player = player;
       respawn(this.player);
       this.loading = false;
+      this.$refs.dun.$forceUpdate();
     },
     openTab(t) {
       this.active = t;
@@ -440,14 +441,10 @@ export default {
     let el = this, kongregate;
     try {
       kongregateAPI.loadAPI(function() {
-        kongregate = kongregateAPI.getAPI();
-
-        
+        kongregate = kongregateAPI.getAPI();       
         el.kongregate = kongregate;
       });
     } catch {    }
-
- 
 
     this.preloading();
 
