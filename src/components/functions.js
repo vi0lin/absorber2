@@ -82,8 +82,6 @@ function checkDot(a, b, c) {
 }
 
 function checkRegeneration(a, b, c) {
-
-    console.log(a.regeneration / 100);
     if (a.status.invert > 0) {
         changeLife(a, a.regeneration / 100, "invert", "damage", b, c)
         a.status.invert--;

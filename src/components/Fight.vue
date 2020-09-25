@@ -148,7 +148,6 @@ export default {
   methods: {
     chooseSmallBox(v) {
       this.smallbox = v;
-      console.log($(this));
     },
     getLast(j, p) {
       return getLast(j, p);

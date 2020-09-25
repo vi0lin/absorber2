@@ -15,6 +15,7 @@ var player = {
     "counter": {},
     "skills": [],
     "status": {},
+    "items":[],
     "time": 0,
     "auto": false,
     "lastEnemy": "bat",

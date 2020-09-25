@@ -6,6 +6,7 @@ import choiselist from "./components/json/choises.json";
 import changelog from "./components/json/changelog.json";
 import bufflist from "./components/json/bufflist.json";
 import skillist from "./components/json/skilltree.json";
+import itemslist from "./components/json/items.json";
 
 
 Vue.config.productionTip = false
@@ -16,6 +17,7 @@ Vue.prototype.choiselist = choiselist
 Vue.prototype.bufflist = bufflist
 Vue.prototype.skillist = skillist
 Vue.prototype.changelog = changelog
+Vue.prototype.itemslist = itemslist
 Vue.prototype.images = []
 
 Vue.prototype.beta = false

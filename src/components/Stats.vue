@@ -1,14 +1,30 @@
 <template>
   <div class="stats">
     <input class="faker" v-model="$parent.player.name" />
-    <div style="display:flex">
-      <button v-show="$parent.player.go" class="btn" @click="$parent.displayfinish">
+    <div style="display: flex">
+      <button
+        v-show="$parent.player.go"
+        class="btn"
+        @click="$parent.displayfinish"
+      >
         Prestige
-        <img class="icons" :src="require('@/assets/icons/star.png')" alt="reset" />
+        <img
+          class="icons"
+          :src="require('@/assets/icons/star.png')"
+          alt="reset"
+        />
       </button>
-      <button v-show="$parent.player.prestige>0" class="btn" @click="openskilltree">
+      <button
+        v-show="$parent.player.prestige > 0"
+        class="btn"
+        @click="openskilltree"
+      >
         Skills
-        <img class="icons" :src="require('@/assets/icons/skills.png')" alt="skills" />
+        <img
+          class="icons"
+          :src="require('@/assets/icons/skills.png')"
+          alt="skills"
+        />
       </button>
     </div>
     <div class="flex">
@@ -22,31 +38,40 @@
           :pid="key"
         />
       </div>
-      <div v-show="Object.keys($parent.player.chance).length !== 0" class="kiste">
+      <div
+        v-show="Object.keys($parent.player.chance).length !== 0"
+        class="kiste"
+      >
         <span class="title">Chances</span>
         <Ability
           class="chance"
-          :key="key+value"
+          :key="key + value"
           v-for="(value, key) in $parent.player.chance"
           :val="value"
           :pid="key"
         />
       </div>
-      <div v-show="Object.keys($parent.player.effects).length !== 0" class="kiste">
+      <div
+        v-show="Object.keys($parent.player.effects).length !== 0"
+        class="kiste"
+      >
         <span class="title">Effects</span>
         <Ability
           class="effects"
-          :key="key+value"
+          :key="key + value"
           v-for="(value, key) in $parent.player.effects"
           :val="value"
           :pid="key"
         />
       </div>
-      <div v-show="Object.keys($parent.player.resistance).length !== 0" class="kiste">
+      <div
+        v-show="Object.keys($parent.player.resistance).length !== 0"
+        class="kiste"
+      >
         <span class="title">Resistance</span>
         <Ability
           class="resistance"
-          :key="key+value"
+          :key="key + value"
           v-for="(value, key) in $parent.player.resistance"
           :val="value"
           :pid="key"
@@ -54,39 +79,77 @@
       </div>
       <div class="kiste">
         <span class="title">Highscore</span>
-        <div :key="key+value" v-for="(key,value ) in $parent.player.highscore">
-          <div v-show="key>0">
+        <div
+          :key="key + value"
+          v-for="(key, value) in $parent.player.highscore"
+        >
+          <div v-show="key > 0">
             <div class="valbox">
-              <span class="val">{{key}}</span>
+              <span class="val">{{ key }}</span>
               <img class="icon" v-if="value" :src="getImgUrl(value)" />
             </div>
-            <TextToolTip :title="getRealEnemyName(value)" :item="'killed in '+key+' seconds'" />
+            <TextToolTip
+              :title="getRealEnemyName(value)"
+              :item="'killed in ' + key + ' seconds'"
+            />
           </div>
         </div>
       </div>
-      <div v-show="Object.keys($parent.player.skills).length !== 0" class="kiste fux">
+      <div
+        v-show="Object.keys($parent.player.skills).length !== 0"
+        class="kiste fux"
+      >
         <span class="title">Skills</span>
-        <div :key="value" v-for="(key,value) in groupSkills($parent.player.skills)">
+        <div
+          :key="value"
+          v-for="(key, value) in groupSkills($parent.player.skills)"
+        >
           <div class="valbox">
-            <img class="icon" :src="require('@/assets/skills/'+displayeskills(value)+'.png')" />
-            <span class="val">{{key}}</span>
+            <img
+              class="icon"
+              :src="
+                require('@/assets/skills/' + displayeskills(value) + '.png')
+              "
+            />
+            <span class="val">{{ key }}</span>
           </div>
-          <TextToolTip :title="displayeskills2(value).name" :item="displayeskills2(value).desc" />
+          <TextToolTip
+            :title="displayeskills2(value).name"
+            :item="displayeskills2(value).desc"
+          />
         </div>
       </div>
-      <div class="kiste" style="width:650px;" v-if="companions.length>0">
-        <span style="width:650px;" class="title">Kongpanions</span>
+      <div class="kiste" style="width: 650px" v-if="companions.length > 0">
+        <span style="width: 650px" class="title">Kongpanions</span>
         <div
-          :class="{scomp:isSelectedC(value.id),comp:!isSelectedC(value.id)}"
+          :class="{
+            scomp: isSelectedC(value.id),
+            comp: !isSelectedC(value.id),
+          }"
           @click="selectComp(value.id)"
           :key="key"
           v-for="(value, key) in companions"
         >
           <img width="110" :src="value.normal_icon_url_small" />
-          <div>{{value.name}}</div>
-          <Ability :val="getboni(value.tags).value" :pid="getboni(value.tags).key" />
+          <div>{{ value.name }}</div>
+          <Ability
+            :val="getboni(value.tags).value"
+            :pid="getboni(value.tags).key"
+          />
         </div>
       </div>
+      <div
+        class="kiste"
+        style="width: 650px"
+        v-if="$parent.player.prestige > 5"
+      >
+        <span style="width: 650px" class="title">Items</span>
+        <div class="comp" :key="key" v-for="(value, key) in this.itemslist">
+          <img width="110" :src="getImgUrl(value.id)" :alt="value.name" />
+          <div>{{ value.name }}</div>
+        </div>
+      </div>
+
       <div class="ecke">
         <button class="btn export" @click="exportSave">
           <img :src="require('@/assets/icons/export.png')" alt="Export" />
@@ -96,7 +159,7 @@
         <input ref="import" id="import" accept="text/txt" type="file" />
 
         <button class="btn import" @click="importSave">
-          <label for="import" style="cursor:pointer">
+          <label for="import" style="cursor: pointer">
             <img :src="require('@/assets/icons/import.png')" alt="Import" />
             <span>Import</span>
           </label>
@@ -259,6 +322,7 @@ export default {
       delete pl.companion;
       delete pl.skills;
       delete pl.time;
+      delete pl.items;
       delete pl.auto;
       delete pl.debug;
       delete pl.tutorial;
@@ -394,6 +458,8 @@ export default {
   margin: 5px;
   border: 3px dotted grey;
   padding: 5px;
+  max-width: 100px;
+  text-align: center;
 }
 .comp img {
   width: 100px;

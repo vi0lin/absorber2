@@ -1,0 +1,29 @@
+[
+    {
+        "tier": 3,
+        "name": "Type-A Energy Weapon",
+        "id": "helosword",
+        "desc": "Allows instakill on bosses",
+        "stats": {}
+    },
+    {
+        "tier": 2,
+        "name": "Bloodthirster",
+        "id": "bloodthirster",
+        "desc": "UNIQUE: +20% life steal",
+        "stats": {
+            "effects": {
+                "lifesteal": 20
+            }
+        }
+    },
+    {
+        "tier": 2,
+        "name": "AK-47",
+        "id": "kalaschnikow",
+        "desc": "Good old fachion damage",
+        "stats": {
+            "dmg": 5
+        }
+    }
+]

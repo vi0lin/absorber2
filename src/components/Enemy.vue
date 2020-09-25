@@ -138,7 +138,7 @@ export default {
 
 .kiste img {
   user-select: none;
-  height: 100%;
+  width: 100%;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -149,10 +149,6 @@ export default {
   pointer-events: none;
 }
 
-.image {
-  width: 70px;
-  height: auto;
-}
 
 .ready {
   background: lightcoral;

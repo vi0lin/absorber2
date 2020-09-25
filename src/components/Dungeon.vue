@@ -33,14 +33,49 @@
             <div></div>
           </div>
         </div>
-        <div v-else class="flex">
-          <div :key="key" v-for="(value, key) in getPrestigeEnemys">
-            <Enemy :min="getcount(value.id)" :max="getLast(value.max)" :value="value" />
+        <div v-else>
+          <div class="flex">
+            <div :key="key" v-for="(value, key) in getPrestigeEnemys">
+              <Enemy :min="getcount(value.id)" :max="getLast(value.max)" :value="value" />
+            </div>
+          </div>
+          <div v-if="$parent.player.prestige>5">
+            <div class="text">Fight for Items</div>
+            <div class="flex">
+              <br />
+              <div class="kiste">
+                <div>
+                  <img :src="require('@/assets/icons/bronze.png')" alt="reset" />
+                  <br />
+                  <span>Bronze Tier</span>
+                </div>
+              </div>
+              <div class="kiste">
+                <div>
+                  <img :src="require('@/assets/icons/silver.png')" alt="reset" />
+                  <br />
+                  <span>Silver Tier</span>
+                </div>
+              </div>
+              <div class="kiste">
+                <div>
+                  <img :src="require('@/assets/icons/gold.png')" alt="reset" />
+                  <br />
+                  <span>Gold Tier</span>
+                </div>
+              </div>
+              <div class="kiste">
+                <div>
+                  <img :src="require('@/assets/icons/platin.png')" alt="reset" />
+                  <br />
+                  <span>Platinum Tier</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div
-        class="text"
+      <div        class="text"
       >Any similarity with other books, games or movies is just coincidence and results from your fertile imagination.</div>
     </div>
   </div>
@@ -54,7 +89,7 @@ export default {
   data() {
     return {
       dragSrcEl: null,
-      loading: true
+      loading: true,
     };
   },
   methods: {
@@ -71,7 +106,7 @@ export default {
     },
     getLast(v) {
       return getLast(v, this.$parent.player.prestige);
-    }
+    },
   },
   mounted() {
     setTimeout(() => {
@@ -84,21 +119,55 @@ export default {
         el = this;
 
       for (let a of this.$parent.player.order) {
-        list.push(this.enemieslist.find(b => a == b.id));
+        list.push(this.enemieslist.find((b) => a == b.id));
       }
 
-      return list.filter(function(x) {
+      return list.filter(function (x) {
         if (x.prestige != null && x.prestige != undefined) {
           return el.$parent.player.prestige >= x.prestige;
         }
         return true;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
+.kiste {
+  border-radius: 5%;
+  font-size: 14px;
+  user-select: none;
+  cursor: pointer;
+  background: whitesmoke;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  text-align: center;
+  width: 80px;
+  min-height: 100px;
+  box-shadow: inset -2px -2px 2px lightgray;
+  transition: 0.1s;
+}
+.kiste:hover {
+  background: lightgray;
+  box-shadow: inset -2px -2px 2px grey;
+  transform: translate(0px, -10px);
+}
+
+.kiste img {
+  user-select: none;
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  pointer-events: none;
+}
+
+.kiste * {
+  pointer-events: none;
+}
+
 .center {
   display: block;
   width: 0%;

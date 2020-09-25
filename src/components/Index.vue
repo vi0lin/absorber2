@@ -4,8 +4,8 @@
       <div>
         <div class="fixed">
           <button
-            :class="{ active: this.active=='fight' }"
-            v-if="this.enemy!=null"
+            :class="{ active: this.active == 'fight' }"
+            v-if="this.enemy != null"
             @click="openTab('fight')"
             class="btn"
           >
@@ -13,44 +13,60 @@
             Fight
           </button>
           <button
-            :class="{ active: this.active=='dungeon' }"
+            :class="{ active: this.active == 'dungeon' }"
             @click="openTab('dungeon')"
             class="btn"
           >
             <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
             Dungeon
           </button>
-          <button :class="{ active: this.active=='stats' }" @click="openTab('stats')" class="btn">
+          <button
+            :class="{ active: this.active == 'stats' }"
+            @click="openTab('stats')"
+            class="btn"
+          >
             <img :src="require('@/assets/icons/hero.png')" alt="stats" />
             Stats
           </button>
-          <button :class="{ active: this.active=='log' }" @click="openTab('log')" class="btn">
+          <button
+            :class="{ active: this.active == 'log' }"
+            @click="openTab('log')"
+            class="btn"
+          >
             <img :src="require('@/assets/icons/log.png')" alt="log" />
             Log
           </button>
-          <button class="btn" v-show="this.enemy!=null" @click="exitFight()">
+          <button class="btn" v-show="this.enemy != null" @click="exitFight()">
             <img :src="require('@/assets/icons/door.png')" alt="back" />
             Exit
           </button>
 
-          <div class="time">{{gettime(player.time)}}</div>
+          <div class="time">{{ gettime(player.time) }}</div>
         </div>
         <div class="box">
-          <Stats  ref="stats" v-show="this.active == 'stats'" />
+          <Stats ref="stats" v-show="this.active == 'stats'" />
           <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
           <Log v-show="this.active == 'log'" />
-          <Fight v-if="this.enemy!=null" v-show="this.active == 'fight'" :item="this.enemy" />
+          <Fight
+            v-if="this.enemy != null"
+            v-show="this.active == 'fight'"
+            :item="this.enemy"
+          />
         </div>
       </div>
       <div class="status">
-        <div v-show="value>0" :key="key" v-for="(value, key) in this.player.status">
-          <img :src="getImgUrl('b'+key)" :alt="key" />
-          <span>{{value}}</span>
+        <div
+          v-show="value > 0"
+          :key="key"
+          v-for="(value, key) in this.player.status"
+        >
+          <img :src="getImgUrl('b' + key)" :alt="key" />
+          <span>{{ value }}</span>
         </div>
       </div>
       <Progressbar :max="player.life" :val="player.clife" :ab="true" />
       <Progressbar
-        v-show="this.enemy!=null"
+        v-show="this.enemy != null"
         :max="player.speed"
         :val="player.cspeed"
         :speed="true"
@@ -80,7 +96,7 @@ export default {
     Progressbar,
     Log,
     Overlay,
-    Fight
+    Fight,
   },
   data() {
     return {
@@ -96,7 +112,7 @@ export default {
       shiftIsPressed: false,
       log: log,
       complist: [],
-      loading: true
+      loading: true,
     };
   },
   methods: {
@@ -106,7 +122,7 @@ export default {
       this.active = "dungeon";
     },
     getImgUrl(id) {
-      return this.images.find(x => x.id == id).img;
+      return this.images.find((x) => x.id == id).img;
     },
     recalculate(pl) {
       this.loading = true;
@@ -145,7 +161,7 @@ export default {
       player.name = pl.name;
       player.prestige = pl.prestige;
       player.companion = pl.companion;
-      player.version = pl.version;
+      //player.version = pl.version;
       player.lastEnemy = pl.lastEnemy;
       player.auto = pl.auto;
       player.time = pl.time;
@@ -153,7 +169,9 @@ export default {
       player.order = pl.order;
 
       if (null != player.companion) {
-        let a = getboni(this.complist.find(a => a.id == player.companion).tags);
+        let a = getboni(
+          this.complist.find((a) => a.id == player.companion).tags
+        );
         a.chance
           ? player.chance[a.key] == null
             ? (player.chance[a.key] = a.value)
@@ -175,7 +193,7 @@ export default {
 
       for (let d in player.counter)
         for (let e, a = 0; a < player.counter[d]; a++)
-          if (((e = this.enemieslist.find(a => a.id === d)), null != e))
+          if (((e = this.enemieslist.find((a) => a.id === d)), null != e))
             for (let b in e.gain)
               if (
                 "effects" != b &&
@@ -215,7 +233,7 @@ export default {
           var index = player.skills.indexOf(b);
           -1 !== index && player.skills.splice(index, 1);
         } else {
-          let c = this.choiselist.find(b => b.id === a.typ);
+          let c = this.choiselist.find((b) => b.id === a.typ);
           for (let a in c.gain)
             switch (a) {
               case "chance":
@@ -309,7 +327,7 @@ export default {
 
       let obj = [
         { text: "continue", func: this.continue },
-        { text: "prestige", func: this.reset }
+        { text: "prestige", func: this.reset },
       ];
 
       ov.place = "20%";
@@ -368,7 +386,7 @@ export default {
     setNextEnemy() {
       if (this.player.prestige >= 3) {
         for (let ind of this.player.order) {
-          let e = this.enemieslist.find(e => e.id == ind);
+          let e = this.enemieslist.find((e) => e.id == ind);
           if (
             this.player.counter[e.id] <
             this.getLast(e.max, this.player.prestige)
@@ -378,7 +396,7 @@ export default {
           }
         }
       } else {
-        let last = this.enemieslist.find(e => e.id == this.player.lastEnemy);
+        let last = this.enemieslist.find((e) => e.id == this.player.lastEnemy);
         if (last != undefined) {
           if (
             this.player.counter[last.id] <
@@ -434,25 +452,32 @@ export default {
       for (let a of this.bufflist)
         this.images.push({ id: "b" + a, img: requireImage("./" + a + ".png") });
 
+      requireImage = require.context("../assets/items/", false, /\.png$/);
+
+      for (let a of this.itemslist)
+        this.images.push({ id: a.id, img: requireImage("./" + a.id + ".png") });
+
       this.loading = false;
-    }
+    },
   },
   mounted() {
-    let el = this, kongregate;
+    let el = this,
+      kongregate;
     try {
-      kongregateAPI.loadAPI(function() {
-        kongregate = kongregateAPI.getAPI();       
+      kongregateAPI.loadAPI(function () {
+        kongregate = kongregateAPI.getAPI();
         el.kongregate = kongregate;
       });
-    } catch {    }
+    } catch {}
 
     this.preloading();
 
-    $.getJSON("https://api.kongregate.com/api/kongpanions/index.json", function(
-      data
-    ) {
-      if (data.success) el.complist = data.kongpanions;
-    }).done(function() {
+    $.getJSON(
+      "https://api.kongregate.com/api/kongpanions/index.json",
+      function (data) {
+        if (data.success) el.complist = data.kongpanions;
+      }
+    ).done(function () {
       null == localStorage.getItem("saveGame")
         ? el.recalculate(el.player)
         : el.recalculate(JSON.parse(localStorage.getItem("saveGame")));
@@ -460,12 +485,12 @@ export default {
       6 != el.player.tutorial && el.tutorial();
     });
 
-    window.addEventListener("keydown", function() {
+    window.addEventListener("keydown", function () {
       "17" == event.which && (el.cntrlIsPressed = !0);
       "16" == event.which && (el.shiftIsPressed = !0);
     });
 
-    window.addEventListener("keyup", function() {
+    window.addEventListener("keyup", function () {
       el.cntrlIsPressed = false;
       el.shiftIsPressed = false;
     });
@@ -494,11 +519,10 @@ export default {
             this.player.auto && this.setNextEnemy());
       }
     }, 1000);
-
   },
   beforeDestroy() {
     clearInterval(this.htimer);
-  }
+  },
 };
 </script>
 
