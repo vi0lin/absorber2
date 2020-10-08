@@ -3,15 +3,15 @@
         "tier": 3,
         "name": "Type-A Energy Weapon",
         "id": "helosword",
-        "desc": "Allows instakill on bosses",
-        "stats": {}
+        "description": "A noble and ancient weapon, wielded by the strongest",
+        "special": "Allows instakill on bosses"
     },
     {
         "tier": 2,
-        "name": "Bloodthirster",
+        "name": "Bloodhunger",
         "id": "bloodthirster",
-        "desc": "UNIQUE: +20% life steal",
-        "stats": {
+        "description": "UNIQUE: +20% life steal",
+        "gain": {
             "effects": {
                 "lifesteal": 20
             }
@@ -21,9 +21,55 @@
         "tier": 2,
         "name": "AK-47",
         "id": "kalaschnikow",
-        "desc": "Good old fachion damage",
-        "stats": {
+        "description": "Good old fachion damage",
+        "gain": {
             "dmg": 5
+        }
+    },
+    {
+        "tier": 4,
+        "name": "Holy Grenade",
+        "id": "holygrenade",
+        "description": "Halleluja",
+        "gain": {
+            "dmg": 50,
+            "chance": {
+                "fire": 10
+            }
+        }
+    },
+    {
+        "tier": 2,
+        "name": "Hidden Blade",
+        "id": "hiddenblade",
+        "description": "RIP Desment",
+        "gain": {
+            "dmg": 2,
+            "chance": {
+                "poison": 50
+            }
+        }
+    },
+    {
+        "tier": 3,
+        "name": "Piano String",
+        "id": "pianostring",
+        "description": "obtained by killing Agent 46",
+        "gain": {
+            "chance": {
+                "instakill": 10
+            }
+        }
+    },
+    {
+        "tier": 2,
+        "name": "Spiked Shell",
+        "id": "blueshell",
+        "description": "It'sa me",
+        "gain": {
+            "chance": {
+                "instakill": 10
+            }
         }
     }
 ]

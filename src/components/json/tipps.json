@@ -55,6 +55,11 @@
         "form": "dmg = dmg * 8"
     },
     {
+        "id": "ultracrit",
+        "desc": "Percentage of a ultra-critical attack. ultra-critical attacks increase damage sixteenfold. Can only occur when mega-critical.",
+        "form": "dmg = dmg * 8"
+    },
+    {
         "id": "poison",
         "desc": "Chance to poison the enemy. Poisoned opponents suffer damage on their turn.",
         "form": "dmg = magic / 4"

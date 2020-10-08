@@ -1,19 +1,27 @@
 <template>
   <div
     class="rows"
-    :style="{ backgroundImage: 'url(' + require('@/assets/icons/background.png') + ')' }"
+    :style="{
+      backgroundImage: 'url(' + require('@/assets/icons/background.png') + ')',
+    }"
   >
     <div class="row1 box">
-      <h2 class="title">{{item.name}}</h2>
-      <div style="border: 1px solid red" v-show="beta">{{item.status}}</div>
+      <h2 class="title">{{ item.name }}</h2>
+      <div style="border: 1px solid red" v-show="beta">{{ item.status }}</div>
       <br />
       <b>Stats:</b>
       <hr />
       <div class="fleo">
-        <div :key="g" v-for="(n,g) in filtred(item)">
-          <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
-          <div class="fleo" v-if="g=='effects'||g=='chance'||g=='resistance'">
-            <div :key="gi" v-for="(gn,gi) in item[g]">
+        <div :key="g" v-for="(n, g) in filtred(item)">
+          <hr
+            style="width: 200px"
+            v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+          />
+          <div
+            class="fleo"
+            v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+          >
+            <div :key="gi" v-for="(gn, gi) in item[g]">
               <Ability :class="g" :pid="gi" :val="gn" />
             </div>
           </div>
@@ -26,12 +34,15 @@
       <b>Gain:</b>
       <hr />
       <div class="fleo">
-        <div class="fleo" :key="g" v-for="(n,g) in item.gain">
-          <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
-          <div v-if="g!='effects'&&g!='chance'&&g!='resistance'">
+        <div class="fleo" :key="g" v-for="(n, g) in item.gain">
+          <hr
+            style="width: 200px"
+            v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+          />
+          <div v-if="g != 'effects' && g != 'chance' && g != 'resistance'">
             <Ability class="basic" :pid="g" :val="n" />
           </div>
-          <div v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
+          <div v-else :key="gi" v-for="(gn, gi) in item.gain[g]">
             <Ability :class="g" :pid="gi" :val="gn" />
           </div>
         </div>
@@ -42,7 +53,7 @@
         <hr />
         <Ability
           class="basic"
-          style="white-space:normal;width:200px;height:auto;"
+          style="white-space: normal; width: 200px; height: auto"
           :pid="'description'"
           :val="item.description"
         />
@@ -51,11 +62,13 @@
     <div class="row2 middle">
       <div>
         <div class="kasten">
-          <div
-            style="text-align:center;margin:10px"
-          >{{this.$parent.player.counter[item.id]}}/{{getLast(this.item.max,this.$parent.player.prestige)}}</div>
+          <div style="text-align: center; margin: 10px">
+            {{ this.$parent.player.counter[item.id] }}/{{
+              getLast(this.item.max, this.$parent.player.prestige)
+            }}
+          </div>
         </div>
-        <div style="width:200px">
+        <div style="width: 200px">
           <img
             ref="eimage"
             v-if="item.id"
@@ -66,16 +79,22 @@
           />
           <span
             class="dmgind"
-            :style="'color:'+ind.color"
+            :style="'color:' + ind.color"
             :key="k"
-            v-for="(ind,k) in dmgind"
-          >{{ind.text}}</span>
+            v-for="(ind, k) in dmgind"
+            >{{ ind.text }}</span
+          >
         </div>
 
         <div class="flex">
-          <div v-show="value>0" class="kiste" :key="key" v-for="(value, key) in this.item.status">
-            {{value}}
-            <img class="icon" :src="getImgUrl('b'+key)" :alt="key" />
+          <div
+            v-show="value > 0"
+            class="kiste"
+            :key="key"
+            v-for="(value, key) in this.item.status"
+          >
+            {{ value }}
+            <img class="icon" :src="getImgUrl('b' + key)" :alt="key" />
           </div>
         </div>
       </div>
@@ -85,41 +104,49 @@
     <div class="row3 box">
       <div class="flex">
         <button
-          :class="{ active: this.smallbox=='stats' }"
+          :class="{ active: this.smallbox == 'stats' }"
           @click="chooseSmallBox('stats')"
           class="btn small"
-        >Stats</button>
+        >
+          Stats
+        </button>
         <button
-          :class="{ active: this.smallbox=='log' }"
+          :class="{ active: this.smallbox == 'log' }"
           @click="chooseSmallBox('log')"
           class="btn small"
-        >Log</button>
+        >
+          Log
+        </button>
       </div>
-      <div v-if="this.smallbox=='stats'">
-        <h2 class="title">{{$parent.player.name}}</h2>
+      <div v-if="this.smallbox == 'stats'">
+        <h2 class="title">{{ $parent.player.name }}</h2>
         <br />
         <b>Stats:</b>
         <hr />
         <div class="fleo">
-          <div class="fleo" :key="g" v-for="(n,g) in item.gain">
-            <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
-            <div v-if="g!='effects'&&g!='chance'&&g!='resistance'">
+          <div class="fleo" :key="g" v-for="(n, g) in item.gain">
+            <hr
+              style="width: 200px"
+              v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+            />
+            <div v-if="g != 'effects' && g != 'chance' && g != 'resistance'">
               <Ability class="basic" :pid="g" :val="$parent.player[g]" />
             </div>
-            <div v-else :key="gi" v-for="(gn,gi) in $parent.player[g]">
+            <div v-else :key="gi" v-for="(gn, gi) in $parent.player[g]">
               <Ability :class="g" :pid="gi" :val="gn" />
             </div>
           </div>
         </div>
       </div>
-      <div v-if="this.smallbox=='log'">
-        <div :key="key" v-for="(l,key) in getLog()" v-html="l"></div>
+      <div v-if="this.smallbox == 'log'">
+        <Log :mini="true" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Log from "./Log.vue";
 import Progressbar from "./Progressbar.vue";
 import { checkTurn, respawn, getLast } from "./functions.js";
 import Ability from "./Ability.vue";
@@ -130,6 +157,7 @@ export default {
   components: {
     Progressbar,
     Ability,
+    Log,
   },
   props: {
     item: {
@@ -178,10 +206,6 @@ export default {
         }, {});
 
       return ob;
-    },
-
-    getLog() {
-      return this.$parent.log.slice(-12).reverse();
     },
     exit() {
       if (

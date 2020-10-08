@@ -8,7 +8,8 @@
             210,
             230,
             260,
-            300
+            300,
+            320
         ],
         "boss": false,
         "dmg": 0.3,
@@ -36,7 +37,8 @@
             320,
             340,
             360,
-            400
+            400,
+            420
         ],
         "boss": false,
         "dmg": 1,
@@ -69,7 +71,8 @@
             150,
             200,
             250,
-            300
+            300,
+            350
         ],
         "boss": false,
         "dmg": 0.5,
@@ -96,7 +99,8 @@
             100,
             140,
             180,
-            220
+            220,
+            240
         ],
         "boss": false,
         "dmg": 0.8,
@@ -122,7 +126,8 @@
             200,
             210,
             220,
-            300
+            300,
+            320
         ],
         "boss": false,
         "dmg": 1,
@@ -152,7 +157,8 @@
             2,
             5,
             8,
-            10
+            10,
+            12
         ],
         "boss": true,
         "dmg": 2,
@@ -176,7 +182,8 @@
             150,
             170,
             210,
-            255
+            255,
+            270
         ],
         "boss": false,
         "dmg": 2,
@@ -200,7 +207,8 @@
             130,
             150,
             170,
-            210
+            210,
+            230
         ],
         "boss": false,
         "dmg": 1.5,
@@ -228,7 +236,8 @@
             140,
             160,
             200,
-            240
+            240,
+            260
         ],
         "boss": false,
         "dmg": 1.8,
@@ -258,7 +267,8 @@
             300,
             350,
             400,
-            420
+            420,
+            440
         ],
         "boss": false,
         "dmg": 2,
@@ -290,7 +300,8 @@
             2,
             3,
             5,
-            8
+            8,
+            10
         ],
         "boss": true,
         "dmg": 1,
@@ -320,7 +331,8 @@
             15,
             18,
             20,
-            25
+            25,
+            30
         ],
         "boss": false,
         "dmg": 6,
@@ -351,7 +363,8 @@
             150,
             160,
             180,
-            200
+            200,
+            220
         ],
         "boss": false,
         "dmg": 0.5,
@@ -384,7 +397,8 @@
             150,
             170,
             190,
-            210
+            210,
+            230
         ],
         "boss": false,
         "dmg": 1.5,
@@ -412,7 +426,8 @@
             140,
             160,
             180,
-            200
+            200,
+            210
         ],
         "boss": false,
         "dmg": 3.5,
@@ -442,7 +457,8 @@
             2,
             3,
             5,
-            8
+            8,
+            10
         ],
         "boss": true,
         "dmg": 8,
@@ -474,7 +490,8 @@
             130,
             150,
             160,
-            180
+            180,
+            200
         ],
         "boss": false,
         "dmg": 4,
@@ -504,7 +521,8 @@
             100,
             150,
             200,
-            220
+            220,
+            240
         ],
         "boss": false,
         "dmg": 15,
@@ -540,7 +558,8 @@
             180,
             190,
             200,
-            220
+            220,
+            240
         ],
         "boss": false,
         "dmg": 3.5,
@@ -574,7 +593,8 @@
             25,
             30,
             35,
-            40
+            40,
+            45
         ],
         "boss": false,
         "dmg": 8,
@@ -611,7 +631,8 @@
             1,
             1,
             2,
-            3
+            3,
+            5
         ],
         "boss": true,
         "dmg": 18,
@@ -645,7 +666,8 @@
             100,
             120,
             140,
-            200
+            200,
+            240
         ],
         "boss": false,
         "dmg": 12,
@@ -677,7 +699,8 @@
             100,
             120,
             140,
-            160
+            160,
+            180
         ],
         "boss": false,
         "dmg": 15,
@@ -715,7 +738,8 @@
             0,
             100,
             150,
-            200
+            200,
+            240
         ],
         "boss": false,
         "dmg": 30,
@@ -750,7 +774,8 @@
             0,
             20,
             25,
-            30
+            30,
+            40
         ],
         "boss": false,
         "dmg": 25,
@@ -787,6 +812,7 @@
             0,
             1,
             1,
+            2,
             2
         ],
         "boss": true,
@@ -833,7 +859,8 @@
             0,
             0,
             180,
-            200
+            200,
+            220
         ],
         "boss": false,
         "dmg": 18,
@@ -865,7 +892,8 @@
             0,
             0,
             160,
-            180
+            180,
+            200
         ],
         "boss": false,
         "dmg": 20,
@@ -892,7 +920,8 @@
             0,
             0,
             210,
-            220
+            220,
+            240
         ],
         "boss": false,
         "dmg": 30,
@@ -1000,7 +1029,8 @@
             0,
             0,
             0,
-            80
+            80,
+            100
         ],
         "boss": false,
         "dmg": 45,
@@ -1032,7 +1062,8 @@
             0,
             0,
             0,
-            20
+            20,
+            25
         ],
         "boss": false,
         "dmg": 120,
@@ -1107,7 +1138,8 @@
             0,
             0,
             0,
-            500
+            500,
+            600
         ],
         "boss": false,
         "dmg": 180,
@@ -1143,7 +1175,8 @@
             0,
             0,
             0,
-            100
+            100,
+            120
         ],
         "boss": false,
         "dmg": 80,
@@ -1178,7 +1211,8 @@
             0,
             0,
             0,
-            1
+            1,
+            2
         ],
         "boss": true,
         "dmg": 150,
@@ -1221,7 +1255,8 @@
             0,
             0,
             0,
-            20
+            20,
+            25
         ],
         "boss": false,
         "dmg": 0,
@@ -1266,7 +1301,8 @@
             0,
             0,
             0,
-            200
+            200,
+            210
         ],
         "boss": false,
         "dmg": 100,
@@ -1303,7 +1339,8 @@
             0,
             0,
             0,
-            200
+            200,
+            220
         ],
         "boss": false,
         "dmg": 80,
@@ -1338,7 +1375,8 @@
             0,
             0,
             0,
-            20
+            20,
+            25
         ],
         "boss": false,
         "dmg": 200,
@@ -1370,7 +1408,8 @@
             0,
             0,
             0,
-            1
+            1,
+            2
         ],
         "boss": true,
         "dmg": 120,
@@ -1394,6 +1433,141 @@
             },
             "chance": {
                 "stim": 20
+            }
+        }
+    },
+    {
+        "id": "hacker",
+        "name": "Hacker",
+        "description": "No System is safe",
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            100
+        ],
+        "boss": false,
+        "dmg": 1,
+        "life": 1200,
+        "magic": 0,
+        "prestige": 5,
+        "regeneration": 20,
+        "speed": 200,
+        "effects": {
+            "block": 300,
+            "precision": 400
+        },
+        "chance": {
+            "invert": 200,
+            "resurrect": 50
+        },
+        "gain": {
+            "dmg": 1,
+            "recovery": 2
+        }
+    },
+    {
+        "id": "brokenadroid",
+        "name": "Broken Android",
+        "description": "You have to find Jerico",
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            120
+        ],
+        "boss": false,
+        "dmg": 50,
+        "life": 1200,
+        "magic": 0,
+        "prestige": 5,
+        "regeneration": 30,
+        "speed": 300,
+        "effects": {
+            "block": 350,
+            "precision": 500
+        },
+        "chance": {
+            "disarm": 25,
+            "silence": 25
+        },
+        "gain": {
+            "chance": {
+                "disarm": 0.1,
+                "silence": 0.1
+            }
+        }
+    },
+    {
+        "id": "rainbow_slime",
+        "name": "Rainbow Slime",
+        "description": "I'm shurly a good slime",
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            100
+        ],
+        "boss": false,
+        "dmg": 50,
+        "life": 150,
+        "regeneration": 5,
+        "prestige": 5,
+        "speed": 500,
+        "chance": {
+            "crit": 100,
+            "megacrit": 50,
+            "supercrit": 100,
+            "ultracrit": 25
+        },
+        "gain": {
+            "dmg": 0.05,
+            "life": 0.05,
+            "speed": 2,
+            "chance": {
+                "ultracrit": 0.05,
+                "megacrit": 0.1
+            }
+        }
+    },
+    {
+        "id": "jadis",
+        "name": "Jadis",
+        "description": "The Queen of Marnia and Empress of the Lone Islands",
+        "max": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+        ],
+        "boss": true,
+        "dmg": 150,
+        "life": 3000,
+        "magic": 1000,
+        "prestige": 5,
+        "regeneration": 100,
+        "speed": 200,
+        "effects": {
+            "block": 500,
+            "precision": 650
+        },
+        "chance": {
+            "slow": 330,
+            "stim": 250,
+            "stun": 25
+        },
+        "gain": {
+            "effects": {
+                "precision": 200,
+                "block": 40
             }
         }
     }

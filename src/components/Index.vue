@@ -86,7 +86,13 @@ import Progressbar from "./Progressbar.vue";
 import Overlay from "./Overlay.vue";
 
 import { RoundAll, getboni } from "./displayfunc";
-import { respawn, getLast, getNodeById, getLastBoss } from "./functions.js";
+import {
+  respawn,
+  getLast,
+  getNodeById,
+  getLastBoss,
+  hasDuplicates,
+} from "./functions.js";
 import { log } from "./gloabals.js";
 
 export default {
@@ -168,91 +174,120 @@ export default {
       player.go = pl.go;
       player.order = pl.order;
 
+      //Calculate Compainion
       if (null != player.companion) {
+        //Adding Stats to Comgpanions Tags
         let a = getboni(
           this.complist.find((a) => a.id == player.companion).tags
         );
-        a.chance
-          ? player.chance[a.key] == null
-            ? (player.chance[a.key] = a.value)
-            : (player.chance[a.key] += a.value)
-          : "speed" == a.key
-          ? (player[a.key] -= a.value)
-          : (player[a.key] += a.value);
+
+        if (a.chance) {
+          if (player.chance[a.key] == null) {
+            player.chance[a.key] = a.value;
+          } else {
+            player.chance[a.key] += a.value;
+          }
+        } else {
+          if ("speed" == a.key) {
+            player[a.key] -= a.value;
+          } else {
+            player[a.key] += a.value;
+          }
+        }
       }
 
-      player.order =
-        pl.order != undefined && pl.order.length > 0
-          ? pl.order
-          : this.enemieslist.map(({ id: a }) => a);
-
-      for (let b in player.highscore)
-        0 < player.highscore[b] &&
-          null != this.kongregate &&
-          this.kongregate.stats.submit(b, player.highscore[b]);
-
-      for (let d in player.counter)
+      //Callculation current Stats
+      for (let d in player.counter) {
         for (let e, a = 0; a < player.counter[d]; a++)
           if (((e = this.enemieslist.find((a) => a.id === d)), null != e))
-            for (let b in e.gain)
+            for (let b in e.gain) {
               if (
                 "effects" != b &&
                 "chance" != b &&
                 "speed" != b &&
                 "resistance" != b
-              )
+              ) {
                 player[b] += e.gain[b];
-              else if ("speed" == b)
-                100 <= player[b] &&
-                  (0 < e.gain[b]
-                    ? 110 < player[b]
-                      ? (player[b] -= e.gain[b])
-                      : (player.sspeed += e.gain[b])
-                    : 0 < player.sspeed
-                    ? (player.sspeed += e.gain[b])
-                    : (player[b] -= e.gain[b]));
-              else if ("effects" == b)
-                for (let b in e.gain.effects)
-                  null == player.effects[b]
-                    ? (player.effects[b] = e.gain.effects[b])
-                    : (player.effects[b] += e.gain.effects[b]);
-              else if ("chance" == b)
-                for (let b in e.gain.chance)
-                  null == player.chance[b]
-                    ? (player.chance[b] = e.gain.chance[b])
-                    : (player.chance[b] += e.gain.chance[b]);
-              else if ("resistance" == b)
-                for (let b in e.gain.resistance)
-                  null == player.resistance[b]
-                    ? (player.resistance[b] = e.gain.resistance[b])
-                    : (player.resistance[b] += e.gain.resistance[b]);
-
+              } else if ("speed" == b) {
+                if (player[b] >= 100) {
+                  if (e.gain[b] > 0) {
+                    if (player[b] > 110) {
+                      player[b] -= e.gain[b];
+                    } else {
+                      player.sspeed += e.gain[b];
+                    }
+                  } else {
+                    if (player.sspeed > 0) {
+                      player.sspeed += e.gain[b];
+                    } else {
+                      player[b] -= e.gain[b];
+                    }
+                  }
+                }
+              } else if ("effects" == b) {
+                for (let b in e.gain.effects) {
+                  if (player.effects[b] == null) {
+                    player.effects[b] = e.gain.effects[b];
+                  } else {
+                    player.effects[b] += e.gain.effects[b];
+                  }
+                }
+              } else if ("chance" == b) {
+                for (let b in e.gain.chance) {
+                  if (null == player.chance[b]) {
+                    player.chance[b] = e.gain.chance[b];
+                  } else {
+                    player.chance[b] += e.gain.chance[b];
+                  }
+                }
+              } else if ("resistance" == b) {
+                for (let b in e.gain.resistance) {
+                  if (player.resistance[b] == null) {
+                    player.resistance[b] = e.gain.resistance[b];
+                  } else {
+                    player.resistance[b] += e.gain.resistance[b];
+                  }
+                }
+              }
+            }
+      }
       for (let b of player.skills) {
         let a = getNodeById(b, this.skillist);
         if (a == null || null == a) {
           var index = player.skills.indexOf(b);
-          -1 !== index && player.skills.splice(index, 1);
+          if (-1 !== index) {
+            player.skills.splice(index, 1);
+          }
         } else {
           let c = this.choiselist.find((b) => b.id === a.typ);
           for (let a in c.gain)
             switch (a) {
               case "chance":
-                for (let a in c.gain.chance)
-                  null == player.chance[a]
-                    ? (player.chance[a] = c.gain.chance[a])
-                    : (player.chance[a] += c.gain.chance[a]);
+                for (let a in c.gain.chance) {
+                  if (null == player.chance[a]) {
+                    player.chance[a] = c.gain.chance[a];
+                  } else {
+                    player.chance[a] += c.gain.chance[a];
+                  }
+                }
                 break;
               case "effects":
-                for (let a in c.gain.effects)
-                  null == player.effects[a]
-                    ? (player.effects[a] = c.gain.effects[a])
-                    : (player.effects[a] += c.gain.effects[a]);
+                for (let a in c.gain.effects) {
+                  if (null == player.effects[a]) {
+                    player.effects[a] = c.gain.effects[a];
+                  } else {
+                    player.effects[a] += c.gain.effects[a];
+                  }
+                }
                 break;
               case "resistance":
-                for (let a in c.gain.resistance)
-                  null == player.resistance[a]
-                    ? (player.resistance[a] = c.gain.resistance[a])
-                    : (player.resistance[a] += c.gain.resistance[a]);
+                for (let a in c.gain.resistance) {
+                  if (null == player.resistance[a]) {
+                    player.resistance[a] = c.gain.resistance[a];
+                  } else {
+                    player.resistance[a] += c.gain.resistance[a];
+                  }
+                }
                 break;
               default:
                 player[a] += c.gain[a];
@@ -260,13 +295,36 @@ export default {
         }
       }
 
+      //Pushing new Enemys
       while (this.enemieslist.length > player.order.length) {
         player.order.push(this.enemieslist[player.order.length].id);
       }
 
+      //Reset order if new Enemys
+      if (
+        pl.order != undefined &&
+        pl.order.length > 0 &&
+        !hasDuplicates(player.order)
+      ) {
+        player.order = pl.order;
+      } else {
+        player.order = this.enemieslist.map(({ id: a }) => a);
+      }
+
+      // Submit current Highscores
+      for (let b in player.highscore) {
+        if (0 < player.highscore[b] && null != this.kongregate) {
+          this.kongregate.stats.submit(b, player.highscore[b]);
+        }
+      }
+
+      //Calculation Points via Prestige and Skills
       player.points = player.prestige - player.skills.length;
 
-      0 < player.counter[getLastBoss(player)] && (player.go = !0);
+      //Checking if lastboss is killed
+      if (0 < player.counter[getLastBoss(player)]) {
+        player.go = true;
+      }
 
       this.player = player;
       respawn(this.player);
@@ -283,14 +341,24 @@ export default {
           this.overlay = true;
           ov.text = "Welcome";
           ov.img = "enemys/blue_slime";
-          ov.obj = [{ text: "next", func: this.tutorial }];
+          ov.obj = [
+            {
+              text: "next",
+              func: this.tutorial,
+            },
+          ];
           break;
         case 1:
           ov.img = "";
           ov.text = "Killing Enemies will steal their stats..";
           ov.color = "rgba(0, 0, 0, 0)";
           ov.background = "tut";
-          ov.obj = [{ text: "next", func: this.tutorial }];
+          ov.obj = [
+            {
+              text: "next",
+              func: this.tutorial,
+            },
+          ];
           break;
 
         case 2:
@@ -309,7 +377,12 @@ export default {
         case 4:
           ov.text = "have fun playing";
           ov.img = "enemys/bat";
-          ov.obj = [{ text: "start", func: this.tutorial }];
+          ov.obj = [
+            {
+              text: "start",
+              func: this.tutorial,
+            },
+          ];
           break;
 
         case 5:
@@ -326,8 +399,14 @@ export default {
         player = this.player;
 
       let obj = [
-        { text: "continue", func: this.continue },
-        { text: "prestige", func: this.reset },
+        {
+          text: "continue",
+          func: this.continue,
+        },
+        {
+          text: "prestige",
+          func: this.reset,
+        },
       ];
 
       ov.place = "20%";
@@ -440,22 +519,34 @@ export default {
       var requireImage = require.context("../assets/enemys/", false, /\.png$/);
 
       for (let a of this.enemieslist)
-        this.images.push({ id: a.id, img: requireImage("./" + a.id + ".png") });
+        this.images.push({
+          id: a.id,
+          img: requireImage("./" + a.id + ".png"),
+        });
 
       requireImage = require.context("../assets/skills/", false, /\.png$/);
 
       for (let a of this.tippslist)
-        this.images.push({ id: a.id, img: requireImage("./" + a.id + ".png") });
+        this.images.push({
+          id: a.id,
+          img: requireImage("./" + a.id + ".png"),
+        });
 
       requireImage = require.context("../assets/buffs/", false, /\.png$/);
 
       for (let a of this.bufflist)
-        this.images.push({ id: "b" + a, img: requireImage("./" + a + ".png") });
+        this.images.push({
+          id: "b" + a,
+          img: requireImage("./" + a + ".png"),
+        });
 
       requireImage = require.context("../assets/items/", false, /\.png$/);
 
       for (let a of this.itemslist)
-        this.images.push({ id: a.id, img: requireImage("./" + a.id + ".png") });
+        this.images.push({
+          id: a.id,
+          img: requireImage("./" + a.id + ".png"),
+        });
 
       this.loading = false;
     },
@@ -486,8 +577,8 @@ export default {
     });
 
     window.addEventListener("keydown", function () {
-      "17" == event.which && (el.cntrlIsPressed = !0);
-      "16" == event.which && (el.shiftIsPressed = !0);
+      "17" == event.which && (el.cntrlIsPressed = true);
+      "16" == event.which && (el.shiftIsPressed = true);
     });
 
     window.addEventListener("keyup", function () {
@@ -508,6 +599,7 @@ export default {
     this.htimer = setInterval(() => {
       if (this.recovery) {
         this.resetStatus(this.player);
+        this.player.cspeed = 0;
         this.player.clife + this.player.recovery + this.player.regeneration <=
         this.player.life
           ? 0 > this.player.clife
@@ -538,9 +630,11 @@ export default {
   bottom: 0;
   z-index: 10;
 }
+
 .box {
   padding-top: 54px;
 }
+
 .fixed {
   border: 1px solid black;
   width: 100%;
@@ -550,6 +644,7 @@ export default {
   align-items: center;
   z-index: 2;
 }
+
 .time {
   margin-right: 10px;
   margin-left: auto;
@@ -581,6 +676,7 @@ export default {
   color: white;
   font-stretch: bold;
 }
+
 .status > div > img {
   float: left;
   margin-right: 2px;

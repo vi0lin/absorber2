@@ -158,6 +158,16 @@
         }
     },
     {
+        "id": "s_ultracrit",
+        "desc": "Adds 2% ultracrit",
+        "name": "Small ultracrit boost",
+        "gain": {
+            "chance": {
+                "ultracrit": 2
+            }
+        }
+    },
+    {
         "id": "s_lifesteal",
         "desc": "Adds 5% lifesteal",
         "name": "Small lifesteal boost",

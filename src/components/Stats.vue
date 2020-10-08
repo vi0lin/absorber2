@@ -1,6 +1,6 @@
 <template>
   <div class="stats">
-    <input class="faker" v-model="$parent.player.name" />
+    <input autocorrect="off" class="faker" v-model="$parent.player.name" />
     <div style="display: flex">
       <button
         v-show="$parent.player.go"
@@ -147,6 +147,7 @@
         <div class="comp" :key="key" v-for="(value, key) in this.itemslist">
           <img width="110" :src="getImgUrl(value.id)" :alt="value.name" />
           <div>{{ value.name }}</div>
+          <Tooltip :item="value" :type="'item'" />
         </div>
       </div>
 
@@ -195,9 +196,10 @@ import { debug } from "./gloabals.js";
 import { copyToClipboard, getClipBoard } from "./functions";
 import { getboni } from "./displayfunc";
 import Ability from "./Ability.vue";
+import Tooltip from "./Tooltip.vue";
 
 export default {
-  components: { TextToolTip, Ability },
+  components: { TextToolTip, Ability, Tooltip },
   data() {
     return {
       dchance: null,
