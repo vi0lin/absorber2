@@ -28,129 +28,219 @@
       </button>
     </div>
     <div class="flex">
-      <div class="kiste">
-        <span class="title">Base</span>
-        <Ability
-          class="basic"
-          :key="key"
-          v-for="(value, key) in show($parent.player)"
-          :val="value"
-          :pid="key"
-        />
+      <div>
+        <div @click="openbase = !openbase" class="kiste dark title">
+          <span>Base</span>
+          <span v-if="openbase" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
+        </div>
+        <transition name="fade">
+          <div v-show="openbase" class="kiste">
+            <div class="innerbox">
+              <Ability
+                class="basic animateOpen"
+                :key="key"
+                v-for="(value, key) in show($parent.player)"
+                :val="value"
+                :pid="key"
+              />
+            </div>
+          </div>
+        </transition>
       </div>
-      <div
-        v-show="Object.keys($parent.player.chance).length !== 0"
-        class="kiste"
-      >
-        <span class="title">Chances</span>
-        <Ability
-          class="chance"
-          :key="key + value"
-          v-for="(value, key) in $parent.player.chance"
-          :val="value"
-          :pid="key"
-        />
+      <div v-show="Object.keys($parent.player.chance).length !== 0">
+        <div @click="openchance = !openchance" class="kiste dark title">
+          <span>Chances</span>
+          <span v-if="openchance" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
+        </div>
+        <transition name="fade">
+          <div v-show="openchance" class="kiste">
+            <div class="innerbox">
+              <Ability
+                class="chance"
+                :key="key + value"
+                v-for="(value, key) in $parent.player.chance"
+                :val="value"
+                :pid="key"
+              />
+            </div>
+          </div>
+        </transition>
       </div>
-      <div
-        v-show="Object.keys($parent.player.effects).length !== 0"
-        class="kiste"
-      >
-        <span class="title">Effects</span>
-        <Ability
-          class="effects"
-          :key="key + value"
-          v-for="(value, key) in $parent.player.effects"
-          :val="value"
-          :pid="key"
-        />
+      <div v-show="Object.keys($parent.player.effects).length !== 0">
+        <div @click="openeffects = !openeffects" class="kiste dark title">
+          <span>Effects</span>
+          <span v-if="openeffects" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
+        </div>
+        <transition name="fade">
+          <div v-show="openeffects" class="kiste">
+            <div class="innerbox">
+              <Ability
+                class="effects"
+                :key="key + value"
+                v-for="(value, key) in $parent.player.effects"
+                :val="value"
+                :pid="key"
+              />
+            </div>
+          </div>
+        </transition>
       </div>
-      <div
-        v-show="Object.keys($parent.player.resistance).length !== 0"
-        class="kiste"
-      >
-        <span class="title">Resistance</span>
-        <Ability
-          class="resistance"
-          :key="key + value"
-          v-for="(value, key) in $parent.player.resistance"
-          :val="value"
-          :pid="key"
-        />
+      <div v-show="Object.keys($parent.player.resistance).length !== 0">
+        <div @click="openres = !openres" class="kiste dark title">
+          <span>Resistance</span>
+          <span v-if="openres" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
+        </div>
+        <transition name="fade">
+          <div v-show="openres" class="kiste">
+            <Ability
+              class="resistance"
+              :key="key + value"
+              v-for="(value, key) in $parent.player.resistance"
+              :val="value"
+              :pid="key"
+            />
+          </div>
+        </transition>
       </div>
-      <div class="kiste">
-        <span class="title">Highscore</span>
-        <div
-          :key="key + value"
-          v-for="(key, value) in $parent.player.highscore"
-        >
-          <div v-show="key > 0">
+      <div>
+        <div @click="openhigh = !openhigh" class="kiste dark title">
+          <span>Highscore</span>
+          <span v-if="openhigh" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
+        </div>
+        <transition name="fade">
+          <div v-show="openhigh" class="kiste innerbox">
+            <div
+              :key="key + value"
+              v-for="(key, value) in $parent.player.highscore"
+            >
+              <div v-show="key > 0">
+                <div class="valbox">
+                  <span class="val">{{ key }}</span>
+                  <img class="icon" v-if="value" :src="getImgUrl(value)" />
+                </div>
+                <TextToolTip
+                  :title="getRealEnemyName(value)"
+                  :item="'killed in ' + key + ' seconds'"
+                />
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
+      <div>
+        <div @click="openall = !openall" class="kiste dark title">
+          <span>All Scores</span>
+          <span v-if="openall" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
+        </div>
+
+        <div v-show="openall" class="kiste innerbox">
+          <div
+            :key="key + value"
+            v-for="(key, value) in $parent.player.allcount"
+          >
+            <div v-show="key > 0">
+              <div class="valbox">
+                <span class="val">{{ key }}</span>
+                <img class="icon" v-if="value" :src="getImgUrl(value)" />
+              </div>
+              <TextToolTip
+                :title="getRealEnemyName(value)"
+                :item="'killed ' + key + ' times'"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-show="Object.keys($parent.player.skills).length !== 0">
+        <div @click="openskills = !openskills" class="kiste dark title">
+          <span>Skills</span>
+          <span v-if="openskills" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
+        </div>
+
+        <div v-show="openskills" class="kiste fux">
+          <div
+            :key="value"
+            v-for="(key, value) in groupSkills($parent.player.skills)"
+          >
             <div class="valbox">
+              <img
+                class="icon"
+                :src="
+                  require('@/assets/skills/' + displayeskills(value) + '.png')
+                "
+              />
               <span class="val">{{ key }}</span>
-              <img class="icon" v-if="value" :src="getImgUrl(value)" />
             </div>
             <TextToolTip
-              :title="getRealEnemyName(value)"
-              :item="'killed in ' + key + ' seconds'"
+              :title="displayeskills2(value).name"
+              :item="displayeskills2(value).desc"
             />
           </div>
         </div>
       </div>
-      <div
-        v-show="Object.keys($parent.player.skills).length !== 0"
-        class="kiste fux"
-      >
-        <span class="title">Skills</span>
+      <div v-if="companions.length > 0">
         <div
-          :key="value"
-          v-for="(key, value) in groupSkills($parent.player.skills)"
+          style="width: 650px"
+          @click="opencomp = !opencomp"
+          class="kiste dark title"
         >
-          <div class="valbox">
-            <img
-              class="icon"
-              :src="
-                require('@/assets/skills/' + displayeskills(value) + '.png')
-              "
+          <span>Kongpanions</span>
+          <span v-if="opencomp" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
+        </div>
+        <div style="width: 650px" v-show="opencomp" class="kiste innerbox">
+          <div
+            :class="{
+              scomp: isSelectedC(value.id),
+              comp: !isSelectedC(value.id),
+            }"
+            @click="selectComp(value.id)"
+            :key="key"
+            v-for="(value, key) in companions"
+          >
+            <img width="110" :src="value.normal_icon_url_small" />
+            <div>{{ value.name }}</div>
+            <Ability
+              :val="getboni(value.tags).value"
+              :pid="getboni(value.tags).key"
             />
-            <span class="val">{{ key }}</span>
           </div>
-          <TextToolTip
-            :title="displayeskills2(value).name"
-            :item="displayeskills2(value).desc"
-          />
         </div>
       </div>
-      <div class="kiste" style="width: 650px" v-if="companions.length > 0">
-        <span style="width: 650px" class="title">Kongpanions</span>
+      <div v-if="$parent.player.prestige > 5">
         <div
-          :class="{
-            scomp: isSelectedC(value.id),
-            comp: !isSelectedC(value.id),
-          }"
-          @click="selectComp(value.id)"
-          :key="key"
-          v-for="(value, key) in companions"
+          style="width: 650px"
+          @click="openitems = !openitems"
+          class="kiste dark title"
         >
-          <img width="110" :src="value.normal_icon_url_small" />
-          <div>{{ value.name }}</div>
-          <Ability
-            :val="getboni(value.tags).value"
-            :pid="getboni(value.tags).key"
-          />
+          <span>Items</span>
+          <span v-if="openitems" style="float: right">▼</span>
+          <span v-else style="float: right">▲</span>
         </div>
-      </div>
-      <div
-        class="kiste"
-        style="width: 650px"
-        v-if="$parent.player.prestige > 5"
-      >
-        <span style="width: 650px" class="title">Items</span>
-        <div class="comp" :key="key" v-for="(value, key) in this.itemslist">
-          <img width="110" :src="getImgUrl(value.id)" :alt="value.name" />
-          <div>{{ value.name }}</div>
-          <Tooltip :item="value" :type="'item'" />
-        </div>
-      </div>
 
+        <div style="width: 650px" v-show="openitems" class="kiste innerbox">
+          <div
+            @click="EquipItem(value.id)"
+            :class="{
+              scomp: isEqupied(value.id),
+              comp: !isEqupied(value.id),
+            }"
+            :key="key"
+            v-for="(value, key) in this.itemslist"
+          >
+            <img width="110" :src="getImgUrl(value.id)" :alt="value.name" />
+            <div>{{ value.name }}</div>
+            <Tooltip :item="value" :type="'item'" />
+          </div>
+        </div>
+      </div>
       <div class="ecke">
         <button class="btn export" @click="exportSave">
           <img :src="require('@/assets/icons/export.png')" alt="Export" />
@@ -193,7 +283,7 @@
 <script>
 import TextToolTip from "./TextToolTip.vue";
 import { debug } from "./gloabals.js";
-import { copyToClipboard, getClipBoard } from "./functions";
+import { copyToClipboard, getClipBoard, removeItemOnce } from "./functions";
 import { getboni } from "./displayfunc";
 import Ability from "./Ability.vue";
 import Tooltip from "./Tooltip.vue";
@@ -206,6 +296,15 @@ export default {
       deffects: null,
       dhighscore: null,
       companions: [],
+      openbase: true,
+      openchance: true,
+      openeffects: true,
+      openres: true,
+      openhigh: true,
+      openall: true,
+      openskills: true,
+      opencomp: true,
+      openitems: true,
     };
   },
   methods: {
@@ -216,8 +315,27 @@ export default {
       this.$parent.player.companion = e;
       this.$parent.recalculate(this.$parent.player);
     },
+    EquipItem(item) {
+      if (this.$parent.player.items.includes(item)) {
+        removeItemOnce(this.$parent.player.items, item);
+      } else if (
+        this.$parent.player.items.length >= this.$parent.player.maxitems
+      ) {
+        this.$parent.player.items.shift();
+        this.$parent.player.items.push(item);
+      } else {
+        this.$parent.player.items.push(item);
+      }
+      this.$parent.recalculate(this.$parent.player);
+    },
     isSelectedC(comp) {
       return !(this.$parent.player.companion != comp);
+    },
+    isEqupied(item) {
+      if (this.$parent.player.items != undefined && item != undefined) {
+        return this.$parent.player.items.includes(item);
+      }
+      return false;
     },
     reverse(str) {
       return str.split("").reverse().join("");
@@ -321,6 +439,8 @@ export default {
       delete pl.status;
       delete pl.counter;
       delete pl.go;
+      delete pl.unlockeditems;
+      delete pl.allcount;
       delete pl.companion;
       delete pl.skills;
       delete pl.time;
@@ -343,8 +463,18 @@ export default {
   created() {
     let boot = setInterval(() => {
       if (this.$parent.kongregate != null) {
-        if (!this.$parent.kongregate.services.isGuest()) {
-          let user = this.$parent.kongregate.services.getUsername();
+        if (!this.$parent.kongregate.services.isGuest() || this.beta) {
+          let user = "";
+          if (this.beta) {
+            if (this.$parent.player.name == "showmethemoney") {
+              user = "dirkf17";
+            } else {
+              user = this.$parent.player.name;
+            }
+          } else {
+            user = this.$parent.kongregate.services.getUsername();
+          }
+
           let el = this;
           let link =
             "https://api.kongregate.com/api/kongpanions.json?username=" + user;
@@ -411,18 +541,20 @@ export default {
 }
 
 .kiste {
-  width: 310px;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 10px;
   margin: 5px;
+  padding: 10px;
+  width: 310px;
   border: 1px solid black;
   background-color: lightgray;
   border-radius: 5px;
   box-shadow: inset 0 0 4px grey;
   min-width: 100px;
 }
-
+.innerbox {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+}
 .icons {
   width: 32px;
   height: 32px;
@@ -434,7 +566,8 @@ export default {
   padding: 2px;
   width: 80px;
   white-space: nowrap;
-  border: 0.5px solid lightgrey;
+  border: 0.5px solid black;
+  background: gold;
 }
 
 .ecke {
@@ -474,5 +607,23 @@ export default {
   width: 100px;
   border: 3px solid yellow;
   padding: 5px;
+  text-align: center;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.dark {
+  background: darkgrey;
+  transition: background-color 0.5s ease;
+}
+.dark:hover {
+  background: yellowgreen;
 }
 </style>

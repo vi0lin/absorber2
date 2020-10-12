@@ -15,7 +15,10 @@ var player = {
     "counter": {},
     "skills": [],
     "status": {},
-    "items":[],
+    "items": [],
+    "maxitems": 1,
+    "unlockeditems": [],
+    "allcount": {},
     "time": 0,
     "auto": false,
     "lastEnemy": "bat",
@@ -27,7 +30,8 @@ var player = {
         "chulthuluseye": -1,
         "necromant": -1,
         "chromeman": -1,
-        "turret": -1
+        "turret": -1,
+        "jadis": -1
     },
     "tutorial": 0,
     "prestige": 0,

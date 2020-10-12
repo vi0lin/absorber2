@@ -1,16 +1,27 @@
 <template>
-  <div v-if="item!=null">
+  <div v-if="item != null">
     <div>
       <img
         class="small"
-        :class="{ big: item.typ.charAt(0) =='m', shinny: co(item.id), deactive: can(item.id) }"
+        :class="{
+          big: item.typ.charAt(0) == 'm',
+          shinny: co(item.id),
+          deactive: can(item.id),
+        }"
         :src="getImage"
         @click="fun(item.id)"
       />
       <TextToolTip :title="gettipp.name" :item="gettipp.desc" />
     </div>
-    <div v-if="item.open.length>0" class="flex-colum">
-      <Accordion :can="can" :co="co" :fun="fun" :key="i.id" :item="i" v-for="i of item.open" />
+    <div v-if="item.open.length > 0" class="flex-colum">
+      <Accordion
+        :can="can"
+        :co="co"
+        :fun="fun"
+        :key="i.id"
+        :item="i"
+        v-for="i of item.open"
+      />
     </div>
   </div>
 </template>
@@ -23,34 +34,34 @@ export default {
   name: "Accordion",
   components: {
     Accordion,
-    TextToolTip
+    TextToolTip,
   },
   props: {
     item: {
       type: Object,
-      required: false
+      required: false,
     },
     fun: {
       type: Function,
-      required: false
+      required: false,
     },
     co: {
       type: Function,
-      required: false
+      required: false,
     },
     can: {
       type: Function,
-      required: false
-    }
+      required: false,
+    },
   },
   computed: {
-    getImage: function() {
-      return this.images.find(x => x.id == this.item.typ.substring(2)).img;
+    getImage: function () {
+      return this.images.find((x) => x.id == this.item.typ.substring(2)).img;
     },
-    gettipp: function() {
-      return this.choiselist.find(x => this.item.typ == x.id);
-    }
-  }
+    gettipp: function () {
+      return this.choiselist.find((x) => this.item.typ == x.id);
+    },
+  },
 };
 </script>
 

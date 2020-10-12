@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!loading">
+    <div v-if="!loading && preloaded">
       <div>
         <div class="fixed">
           <button
@@ -74,6 +74,19 @@
       />
       <Overlay :skilltree="skilltree" ref="ov" v-show="this.overlay" />
     </div>
+    <div style="padding-top: 100px" v-else>
+      <div class="center">
+        <div class="lds-ring">
+          <img
+            style="image-rendering: pixelated"
+            width="200px"
+            :src="require('@/assets/icons/hero.png')"
+            alt="stats"
+          />
+        </div>
+        <span style="font-size: 40px">LOADING...</span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -92,6 +105,7 @@ import {
   getNodeById,
   getLastBoss,
   hasDuplicates,
+  isEmpty,
 } from "./functions.js";
 import { log } from "./gloabals.js";
 
@@ -108,6 +122,7 @@ export default {
     return {
       active: "dungeon",
       player: p,
+      preloaded: false,
       enemy: null,
       htimer: null,
       recovery: true,
@@ -133,10 +148,10 @@ export default {
     recalculate(pl) {
       this.loading = true;
       this.enemy = null;
-
       let player = {};
 
-      //reset everything
+      //reset player
+
       player.effects = {};
       player.chance = {};
       player.resistance = {};
@@ -152,8 +167,35 @@ export default {
       player.status = {};
       player.version = p.version;
 
-      //copy from save
-      player.highscore = pl.highscore;
+      //Get Stats from save
+
+      if (!isEmpty(pl.highscore)) {
+        player.highscore = pl.highscore;
+      } else {
+        player.highscore = {};
+        for (let e of this.enemieslist.filter((x) => x.boss)) {
+          player.highscore[e.id] = -1;
+        }
+      }
+
+      if (!isEmpty(pl.allcount)) {
+        player.allcount = pl.allcount;
+      } else {
+        player.allcount = {};
+        for (let en of this.enemieslist) {
+          player.allcount[en.id] = 0;
+        }
+      }
+
+      player.skills = pl.skills;
+      player.order = pl.order;
+      player.prestige = pl.prestige;
+      player.name = pl.name;
+      player.companion = pl.companion;
+      player.auto = pl.auto;
+      player.time = pl.time;
+      player.lastEnemy = pl.lastEnemy;
+
       if (pl.counter.length <= 0) {
         for (let en of this.enemieslist) {
           player.counter[en.id] = 0;
@@ -162,17 +204,78 @@ export default {
         player.counter = pl.counter;
       }
 
-      player.go = pl.go;
-      player.skills = pl.skills;
-      player.name = pl.name;
-      player.prestige = pl.prestige;
-      player.companion = pl.companion;
-      //player.version = pl.version;
-      player.lastEnemy = pl.lastEnemy;
-      player.auto = pl.auto;
-      player.time = pl.time;
-      player.go = pl.go;
-      player.order = pl.order;
+      //calculate Items
+      if (null != player.items) {
+        for (let d of player.items) {
+          let e = this.itemslist.find((a) => a.id === d);
+          if (e != null) {
+            for (let b in e.gain) {
+              if (
+                "effects" != b &&
+                "chance" != b &&
+                "speed" != b &&
+                "resistance" != b
+              ) {
+                if (b == "life" && player.life + e.gain.life <= 1) {
+                  player.life = 1;
+                } else if (
+                  b == "recovery" &&
+                  player.recovery + e.gain.recovery <= 1
+                ) {
+                  player.recovery = 1;
+                } else if (
+                  b == "regeneration" &&
+                  player.regeneration + e.gain.regeneration <= 0
+                ) {
+                  player.regeneration = 0;
+                } else {
+                  player[b] += e.gain[b];
+                }
+              } else if ("speed" == b) {
+                if (player[b] >= 100) {
+                  if (e.gain[b] > 0) {
+                    if (player[b] > 110) {
+                      player[b] -= e.gain[b];
+                    } else {
+                      player.sspeed += e.gain[b];
+                    }
+                  } else {
+                    if (player.sspeed > 0) {
+                      player.sspeed += e.gain[b];
+                    } else {
+                      player[b] -= e.gain[b];
+                    }
+                  }
+                }
+              } else if ("effects" == b) {
+                for (let b in e.gain.effects) {
+                  if (player.effects[b] == null) {
+                    player.effects[b] = e.gain.effects[b];
+                  } else {
+                    player.effects[b] += e.gain.effects[b];
+                  }
+                }
+              } else if ("chance" == b) {
+                for (let b in e.gain.chance) {
+                  if (null == player.chance[b]) {
+                    player.chance[b] = e.gain.chance[b];
+                  } else {
+                    player.chance[b] += e.gain.chance[b];
+                  }
+                }
+              } else if ("resistance" == b) {
+                for (let b in e.gain.resistance) {
+                  if (player.resistance[b] == null) {
+                    player.resistance[b] = e.gain.resistance[b];
+                  } else {
+                    player.resistance[b] += e.gain.resistance[b];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
 
       //Calculate Compainion
       if (null != player.companion) {
@@ -207,7 +310,21 @@ export default {
                 "speed" != b &&
                 "resistance" != b
               ) {
-                player[b] += e.gain[b];
+                if (b == "life" && player.life + e.gain.life <= 1) {
+                  player.life = 1;
+                } else if (
+                  b == "recovery" &&
+                  player.recovery + e.gain.recovery <= 1
+                ) {
+                  player.recovery = 1;
+                } else if (
+                  b == "regeneration" &&
+                  player.regeneration + e.gain.regeneration <= 0
+                ) {
+                  player.regeneration = 0;
+                } else {
+                  player[b] += e.gain[b];
+                }
               } else if ("speed" == b) {
                 if (player[b] >= 100) {
                   if (e.gain[b] > 0) {
@@ -329,7 +446,12 @@ export default {
       this.player = player;
       respawn(this.player);
       this.loading = false;
-      this.$refs.dun.$forceUpdate();
+
+      let el = this;
+      setTimeout(() => {
+        el.$refs.dun.$forceUpdate();
+        6 != el.player.tutorial && el.tutorial();
+      }, 100);
     },
     openTab(t) {
       this.active = t;
@@ -427,6 +549,7 @@ export default {
     softreset() {
       this.player.skills = [];
       this.reset(this.player);
+      this.player.prestige--;
       this.overlay = false;
       this.save();
     },
@@ -547,8 +670,7 @@ export default {
           id: a.id,
           img: requireImage("./" + a.id + ".png"),
         });
-
-      this.loading = false;
+      this.preloaded = true;
     },
   },
   mounted() {
@@ -572,8 +694,6 @@ export default {
       null == localStorage.getItem("saveGame")
         ? el.recalculate(el.player)
         : el.recalculate(JSON.parse(localStorage.getItem("saveGame")));
-
-      6 != el.player.tutorial && el.tutorial();
     });
 
     window.addEventListener("keydown", function () {
@@ -588,16 +708,14 @@ export default {
 
     setInterval(() => {
       this.save();
-    }, 15000);
+    }, 60000);
 
     setInterval(() => {
       this.player.time += 1;
     }, 1000);
 
-    this.resetStatus(this.player);
-
     this.htimer = setInterval(() => {
-      if (this.recovery) {
+      if (this.recovery && !this.loading) {
         this.resetStatus(this.player);
         this.player.cspeed = 0;
         this.player.clife + this.player.recovery + this.player.regeneration <=
@@ -680,5 +798,26 @@ export default {
 .status > div > img {
   float: left;
   margin-right: 2px;
+}
+
+.lds-ring {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  animation: lds-ring 1.2s infinite;
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.center {
+  display: block;
+  width: 0%;
+  margin: auto;
 }
 </style>

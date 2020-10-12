@@ -99,6 +99,7 @@ export default {
     cheat() {
       if (this.$parent.$parent.player.name == "showmethemoney" && this.beta) {
         this.$parent.$parent.player.counter[this.value.id] = this.max;
+        this.$parent.$parent.player.allcount[this.value.id] += this.max;
         this.$parent.$parent.recalculate(this.$parent.$parent.player);
       }
     },

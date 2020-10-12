@@ -1,13 +1,12 @@
 [
     {
-        "tier": 3,
         "name": "Type-A Energy Weapon",
         "id": "helosword",
         "description": "A noble and ancient weapon, wielded by the strongest",
+        "gain": {},
         "special": "Allows instakill on bosses"
     },
     {
-        "tier": 2,
         "name": "Bloodhunger",
         "id": "bloodthirster",
         "description": "UNIQUE: +20% life steal",
@@ -18,7 +17,6 @@
         }
     },
     {
-        "tier": 2,
         "name": "AK-47",
         "id": "kalaschnikow",
         "description": "Good old fachion damage",
@@ -27,7 +25,6 @@
         }
     },
     {
-        "tier": 4,
         "name": "Holy Grenade",
         "id": "holygrenade",
         "description": "Halleluja",
@@ -39,7 +36,6 @@
         }
     },
     {
-        "tier": 2,
         "name": "Hidden Blade",
         "id": "hiddenblade",
         "description": "RIP Desment",
@@ -51,7 +47,6 @@
         }
     },
     {
-        "tier": 3,
         "name": "Piano String",
         "id": "pianostring",
         "description": "obtained by killing Agent 46",
@@ -62,14 +57,134 @@
         }
     },
     {
-        "tier": 2,
         "name": "Spiked Shell",
         "id": "blueshell",
-        "description": "It'sa me",
+        "description": "Destroyer of Friendships",
         "gain": {
             "chance": {
-                "instakill": 10
+                "crit": 10,
+                "supercrit": 10
             }
+        }
+    },
+    {
+        "name": "Cursed Card",
+        "id": "unocard",
+        "description": "Destroyer of Friendships II",
+        "gain": {
+            "dmg": 4
+        }
+    },
+    {
+        "name": "Strange White Powder",
+        "id": "cocain",
+        "description": "Maybe i shoudn't",
+        "gain": {
+            "speed": 50
+        }
+    },
+    {
+        "name": "Excalibur",
+        "id": "excalibur",
+        "description": "It was just stuck in a rock",
+        "gain": {
+            "dmg": 1,
+            "speed": 10,
+            "chance": {
+                "crit": 5
+            }
+        }
+    },
+    {
+        "name": "Sihil",
+        "id": "sihil",
+        "description": "May they perish to their doom",
+        "gain": {
+            "chance": {
+                "crit": 100,
+                "megacrit": 25,
+                "supercrit": 50
+            }
+        }
+    },
+    {
+        "name": "Mjölnir",
+        "id": "thorshammer",
+        "description": "Whosoever holds this hammer, if he be worthy, shall possess the power of Thor.",
+        "gain": {
+            "chance": {
+                "stun": 10
+            }
+        }
+    },
+    {
+        "name": "Saphir sword",
+        "id": "diamondsword",
+        "description": "Never waste your saphirs on a how",
+        "gain": {
+            "chance": {
+                "rot": 10
+            },
+            "dmg": 2
+        }
+    },
+    {
+        "name": "One Ring",
+        "id": "lotrring",
+        "description": "One ring to rule them all",
+        "gain": {
+            "chance": {
+                "dodge": 5
+            },
+            "magic": 100
+        }
+    },
+    {
+        "name": "Woofwere",
+        "id": "woofsword",
+        "description": "woof woof woof woof",
+        "gain": {
+            "dmg": 5,
+            "magic": 20
+        }
+    },
+    {
+        "name": "Bloodless",
+        "id": "arrowcatch",
+        "description": "Ule and doch are | Both for binding | Reh for seeking | Kel for finding",
+        "gain": {
+            "chance": {
+                "dodge": 30
+            }
+        }
+    },
+    {
+        "name": "Ocarina of Time",
+        "id": "linksitem",
+        "description": "↑ ← → ↑ ← →",
+        "gain": {
+            "regeneration": 2,
+            "chance": {
+                "bleed": 30
+            }
+        }
+    },
+    {
+        "name": "Master Ball",
+        "id": "pokemon",
+        "description": "The best Ball. It never misses.",
+        "gain": {
+            "effects": {
+                "precision": 50
+            }
+        }
+    },
+    {
+        "name": "Relict",
+        "id": "aoe2",
+        "description": "Wololo",
+        "gain": {
+            "regeneration": 5
         }
     }
 ]

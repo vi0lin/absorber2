@@ -347,6 +347,7 @@ export default {
 .image {
   margin: 0px 10px;
   width: 180px;
+  image-rendering: pixelated;
 }
 
 .animated {

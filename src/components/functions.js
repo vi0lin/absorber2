@@ -74,6 +74,14 @@ export function hasDuplicates(array) {
   return (new Set(array)).size !== array.length;
 }
 
+export function removeItemOnce(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
+}
+
 function checkDot(a, b, c) {
   if (0 < a.status.poison) {
     let damage = b.magic / 4;
@@ -199,7 +207,7 @@ function checkDisarm(a, b) {
 
 function checkInstakill(a, b) {
   if (checkChance(a.chance.instakill, "instakill")) {
-    if (b.boss) {
+    if (b.boss && !a.items.includes("helosword")) {
       log.push(`<div class="chances">${a.name} tryed to <span style="color:purple">instakill</span> ${b.name} doing ${b.life / 4} Damage</div>`);
       b.clife -= b.life / 4;
     } else {
@@ -513,10 +521,13 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
           : (target.resistance[b] += attacker.gain.resistance[b]);
 
   target.counter[attacker.id]++;
+  target.allcount[attacker.id]++;
 
   if (attacker.boss) {
-    target.time < target.highscore[attacker.id] &&
-      (target.highscore[attacker.id] = target.time);
+
+    if (target.time > target.highscore[attacker.id]) {
+      target.highscore[attacker.id] = target.time
+    }
 
     log.push(`<div class="death">${attacker.name} was killed in ${target.time}</div>`);
 
@@ -562,6 +573,16 @@ export function getLastBoss(t) {
       break;
   }
   return lastBoss;
+}
+
+export function isEmpty(obj) {
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+
+  return JSON.stringify(obj) === JSON.stringify({});
 }
 
 function checkDeath(target, attacker, func, res, kong) {

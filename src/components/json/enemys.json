@@ -979,7 +979,7 @@
     },
     {
         "id": "darlek",
-        "name": "strange Robot",
+        "name": "Strange Robot",
         "description": "EXTERMINATE",
         "max": [
             0,
@@ -1462,6 +1462,9 @@
         "chance": {
             "invert": 200,
             "resurrect": 50
+        },
+        "resistance": {
+            "fireresistance": 100
         },
         "gain": {
             "dmg": 1,

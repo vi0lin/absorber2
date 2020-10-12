@@ -168,6 +168,14 @@
         }
     },
     {
+        "id": "s_maxitems",
+        "desc": "Adds 1 maxitems",
+        "name": "Small maxitems boost",
+        "gain": {
+            "maxitems": 1
+        }
+    },
+    {
         "id": "s_lifesteal",
         "desc": "Adds 5% lifesteal",
         "name": "Small lifesteal boost",
