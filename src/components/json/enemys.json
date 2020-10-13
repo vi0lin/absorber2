@@ -541,7 +541,7 @@
             "regeneration": 0.3,
             "speed": -10,
             "effects": {
-                "reflect": 0.2
+                "reflect": 0.5
             },
             "resistance": {
                 "fireresistance": 0.1,

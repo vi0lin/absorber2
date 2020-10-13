@@ -151,7 +151,7 @@ export default {
       let player = {};
 
       //reset player
-
+      player.unlocked = [];
       player.effects = {};
       player.chance = {};
       player.resistance = {};
@@ -166,6 +166,8 @@ export default {
       player.sspeed = 0;
       player.status = {};
       player.version = p.version;
+      player.items = [];
+      player.maxitems = 1;
 
       //Get Stats from save
 
@@ -185,6 +187,14 @@ export default {
         for (let en of this.enemieslist) {
           player.allcount[en.id] = 0;
         }
+      }
+
+      if (pl.items != undefined) {
+        player.items = pl.items;
+      }
+
+      if (pl.unlocked != undefined) {
+        player.unlocked = pl.unlocked;
       }
 
       player.skills = pl.skills;
@@ -542,6 +552,8 @@ export default {
     hardreset() {
       this.player.skills = [];
       this.player.prestige = -1;
+      this.player.allcount = {};
+      this.player.highscore = {};
       this.reset(this.player);
       this.overlay = false;
       this.save();

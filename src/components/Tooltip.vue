@@ -48,7 +48,7 @@
             :pid="'description'"
             :val="item.description"
           />
-          <div v-if="item.special!=null">
+          <div v-if="item.special != null">
             <b>Special:</b>
             <hr />
             <Ability
@@ -60,7 +60,7 @@
           </div>
         </div>
 
-        <b v-if="item.gain!=null">Gain:</b>
+        <b v-if="Object.keys(item.gain).length !== 0">Gain:</b>
         <div class="fleo">
           <div class="fleo" :key="g" v-for="(n, g) in item.gain">
             <hr

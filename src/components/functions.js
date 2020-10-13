@@ -258,9 +258,7 @@ function checkBury(a) {
   if (checkChance(a.chance.bury, "bury")) {
     a.status.bury++;
     log.push(`<div class="chances">${a.name} <span style="color:white">buried</span> himself</div>`);
-    return true;
   }
-  return false;
 }
 
 function checkRot(a, b) {
@@ -283,7 +281,8 @@ function checkRotTurn(a) {
   return false;
 }
 
-export function checkTurn(target, attacker, disfi, exit, kong) {
+export function checkTurn(target, attacker, disfi, exit, kong, itemlist) {
+
   if (!checkRotTurn(target)) {
     checkRegeneration(target);
   }
@@ -294,12 +293,12 @@ export function checkTurn(target, attacker, disfi, exit, kong) {
 
   checkDot(target, attacker);
 
-  if (!checkDeath(target, attacker, disfi, exit, kong)) {
+  if (!checkDeath(target, attacker, disfi, exit, kong, itemlist)) {
     return;
   }
 
   if (checkStunTurn(target)) {
-    checkDeath(target, attacker, disfi, exit, kong);
+    checkDeath(target, attacker, disfi, exit, kong, itemlist);
     return;
   }
 
@@ -312,22 +311,21 @@ export function checkTurn(target, attacker, disfi, exit, kong) {
 
   if (checkDodge(target, attacker)) {
     log.push(`<div class="chances">${attacker.name} <span style="color:brown">dodged</span></div>`);
-    checkDeath(target, attacker, disfi, exit, kong);
+    checkDeath(target, attacker, disfi, exit, kong, itemlist);
     return;
   }
 
   if (target.status.silence <= 0) {
     if (null != target.chance) {
       if (checkInstakill(target, attacker)) {
-        checkDeath(target, attacker, disfi, exit, kong);
+        checkDeath(target, attacker, disfi, exit, kong, itemlist);
         return;
       }
 
       att = checkDouble(target);
 
-      if (checkBury(target)) {
-        return;
-      }
+      checkBury(target);
+
 
       checkInvert(target, attacker);
       checkStim(target, attacker);
@@ -378,7 +376,7 @@ export function checkTurn(target, attacker, disfi, exit, kong) {
 
   target.version != null && animateObject("animated");
 
-  checkDeath(target, attacker, disfi, exit, kong);
+  checkDeath(target, attacker, disfi, exit, kong, itemlist);
 }
 
 function checkCounter(target, attacker) {
@@ -449,7 +447,7 @@ function animateObject(b) {
   }, 500);
 }
 
-function checkEnemyDeath(target, attacker, func, res, kong) {
+function checkEnemyDeath(target, attacker, func, res, kong, itemlist) {
   if (attacker.chance != null) {
     if (checkChance(attacker.chance.resurrect, "resurrect")) {
       respawn(attacker);
@@ -523,6 +521,15 @@ function checkEnemyDeath(target, attacker, func, res, kong) {
   target.counter[attacker.id]++;
   target.allcount[attacker.id]++;
 
+  for (let e of itemlist.filter(x => !target.unlocked.includes(x.id))) {
+    if (e.req != undefined) {
+
+      if ((target.allcount[e.req.id] * 100) / e.req.count >= 100) {
+        target.unlocked.push(e.id);
+      }
+    }
+  }
+
   if (attacker.boss) {
 
     if (target.time > target.highscore[attacker.id]) {
@@ -585,10 +592,10 @@ export function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
-function checkDeath(target, attacker, func, res, kong) {
+function checkDeath(target, attacker, func, res, kong, itemlist) {
   if (target.version != null) {
     if (attacker.clife <= 0) {
-      checkEnemyDeath(target, attacker, func, res, kong);
+      checkEnemyDeath(target, attacker, func, res, kong, itemlist);
       return false;
     }
     if (target.clife <= 0) {
@@ -601,7 +608,7 @@ function checkDeath(target, attacker, func, res, kong) {
       return false;
     }
     if (target.clife <= 0) {
-      checkEnemyDeath(attacker, target, func, res, kong);
+      checkEnemyDeath(attacker, target, func, res, kong, itemlist);
       return false;
     }
   }

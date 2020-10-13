@@ -129,11 +129,45 @@
               style="width: 200px"
               v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
             />
+
             <div v-if="g != 'effects' && g != 'chance' && g != 'resistance'">
               <Ability class="basic" :pid="g" :val="$parent.player[g]" />
             </div>
-            <div v-else :key="gi" v-for="(gn, gi) in $parent.player[g]">
-              <Ability :class="g" :pid="gi" :val="gn" />
+            <div
+              v-else-if="g == 'effects'"
+              :key="i"
+              v-for="(k, i) in item.gain.effects"
+            >
+              <Ability
+                v-if="$parent.player.effects[i] != undefined"
+                :class="g"
+                :pid="i"
+                :val="$parent.player.effects[i]"
+              />
+            </div>
+            <div
+              v-else-if="g == 'chance'"
+              :key="i"
+              v-for="(k, i) in item.gain.chance"
+            >
+              <Ability
+                v-if="$parent.player.chance[i] != undefined"
+                :class="g"
+                :pid="i"
+                :val="$parent.player.chance[i]"
+              />
+            </div>
+            <div
+              v-else-if="g == 'resistance'"
+              :key="i"
+              v-for="(k, i) in item.gain.resistance"
+            >
+              <Ability
+                v-if="$parent.player.resistance[i] != undefined"
+                :class="g"
+                :pid="i"
+                :val="$parent.player.resistance[i]"
+              />
             </div>
           </div>
         </div>
@@ -233,15 +267,14 @@ export default {
       classlist = this.$refs.eimage.classList;
 
     player.lastEnemy = this.item.id;
-
     this.timer2 = setInterval(() => {
       checkTurn(
         player,
         this.item,
         this.won,
         this.exit,
-        classlist,
-        this.$parent.kongregate
+        this.$parent.kongregate,
+        this.itemslist
       );
     }, 100);
 
@@ -251,8 +284,8 @@ export default {
         player,
         this.won,
         this.exit,
-        classlist,
-        this.$parent.kongregate
+        this.$parent.kongregate,
+        this.itemslist
       );
     }, 100);
   },

@@ -106,7 +106,7 @@
           </div>
         </transition>
       </div>
-      <div>
+      <div v-if="getAnyElement($parent.player.highscore) > -9">
         <div @click="openhigh = !openhigh" class="kiste dark title">
           <span>Highscore</span>
           <span v-if="openhigh" style="float: right">▼</span>
@@ -132,7 +132,7 @@
           </div>
         </transition>
       </div>
-      <div>
+      <div v-if="getAnyElement($parent.player.allcount) > 0">
         <div @click="openall = !openall" class="kiste dark title">
           <span>All Scores</span>
           <span v-if="openall" style="float: right">▼</span>
@@ -233,11 +233,28 @@
               comp: !isEqupied(value.id),
             }"
             :key="key"
-            v-for="(value, key) in this.itemslist"
+            v-for="(value, key) in getUnlocked()"
           >
             <img width="110" :src="getImgUrl(value.id)" :alt="value.name" />
             <div>{{ value.name }}</div>
             <Tooltip :item="value" :type="'item'" />
+          </div>
+          <div :key="value + key" v-for="(value, key) in getLocked()">
+            <div class="comp" v-if="value.req != undefined">
+              <img
+                class="locked"
+                width="110"
+                :src="getImgUrl(value.id)"
+                :alt="value.name"
+              />
+
+              <progress
+                :max="value.req.count"
+                :value="$parent.player.allcount[value.req.id]"
+                style="width: 100px"
+              ></progress>
+              <TextToolTip :item="getPercent(value)" :type="'text'" />
+            </div>
           </div>
         </div>
       </div>
@@ -308,6 +325,44 @@ export default {
     };
   },
   methods: {
+    getAnyElement(obj) {
+      var sum = 0;
+      for (var el in obj) {
+        if (obj.hasOwnProperty(el)) {
+          sum += parseFloat(obj[el]);
+        }
+      }
+      return sum;
+    },
+    getPercent(e) {
+      let p = Math.round(
+        (this.$parent.player.allcount[e.req.id] * 100) / e.req.count
+      );
+      if (p >= 100) {
+        p = 100;
+      }
+      return p + "% until Item is unlocked";
+    },
+    getUnlocked() {
+      let el = this;
+      if (el.$parent.player.unlocked != undefined) {
+        return this.itemslist.filter((x) =>
+          el.$parent.player.unlocked.includes(x.id)
+        );
+      } else {
+        return false;
+      }
+    },
+    getLocked() {
+      let el = this;
+      if (el.$parent.player.unlocked != undefined) {
+        return this.itemslist.filter(
+          (x) => !el.$parent.player.unlocked.includes(x.id)
+        );
+      } else {
+        return true;
+      }
+    },
     getboni(tags) {
       return getboni(tags);
     },
@@ -439,7 +494,7 @@ export default {
       delete pl.status;
       delete pl.counter;
       delete pl.go;
-      delete pl.unlockeditems;
+      delete pl.unlocked;
       delete pl.allcount;
       delete pl.companion;
       delete pl.skills;
@@ -513,6 +568,7 @@ export default {
   line-height: 25px;
   font-size: 14px;
 }
+
 .icon {
   float: left;
   width: 25px;
@@ -590,6 +646,7 @@ export default {
   margin: 0px;
 }
 .comp {
+  min-height: 120px;
   margin: 5px;
   border: 3px dotted grey;
   padding: 5px;
@@ -608,6 +665,10 @@ export default {
   border: 3px solid yellow;
   padding: 5px;
   text-align: center;
+}
+
+.locked {
+  filter: blur(4px) grayscale(100%);
 }
 
 .fade-enter-active,
