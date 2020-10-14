@@ -36,7 +36,7 @@
         "name": "Small speed boost",
         "desc": "Adds 100 speed",
         "gain": {
-            "speed": -100
+            "speed": 100
         }
     },
     {

@@ -137,6 +137,15 @@ export default {
     };
   },
   methods: {
+    ObjectLength(object) {
+      var length = 0;
+      for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+          ++length;
+        }
+      }
+      return length;
+    },
     exitFight() {
       this.enemy = null;
       this.player.auto = false;
@@ -171,17 +180,17 @@ export default {
 
       //Get Stats from save
 
-      if (!isEmpty(pl.highscore)) {
-        player.highscore = pl.highscore;
-      } else {
-        player.highscore = {};
-        for (let e of this.enemieslist.filter((x) => x.boss)) {
-          player.highscore[e.id] = -1;
-        }
-      }
+      player.highscore = this.CalculateHighscore(pl.highscore);
 
-      if (!isEmpty(pl.allcount)) {
-        player.allcount = pl.allcount;
+      if (pl.allcount != undefined) {
+        if (!isEmpty(pl.allcount)) {
+          player.allcount = pl.allcount;
+        } else {
+          player.allcount = {};
+          for (let en of this.enemieslist) {
+            player.allcount[en.id] = 0;
+          }
+        }
       } else {
         player.allcount = {};
         for (let en of this.enemieslist) {
@@ -189,13 +198,9 @@ export default {
         }
       }
 
-      if (pl.items != undefined) {
-        player.items = pl.items;
-      }
+      pl.items != undefined && (player.items = pl.items);
 
-      if (pl.unlocked != undefined) {
-        player.unlocked = pl.unlocked;
-      }
+      pl.unlocked != undefined && (player.unlocked = pl.unlocked);
 
       player.skills = pl.skills;
       player.order = pl.order;
@@ -214,217 +219,38 @@ export default {
         player.counter = pl.counter;
       }
 
-      //calculate Items
+      //Callculation current Stats
+      //e = this.enemieslist.find((a) => a.id === d)
+
+      for (let d in player.counter) {
+        for (let a = 0; a < player.counter[d]; a++) {
+          let e = this.enemieslist.find((a) => a.id === d);
+          if (e != undefined) {
+            this.SingleCalculation(e, player);
+          }
+        }
+      }
+
+      for (let b of player.skills) {
+        let a = getNodeById(b, this.skillist);
+        let c = this.choiselist.find((b) => b.id === a.typ);
+        this.SingleCalculation(c, player);
+      }
+
+      if (null != player.companion) {
+        let a = getboni(
+          this.complist.find((a) => a.id == player.companion).tags
+        );
+        this.SingleCalculation(a, player);
+      }
+
       if (null != player.items) {
         for (let d of player.items) {
           let e = this.itemslist.find((a) => a.id === d);
           if (e != null) {
-            for (let b in e.gain) {
-              if (
-                "effects" != b &&
-                "chance" != b &&
-                "speed" != b &&
-                "resistance" != b
-              ) {
-                if (b == "life" && player.life + e.gain.life <= 1) {
-                  player.life = 1;
-                } else if (
-                  b == "recovery" &&
-                  player.recovery + e.gain.recovery <= 1
-                ) {
-                  player.recovery = 1;
-                } else if (
-                  b == "regeneration" &&
-                  player.regeneration + e.gain.regeneration <= 0
-                ) {
-                  player.regeneration = 0;
-                } else {
-                  player[b] += e.gain[b];
-                }
-              } else if ("speed" == b) {
-                if (player[b] >= 100) {
-                  if (e.gain[b] > 0) {
-                    if (player[b] > 110) {
-                      player[b] -= e.gain[b];
-                    } else {
-                      player.sspeed += e.gain[b];
-                    }
-                  } else {
-                    if (player.sspeed > 0) {
-                      player.sspeed += e.gain[b];
-                    } else {
-                      player[b] -= e.gain[b];
-                    }
-                  }
-                }
-              } else if ("effects" == b) {
-                for (let b in e.gain.effects) {
-                  if (player.effects[b] == null) {
-                    player.effects[b] = e.gain.effects[b];
-                  } else {
-                    player.effects[b] += e.gain.effects[b];
-                  }
-                }
-              } else if ("chance" == b) {
-                for (let b in e.gain.chance) {
-                  if (null == player.chance[b]) {
-                    player.chance[b] = e.gain.chance[b];
-                  } else {
-                    player.chance[b] += e.gain.chance[b];
-                  }
-                }
-              } else if ("resistance" == b) {
-                for (let b in e.gain.resistance) {
-                  if (player.resistance[b] == null) {
-                    player.resistance[b] = e.gain.resistance[b];
-                  } else {
-                    player.resistance[b] += e.gain.resistance[b];
-                  }
-                }
-              }
-            }
+            this.SingleCalculation(e, player);
           }
         }
-      }
-
-      //Calculate Compainion
-      if (null != player.companion) {
-        //Adding Stats to Comgpanions Tags
-        let a = getboni(
-          this.complist.find((a) => a.id == player.companion).tags
-        );
-
-        if (a.chance) {
-          if (player.chance[a.key] == null) {
-            player.chance[a.key] = a.value;
-          } else {
-            player.chance[a.key] += a.value;
-          }
-        } else {
-          if ("speed" == a.key) {
-            player[a.key] -= a.value;
-          } else {
-            player[a.key] += a.value;
-          }
-        }
-      }
-
-      //Callculation current Stats
-      for (let d in player.counter) {
-        for (let e, a = 0; a < player.counter[d]; a++)
-          if (((e = this.enemieslist.find((a) => a.id === d)), null != e))
-            for (let b in e.gain) {
-              if (
-                "effects" != b &&
-                "chance" != b &&
-                "speed" != b &&
-                "resistance" != b
-              ) {
-                if (b == "life" && player.life + e.gain.life <= 1) {
-                  player.life = 1;
-                } else if (
-                  b == "recovery" &&
-                  player.recovery + e.gain.recovery <= 1
-                ) {
-                  player.recovery = 1;
-                } else if (
-                  b == "regeneration" &&
-                  player.regeneration + e.gain.regeneration <= 0
-                ) {
-                  player.regeneration = 0;
-                } else {
-                  player[b] += e.gain[b];
-                }
-              } else if ("speed" == b) {
-                if (player[b] >= 100) {
-                  if (e.gain[b] > 0) {
-                    if (player[b] > 110) {
-                      player[b] -= e.gain[b];
-                    } else {
-                      player.sspeed += e.gain[b];
-                    }
-                  } else {
-                    if (player.sspeed > 0) {
-                      player.sspeed += e.gain[b];
-                    } else {
-                      player[b] -= e.gain[b];
-                    }
-                  }
-                }
-              } else if ("effects" == b) {
-                for (let b in e.gain.effects) {
-                  if (player.effects[b] == null) {
-                    player.effects[b] = e.gain.effects[b];
-                  } else {
-                    player.effects[b] += e.gain.effects[b];
-                  }
-                }
-              } else if ("chance" == b) {
-                for (let b in e.gain.chance) {
-                  if (null == player.chance[b]) {
-                    player.chance[b] = e.gain.chance[b];
-                  } else {
-                    player.chance[b] += e.gain.chance[b];
-                  }
-                }
-              } else if ("resistance" == b) {
-                for (let b in e.gain.resistance) {
-                  if (player.resistance[b] == null) {
-                    player.resistance[b] = e.gain.resistance[b];
-                  } else {
-                    player.resistance[b] += e.gain.resistance[b];
-                  }
-                }
-              }
-            }
-      }
-      for (let b of player.skills) {
-        let a = getNodeById(b, this.skillist);
-        if (a == null || null == a) {
-          var index = player.skills.indexOf(b);
-          if (-1 !== index) {
-            player.skills.splice(index, 1);
-          }
-        } else {
-          let c = this.choiselist.find((b) => b.id === a.typ);
-          for (let a in c.gain)
-            switch (a) {
-              case "chance":
-                for (let a in c.gain.chance) {
-                  if (null == player.chance[a]) {
-                    player.chance[a] = c.gain.chance[a];
-                  } else {
-                    player.chance[a] += c.gain.chance[a];
-                  }
-                }
-                break;
-              case "effects":
-                for (let a in c.gain.effects) {
-                  if (null == player.effects[a]) {
-                    player.effects[a] = c.gain.effects[a];
-                  } else {
-                    player.effects[a] += c.gain.effects[a];
-                  }
-                }
-                break;
-              case "resistance":
-                for (let a in c.gain.resistance) {
-                  if (null == player.resistance[a]) {
-                    player.resistance[a] = c.gain.resistance[a];
-                  } else {
-                    player.resistance[a] += c.gain.resistance[a];
-                  }
-                }
-                break;
-              default:
-                player[a] += c.gain[a];
-            }
-        }
-      }
-
-      //Pushing new Enemys
-      while (this.enemieslist.length > player.order.length) {
-        player.order.push(this.enemieslist[player.order.length].id);
       }
 
       //Reset order if new Enemys
@@ -436,6 +262,11 @@ export default {
         player.order = pl.order;
       } else {
         player.order = this.enemieslist.map(({ id: a }) => a);
+      }
+
+      //Reset push new enemies into order
+      while (this.enemieslist.length > player.order.length) {
+        player.order.push(this.enemieslist[player.order.length].id);
       }
 
       // Submit current Highscores
@@ -525,6 +356,65 @@ export default {
           break;
       }
       this.player.tutorial++;
+    },
+    CalculateHighscore(highscore) {
+      let newscore;
+      if (isEmpty(highscore)) {
+        newscore = {};
+        for (let e of this.enemieslist.filter((x) => x.boss)) {
+          newscore[e.id] = -1;
+        }
+      } else if (8 > this.ObjectLength(newscore)) {
+        newscore = highscore;
+        for (let e of this.enemieslist.filter((x) => x.boss)) {
+          newscore[e.id] == undefined && (newscore[e.id] = -1);
+        }
+      }
+      return newscore;
+    },
+    SingleCalculation(obj, player) {
+      for (let gain in obj.gain) {
+        switch (gain) {
+          case "effects":
+            this.addOrCreate(player.effects, obj.gain.effects);
+            break;
+          case "chance":
+            this.addOrCreate(player.chance, obj.gain.chance);
+            break;
+          case "resistance":
+            this.addOrCreate(player.resistance, obj.gain.resistance);
+            break;
+          case "speed":
+            if (obj.gain.speed > 0) {
+              if (player.speed - obj.gain.speed < 110) {
+                player.speed = 110;
+                player.sspeed += player.speed - 110 + obj.gain.speed;
+              } else {
+                player.speed -= obj.gain.speed;
+              }
+            } else {
+              if (player.sspeed - obj.gain.speed * -1 >= 0) {
+                player.sspeed -= obj.gain.speed;
+              } else {
+                player.speed += obj.gain.speed;
+              }
+            }
+            break;
+
+          default:
+            player[gain] += obj.gain[gain];
+            break;
+        }
+      }
+    },
+    addOrCreate(player, obj) {
+      for (let b in obj) {
+        if (player[b] == null) {
+          player[b] = obj[b];
+        } else {
+          player[b] += obj[b];
+        }
+      }
     },
     displayfinish() {
       let ov = this.$refs.ov.$data,
@@ -730,15 +620,29 @@ export default {
       if (this.recovery && !this.loading) {
         this.resetStatus(this.player);
         this.player.cspeed = 0;
-        this.player.clife + this.player.recovery + this.player.regeneration <=
-        this.player.life
-          ? 0 > this.player.clife
-            ? (this.player.clife =
-                this.player.recovery + this.player.regeneration)
-            : (this.player.clife +=
-                this.player.recovery + this.player.regeneration)
-          : ((this.player.clife = this.player.life),
-            this.player.auto && this.setNextEnemy());
+        if (
+          this.player.clife + this.player.recovery + this.player.regeneration <=
+          this.player.life
+        ) {
+          let add = 0;
+          if (this.player.recovery > 0) {
+            add += this.player.recovery;
+          }
+          if (this.player.regeneration > 0) {
+            add += this.player.regeneration;
+          }
+          if (add < 1) {
+            add = 1;
+          }
+          if (0 > this.player.clife) {
+            this.player.clife = add;
+          } else {
+            this.player.clife += add;
+          }
+        } else {
+          this.player.clife = this.player.life;
+          this.player.auto && this.setNextEnemy();
+        }
       }
     }, 1000);
   },

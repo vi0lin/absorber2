@@ -106,7 +106,7 @@
           </div>
         </transition>
       </div>
-      <div v-if="getAnyElement($parent.player.highscore) > -9">
+      <div v-if="getAnyElement($parent.player.highscore) > 0">
         <div @click="openhigh = !openhigh" class="kiste dark title">
           <span>Highscore</span>
           <span v-if="openhigh" style="float: right">▼</span>
@@ -207,10 +207,29 @@
           >
             <img width="110" :src="value.normal_icon_url_small" />
             <div>{{ value.name }}</div>
-            <Ability
-              :val="getboni(value.tags).value"
-              :pid="getboni(value.tags).key"
-            />
+            <div
+              :key="value.name + d"
+              v-for="(d, l) in getboni(value.tags).gain"
+            >
+              <div v-if="l == 'chance'">
+                <Ability
+                  style="max-width: 90px"
+                  :key="ld + ld"
+                  v-for="(dl, ld) in d"
+                  class="chance"
+                  :val="dl"
+                  :pid="ld"
+                />
+              </div>
+              <div v-else>
+                <Ability
+                  style="max-width: 90px"
+                  class="basic"
+                  :val="d"
+                  :pid="l"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -338,13 +357,16 @@ export default {
       return sum;
     },
     getPercent(e) {
-      let p = Math.round(
-        (this.$parent.player.allcount[e.req.id] * 100) / e.req.count
-      );
-      if (p >= 100) {
-        p = 100;
+      if (this.$parent.player.allcount != undefined) {
+        let p = Math.round(
+          (this.$parent.player.allcount[e.req.id] * 100) / e.req.count
+        );
+        if (p >= 100) {
+          p = 100;
+        }
+        return p;
       }
-      return p;
+      return false;
     },
     getUnlocked() {
       let el = this;

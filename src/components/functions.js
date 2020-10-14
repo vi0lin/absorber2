@@ -123,11 +123,11 @@ function checkDot(a, b, c) {
 function checkRegeneration(a, b, c) {
   if (a.status.invert > 0) {
     changeLife(a, a.regeneration / 25, "invert", "damage", b, c);
-  } else if (a.status.bury > 0) {
+  } else if (a.status.bury > 0 && a.regeneration > 0) {
     a.regeneration * 4 + a.clife <= a.life
       ? changeLife(a, a.regeneration / 6, "regeneration", "heal", b, c)
       : changeLife(a, a.life - a.clife, "regeneration", "heal", b, c);
-  } else {
+  } else if (a.regeneration > 0) {
     a.regeneration + a.clife <= a.life
       ? changeLife(a, a.regeneration / 25, "regeneration", "heal", b, c)
       : changeLife(a, a.life - a.clife, "regeneration", "heal", b, c);
@@ -471,18 +471,6 @@ function checkEnemyDeath(target, attacker, func, res, kong, itemlist) {
     ) {
       target[a] += attacker.gain[a];
     } else if ("life" == a) {
-      if (target[a] + attacker.gain[a] <= 0) {
-        target[a] = 1;
-      } else {
-        target[a] += attacker.gain[a];
-      }
-    } else if ("regeneration" == a) {
-      if (target[a] + attacker.gain[a] <= 0) {
-        target[a] = 1;
-      } else {
-        target[a] += attacker.gain[a];
-      }
-    } else if ("recovery" == a) {
       if (target[a] + attacker.gain[a] <= 0) {
         target[a] = 1;
       } else {
