@@ -253,7 +253,10 @@
                 :value="$parent.player.allcount[value.req.id]"
                 style="width: 100px"
               ></progress>
-              <TextToolTip :item="getPercent(value)" :type="'text'" />
+              <TextToolTip
+                :item="getPercent(value) + '% until Item is unlocked'"
+                :type="'text'"
+              />
             </div>
           </div>
         </div>
@@ -341,7 +344,7 @@ export default {
       if (p >= 100) {
         p = 100;
       }
-      return p + "% until Item is unlocked";
+      return p;
     },
     getUnlocked() {
       let el = this;
@@ -356,9 +359,11 @@ export default {
     getLocked() {
       let el = this;
       if (el.$parent.player.unlocked != undefined) {
-        return this.itemslist.filter(
+        let list = this.itemslist.filter(
           (x) => !el.$parent.player.unlocked.includes(x.id)
         );
+
+        return list.sort((a, b) => this.getPercent(b) - this.getPercent(a));
       } else {
         return true;
       }
