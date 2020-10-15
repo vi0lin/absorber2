@@ -2,43 +2,79 @@
   <transition name="fade">
     <div v-if="create" v-show="show" class="wiste">
       <div v-if="ctrl">
-        <h2 class="title">{{item.name}}</h2>
+        <h2 class="title">{{ item.name }}</h2>
         <b>Stats:</b>
         <div class="fleo">
-          <div class="fleo" :key="g" v-for="(n,g) in filtred(item)">
-            <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
-            <div class="fleo" v-if="g=='effects'||g=='chance'||g=='resistance'">
-              <Ability :class="g" :key="gi" v-for="(gn,gi) in item[g]" :pid="gi" :val="gn" />
+          <div class="fleo" :key="g" v-for="(n, g) in filtred(item)">
+            <hr
+              style="width: 200px"
+              v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+            />
+            <div
+              class="fleo"
+              v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+            >
+              <Ability
+                :class="g"
+                :key="gi"
+                v-for="(gn, gi) in item[g]"
+                :pid="gi"
+                :val="gn"
+              />
             </div>
             <Ability v-else :pid="g" class="basic" :val="n" />
           </div>
         </div>
       </div>
       <div v-else-if="shift">
-        <h2 class="title">{{item.name}}</h2>
+        <h2 class="title">{{ item.name }}</h2>
         <b>Description:</b>
         <hr />
         <Ability
           class="basic"
-          style="white-space:normal;width:200px;height:auto;"
+          style="white-space: normal; width: 200px; height: auto"
           :pid="'description'"
           :val="item.description"
         />
       </div>
       <div v-else>
-        <h2 class="title">{{item.name}}</h2>
-        <b>Gain:</b>
+        <h2 class="title">{{ item.name }}</h2>
+        <div v-if="type == 'item'">
+          <b>Description:</b>
+          <hr />
+          <Ability
+            class="basic"
+            style="white-space: normal; width: 200px; height: auto"
+            :pid="'description'"
+            :val="item.description"
+          />
+          <div v-if="item.special != null">
+            <b>Special:</b>
+            <hr />
+            <Ability
+              class="basic"
+              style="white-space: normal; width: 200px; height: auto"
+              :pid="'crit'"
+              :val="item.special"
+            />
+          </div>
+        </div>
+
+        <b v-if="Object.keys(item.gain).length !== 0">Gain:</b>
         <div class="fleo">
-          <div class="fleo" :key="g" v-for="(n,g) in item.gain">
-            <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
-            <div v-if="g!='effects'&&g!='chance'&&g!='resistance'">
+          <div class="fleo" :key="g" v-for="(n, g) in item.gain">
+            <hr
+              style="width: 200px"
+              v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+            />
+            <div v-if="g != 'effects' && g != 'chance' && g != 'resistance'">
               <Ability class="basic" :pid="g" :val="n" />
             </div>
             <Ability
               v-else
               :class="g"
               :key="gi"
-              v-for="(gn,gi) in item.gain[g]"
+              v-for="(gn, gi) in item.gain[g]"
               :pid="gi"
               :val="gn"
             />
@@ -53,21 +89,26 @@
 import Ability from "./Ability.vue";
 export default {
   components: {
-    Ability
+    Ability,
   },
   props: {
     item: {
       type: Object,
-      required: true
+      required: true,
     },
     ctrl: {
       type: Boolean,
-      required: false
+      required: false,
     },
     shift: {
       type: Boolean,
-      required: false
-    }
+      required: false,
+    },
+    type: {
+      type: String,
+      required: false,
+      value: "enemy",
+    },
   },
   data() {
     return {
@@ -78,7 +119,7 @@ export default {
       mlistender: null,
       target: null,
       x: 0,
-      y: 0
+      y: 0,
     };
   },
   methods: {
@@ -93,11 +134,11 @@ export default {
         "status",
         "gain",
         "max",
-        "prestige"
+        "prestige",
       ];
 
       let ob = Object.keys(arr)
-        .filter(key => !allowed.includes(key))
+        .filter((key) => !allowed.includes(key))
         .reduce((obj, key) => {
           obj[key] = arr[key];
 
@@ -108,7 +149,7 @@ export default {
     },
     setReal() {
       let el = this;
-      setTimeout(function() {
+      setTimeout(function () {
         let eposy = 0;
         let eposx = 0;
         try {
@@ -134,63 +175,45 @@ export default {
       el.x = e.clientX;
       el.y = e.clientY;
       this.setReal();
-    }
+    },
   },
   watch: {
-    shift: function(val) {
+    shift: function (val) {
       this.setReal();
     },
-    ctrl: function(val) {
+    ctrl: function (val) {
       this.setReal();
-    }
+    },
   },
   mounted() {
     let el = this;
 
-    this.elistender = function(e) {
+    this.elistender = function (e) {
       el.setDimensions(e, el);
     };
 
-    this.mlistender = function(e) {
+    this.mlistender = function (e) {
       el.setDimensions(e, el);
     };
 
-    this.llistender = function() {
+    this.llistender = function () {
       el.show = false;
       el.create = false;
     };
 
-    $(this.$el)
-      .parent()
-      .first()
-      .on("mouseenter", this.elistender);
+    $(this.$el).parent().first().on("mouseenter", this.elistender);
 
-    $(this.$el)
-      .parent()
-      .first()
-      .on("mousemove", this.mlistender);
+    $(this.$el).parent().first().on("mousemove", this.mlistender);
 
-    $(this.$el)
-      .parent()
-      .first()
-      .on("mouseleave", this.llistender);
+    $(this.$el).parent().first().on("mouseleave", this.llistender);
   },
   beforeDestroy() {
-    $(this.$el)
-      .parent()
-      .first()
-      .off("mouseenter", this.elistender);
+    $(this.$el).parent().first().off("mouseenter", this.elistender);
 
-    $(this.$el)
-      .parent()
-      .first()
-      .off("mousemove", this.mlistender);
+    $(this.$el).parent().first().off("mousemove", this.mlistender);
 
-    $(this.$el)
-      .parent()
-      .first()
-      .off("mouseleave", this.llistender);
-  }
+    $(this.$el).parent().first().off("mouseleave", this.llistender);
+  },
 };
 </script>
 

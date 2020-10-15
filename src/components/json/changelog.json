@@ -1,0 +1,73 @@
+[
+    {
+        "version": "1.8",
+        "info": [
+            "added Items",
+            "Added Counter for all Enemys",
+            "Made Stats closable",
+            "Add maximum ammount of items",
+            "Added search for enemys",
+            "Added sort for log"
+        ]
+    },
+    {
+        "version": "1.7",
+        "info": [
+            "Buffed Hard Turtle",
+            "Again fixing Buggs",
+            "Made every image smaller",
+            "Buffed Slow and Stim",
+            "Changed the way regeneration works",
+            "Added InFight Stats"
+        ]
+    },
+    {
+        "version": "1.6",
+        "info": [
+            "Added a changelog",
+            "Added softreset",
+            "Fixed the big dont-update-numbers-bug",
+            "Repaired Hightscores and Kongpainons"
+        ]
+    },
+    {
+        "version": "1.5",
+        "info": [
+            "Drag and drop now pushed between.",
+            "More Enemies",
+            "Added Resistance",
+            "Skilltree looks a litte more like a skilltree."
+        ]
+    },
+    {
+        "version": "1.4",
+        "info": [
+            "Added the Fight-Order",
+            "More Enemies",
+            "Added better tooltips."
+        ]
+    },
+    {
+        "version": "1.3",
+        "info": [
+            "Added Stim Tooltip",
+            "Added Sspeed saving",
+            "overlay change"
+        ]
+    },
+    {
+        "version": "1.2 ",
+        "info": [
+            "Added Icons",
+            "Added more Prestige"
+        ]
+    },
+    {
+        "version": "1.1 ",
+        "info": [
+            "Fixed Dodge",
+            "Fixed Dying on DOT",
+            "Added New Enemys"
+        ]
+    }
+]

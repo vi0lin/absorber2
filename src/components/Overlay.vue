@@ -2,32 +2,41 @@
   <div>
     <div v-show="!skilltree">
       <img
-        v-if="this.background!=''"
+        v-if="this.background != ''"
         class="bc"
-        :src="require('@/assets/icons/'+this.background+'.png')"
+        :src="require('@/assets/icons/' + this.background + '.png')"
       />
-      <div class="overlay" :style="'background-color:' +this.color">
-        <div class="box" :style="'left:'+this.place">
-          <div style="font-size: 30px;">{{text}}</div>
+      <div class="overlay" :style="'background-color:' + this.color">
+        <div class="box" :style="'left:' + this.place">
+          <div style="font-size: 30px">{{ text }}</div>
           <div>
-            <img width="200px;" v-if="this.img!=''" :src="require('@/assets/'+this.img+'.png')" />
+            <img
+              width="200px;"
+              v-if="this.img != ''"
+              :src="require('@/assets/' + this.img + '.png')"
+            />
           </div>
           <div class="flex">
-            <div class="btn" :key="k" v-for="(thing,k) in obj" @click="thing.func">
-              <div>{{thing.text}}</div>
+            <div
+              class="btn"
+              :key="k"
+              v-for="(thing, k) in obj"
+              @click="thing.func"
+            >
+              <div>{{ thing.text }}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div v-show="skilltree">
-      <div class="overlay" :style="'background-color:' +this.color">
+      <div class="overlay" :style="'background-color:' + this.color">
         <div
           class="kiste"
           :style="{ backgroundImage: 'url(' + require('@/assets/icons/background3.png') + ')' }"
         >
           <button class="btn close" @click="close">X</button>
-          <div class="points">Points: {{this.$parent.player.points}}</div>
+          <div class="points">Points: {{ this.$parent.player.points }}</div>
           <button class="btn reset" @click="resetskills">Reset</button>
           <div class="allskills">
             <div>
@@ -80,7 +89,7 @@ import { getParentById, getNodeById } from "./functions.js";
 
 export default {
   components: {
-    Accordion
+    Accordion,
   },
   methods: {
     chooseskill(s) {
@@ -111,13 +120,13 @@ export default {
         return false;
       }
       return true;
-    }
+    },
   },
   props: {
     skilltree: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -127,9 +136,9 @@ export default {
       background: "",
       color: "rgba(0, 0, 0, 0.4)",
       place: "40%",
-      st: skilltree
+      st: skilltree,
     };
-  }
+  },
 };
 </script>
 

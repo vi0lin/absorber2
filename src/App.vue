@@ -1,5 +1,5 @@
 <template>
-  <div :class="{beta:beta}" id="app">
+  <div :class="{ beta: beta }" id="app">
     <Index />
   </div>
 </template>
@@ -10,8 +10,8 @@ import Index from "./components/Index.vue";
 export default {
   name: "app",
   components: {
-    Index
-  }
+    Index,
+  },
 };
 </script>
 
@@ -27,6 +27,10 @@ html,
   font-family: "MedievalSharp", cursive;
 }
 
+.hide {
+  display: none;
+}
+
 .resistance {
   background: lightcoral;
 }
@@ -36,16 +40,12 @@ html,
 .chance {
   background: lightgreen;
 }
-
 .basic {
   background: lightyellow;
 }
 
 .beta {
   border: 3px solid red;
-  width: 894px !IMPORTANT;
-  height: 594px !IMPORTANT;
-  overflow: auto;
 }
 
 ::-webkit-scrollbar {
@@ -106,5 +106,42 @@ html,
 .flex-colum {
   display: flex;
   flex-direction: column;
+}
+
+.dun {
+  min-width: 130px;
+  background: lightskyblue;
+  font-size: 14px;
+  display: inline;
+  padding: 4px;
+  box-shadow: 0 2px #0a9bf5;
+  line-height: 20px;
+}
+.text {
+  background: lightgray;
+  margin-left: 10px;
+  padding: 20px;
+  display: block;
+  width: 790px;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: inset 0 0 4px grey;
+}
+
+.dun:hover {
+  background: #9dd7fb;
+}
+
+.dun:active,
+.dun.active {
+  box-shadow: 0 2px #054d7a;
+  transform: translateY(1px);
+  background: #0a9bf5;
+}
+
+.dun > img {
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
 }
 </style>

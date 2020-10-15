@@ -36,7 +36,7 @@
         "name": "Small speed boost",
         "desc": "Adds 100 speed",
         "gain": {
-            "speed": -100
+            "speed": 100
         }
     },
     {
@@ -155,6 +155,24 @@
             "chance": {
                 "megacrit": 2
             }
+        }
+    },
+    {
+        "id": "s_ultracrit",
+        "desc": "Adds 2% ultracrit",
+        "name": "Small ultracrit boost",
+        "gain": {
+            "chance": {
+                "ultracrit": 2
+            }
+        }
+    },
+    {
+        "id": "s_maxitems",
+        "desc": "Adds 1 maxitems",
+        "name": "Small maxitems boost",
+        "gain": {
+            "maxitems": 1
         }
     },
     {

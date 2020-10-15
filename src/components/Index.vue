@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div v-if="!loading">
+    <div v-if="!loading && preloaded">
       <div>
         <div class="fixed">
           <button
-            :class="{ active: this.active=='fight' }"
-            v-if="this.enemy!=null"
+            :class="{ active: this.active == 'fight' }"
+            v-if="this.enemy != null"
             @click="openTab('fight')"
             class="btn"
           >
@@ -13,50 +13,79 @@
             Fight
           </button>
           <button
-            :class="{ active: this.active=='dungeon' }"
+            :class="{ active: this.active == 'dungeon' }"
             @click="openTab('dungeon')"
             class="btn"
           >
             <img :src="require('@/assets/icons/cave.png')" alt="dungeon" />
             Dungeon
           </button>
-          <button :class="{ active: this.active=='stats' }" @click="openTab('stats')" class="btn">
+          <button
+            :class="{ active: this.active == 'stats' }"
+            @click="openTab('stats')"
+            class="btn"
+          >
             <img :src="require('@/assets/icons/hero.png')" alt="stats" />
             Stats
           </button>
-          <button :class="{ active: this.active=='log' }" @click="openTab('log')" class="btn">
+          <button
+            :class="{ active: this.active == 'log' }"
+            @click="openTab('log')"
+            class="btn"
+          >
             <img :src="require('@/assets/icons/log.png')" alt="log" />
             Log
           </button>
-          <button class="btn" v-show="this.enemy!=null" @click="exitFight()">
+          <button class="btn" v-show="this.enemy != null" @click="exitFight()">
             <img :src="require('@/assets/icons/door.png')" alt="back" />
             Exit
           </button>
 
-          <div class="time">{{gettime(player.time)}}</div>
+          <div class="time">{{ gettime(player.time) }}</div>
         </div>
         <div class="box">
-          <Stats v-show="this.active == 'stats'" />
+          <Stats ref="stats" v-show="this.active == 'stats'" />
           <Dungeon ref="dun" v-show="this.active == 'dungeon'" />
           <Log v-show="this.active == 'log'" />
-          <Fight v-if="this.enemy!=null" v-show="this.active == 'fight'" :item="this.enemy" />
+          <Fight
+            v-if="this.enemy != null"
+            v-show="this.active == 'fight'"
+            :item="this.enemy"
+          />
         </div>
       </div>
       <div class="status">
-        <div v-show="value>0" :key="key" v-for="(value, key) in this.player.status">
-          <img :src="getImgUrl('b'+key)" :alt="key" />
-          <span>{{value}}</span>
+        <div
+          v-show="value > 0"
+          :key="key"
+          v-for="(value, key) in this.player.status"
+        >
+          <img :src="getImgUrl('b' + key)" :alt="key" />
+          <span>{{ value }}</span>
         </div>
       </div>
       <Progressbar :max="player.life" :val="player.clife" :ab="true" />
       <Progressbar
-        v-show="this.enemy!=null"
+        v-show="this.enemy != null"
         :max="player.speed"
         :val="player.cspeed"
         :speed="true"
         :ab="true"
       />
       <Overlay :skilltree="skilltree" ref="ov" v-show="this.overlay" />
+    </div>
+    <div style="padding-top: 100px" v-else>
+      <div class="center">
+        <div class="lds-ring">
+          <img
+            style="image-rendering: pixelated"
+            width="200px"
+            :src="require('@/assets/icons/hero.png')"
+            alt="stats"
+          />
+        </div>
+        <span style="font-size: 40px">LOADING...</span>
+      </div>
     </div>
   </div>
 </template>
@@ -70,10 +99,15 @@ import Progressbar from "./Progressbar.vue";
 import Overlay from "./Overlay.vue";
 
 import { RoundAll, getboni } from "./displayfunc";
-import { respawn, getLast, getNodeById, getLastBoss } from "./functions.js";
+import {
+  respawn,
+  getLast,
+  getNodeById,
+  getLastBoss,
+  hasDuplicates,
+  isEmpty,
+} from "./functions.js";
 import { log } from "./gloabals.js";
-
-kongregateAPI.loadAPI();
 
 export default {
   components: {
@@ -82,23 +116,13 @@ export default {
     Progressbar,
     Log,
     Overlay,
-    Fight
-  },
-  watch: {
-    player: {
-      deep: true,
-      handler(n, o) {
-        n = o;
-        n.life < 0 && (n.life = 1);
-        n.regeneration < 0 && (n.regeneration = 1);
-        n.recovery < 0 && (n.recovery = 1);
-      }
-    }
+    Fight,
   },
   data() {
     return {
       active: "dungeon",
       player: p,
+      preloaded: false,
       enemy: null,
       htimer: null,
       recovery: true,
@@ -109,25 +133,34 @@ export default {
       shiftIsPressed: false,
       log: log,
       complist: [],
-      loading: true
+      loading: true,
     };
   },
   methods: {
+    ObjectLength(object) {
+      var length = 0;
+      for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+          ++length;
+        }
+      }
+      return length;
+    },
     exitFight() {
       this.enemy = null;
       this.player.auto = false;
       this.active = "dungeon";
     },
     getImgUrl(id) {
-      return this.images.find(x => x.id == id).img;
+      return this.images.find((x) => x.id == id).img;
     },
     recalculate(pl) {
       this.loading = true;
       this.enemy = null;
-
       let player = {};
 
-      //reset everything
+      //reset player
+      player.unlocked = [];
       player.effects = {};
       player.chance = {};
       player.resistance = {};
@@ -141,9 +174,43 @@ export default {
       player.dmg = 1;
       player.sspeed = 0;
       player.status = {};
+      player.version = p.version;
+      player.items = [];
+      player.maxitems = 1;
 
-      //copy from save
-      player.highscore = pl.highscore;
+      //Get Stats from save
+
+      player.highscore = this.CalculateHighscore(pl.highscore);
+
+      if (pl.allcount != undefined) {
+        if (!isEmpty(pl.allcount)) {
+          player.allcount = pl.allcount;
+        } else {
+          player.allcount = {};
+          for (let en of this.enemieslist) {
+            player.allcount[en.id] = 0;
+          }
+        }
+      } else {
+        player.allcount = {};
+        for (let en of this.enemieslist) {
+          player.allcount[en.id] = 0;
+        }
+      }
+
+      pl.items != undefined && (player.items = pl.items);
+
+      pl.unlocked != undefined && (player.unlocked = pl.unlocked);
+
+      player.skills = pl.skills;
+      player.order = pl.order;
+      player.prestige = pl.prestige;
+      player.name = pl.name;
+      player.companion = pl.companion;
+      player.auto = pl.auto;
+      player.time = pl.time;
+      player.lastEnemy = pl.lastEnemy;
+
       if (pl.counter.length <= 0) {
         for (let en of this.enemieslist) {
           player.counter[en.id] = 0;
@@ -152,119 +219,80 @@ export default {
         player.counter = pl.counter;
       }
 
-      player.go = pl.go;
-      player.skills = pl.skills;
-      player.name = pl.name;
-      player.prestige = pl.prestige;
-      player.companion = pl.companion;
-      player.version = pl.version;
-      player.lastEnemy = pl.lastEnemy;
-      player.auto = pl.auto;
-      player.time = pl.time;
-      player.go = pl.go;
-      player.order = pl.order;
+      //Callculation current Stats
+      //e = this.enemieslist.find((a) => a.id === d)
 
-      if (null != player.companion) {
-        let a = getboni(this.complist.find(a => a.id == player.companion).tags);
-        a.chance
-          ? player.chance[a.key] == null
-            ? (player.chance[a.key] = a.value)
-            : (player.chance[a.key] += a.value)
-          : "speed" == a.key
-          ? (player[a.key] -= a.value)
-          : (player[a.key] += a.value);
-      }
-
-      player.order =
-        pl.order != undefined && pl.order.length > 0
-          ? pl.order
-          : this.enemieslist.map(({ id: a }) => a);
-
-      for (let b in player.highscore)
-        0 < player.highscore[b] &&
-          null != this.kongregate &&
-          this.kongregate.stats.submit(b, player.highscore[b]);
-
-      for (let d in player.counter)
-        for (let e, a = 0; a < player.counter[d]; a++)
-          if (((e = this.enemieslist.find(a => a.id === d)), null != e))
-            for (let b in e.gain)
-              if (
-                "effects" != b &&
-                "chance" != b &&
-                "speed" != b &&
-                "resistance" != b
-              )
-                player[b] += e.gain[b];
-              else if ("speed" == b)
-                100 <= player[b] &&
-                  (0 < e.gain[b]
-                    ? 110 < player[b]
-                      ? (player[b] -= e.gain[b])
-                      : (player.sspeed += e.gain[b])
-                    : 0 < player.sspeed
-                    ? (player.sspeed += e.gain[b])
-                    : (player[b] -= e.gain[b]));
-              else if ("effects" == b)
-                for (let b in e.gain.effects)
-                  null == player.effects[b]
-                    ? (player.effects[b] = e.gain.effects[b])
-                    : (player.effects[b] += e.gain.effects[b]);
-              else if ("chance" == b)
-                for (let b in e.gain.chance)
-                  null == player.chance[b]
-                    ? (player.chance[b] = e.gain.chance[b])
-                    : (player.chance[b] += e.gain.chance[b]);
-              else if ("resistance" == b)
-                for (let b in e.gain.resistance)
-                  null == player.resistance[b]
-                    ? (player.resistance[b] = e.gain.resistance[b])
-                    : (player.resistance[b] += e.gain.resistance[b]);
-
-      for (let b of player.skills) {
-        let a = getNodeById(b, this.skillist);
-        if (a == null || null == a) {
-          var index = player.skills.indexOf(b);
-          -1 !== index && player.skills.splice(index, 1);
-        } else {
-          let c = this.choiselist.find(b => b.id === a.typ);
-          for (let a in c.gain)
-            switch (a) {
-              case "chance":
-                for (let a in c.gain.chance)
-                  null == player.chance[a]
-                    ? (player.chance[a] = c.gain.chance[a])
-                    : (player.chance[a] += c.gain.chance[a]);
-                break;
-              case "effects":
-                for (let a in c.gain.effects)
-                  null == player.effects[a]
-                    ? (player.effects[a] = c.gain.effects[a])
-                    : (player.effects[a] += c.gain.effects[a]);
-                break;
-              case "resistance":
-                for (let a in c.gain.resistance)
-                  null == player.resistance[a]
-                    ? (player.resistance[a] = c.gain.resistance[a])
-                    : (player.resistance[a] += c.gain.resistance[a]);
-                break;
-              default:
-                player[a] += c.gain[a];
-            }
+      for (let d in player.counter) {
+        for (let a = 0; a < player.counter[d]; a++) {
+          let e = this.enemieslist.find((a) => a.id === d);
+          if (e != undefined) {
+            this.SingleCalculation(e, player);
+          }
         }
       }
 
+      for (let b of player.skills) {
+        let a = getNodeById(b, this.skillist);
+        let c = this.choiselist.find((b) => b.id === a.typ);
+        this.SingleCalculation(c, player);
+      }
+
+      if (null != player.companion) {
+        let a = getboni(
+          this.complist.find((a) => a.id == player.companion).tags
+        );
+        this.SingleCalculation(a, player);
+      }
+
+      if (null != player.items) {
+        for (let d of player.items) {
+          let e = this.itemslist.find((a) => a.id === d);
+          if (e != null) {
+            this.SingleCalculation(e, player);
+          }
+        }
+      }
+
+      //Reset order if new Enemys
+      if (
+        pl.order != undefined &&
+        pl.order.length > 0 &&
+        !hasDuplicates(player.order)
+      ) {
+        player.order = pl.order;
+      } else {
+        player.order = this.enemieslist.map(({ id: a }) => a);
+      }
+
+      //Reset push new enemies into order
       while (this.enemieslist.length > player.order.length) {
         player.order.push(this.enemieslist[player.order.length].id);
       }
 
+      // Submit current Highscores
+      for (let b in player.highscore) {
+        if (0 < player.highscore[b] && null != this.kongregate) {
+          this.kongregate.stats.submit(b, player.highscore[b]);
+        }
+      }
+
+      //Calculation Points via Prestige and Skills
       player.points = player.prestige - player.skills.length;
 
-      0 < player.counter[getLastBoss(player)] && (player.go = !0);
+      //Checking if lastboss is killed
+      if (0 < player.counter[getLastBoss(player)]) {
+        player.go = true;
+      }
 
       this.player = player;
       respawn(this.player);
       this.loading = false;
+
+      let el = this;
+      setTimeout(() => {
+        el.$refs.dun.$forceUpdate();
+        6 != el.player.tutorial && el.tutorial();
+      }, 100);
     },
     openTab(t) {
       this.active = t;
@@ -276,14 +304,24 @@ export default {
           this.overlay = true;
           ov.text = "Welcome";
           ov.img = "enemys/blue_slime";
-          ov.obj = [{ text: "next", func: this.tutorial }];
+          ov.obj = [
+            {
+              text: "next",
+              func: this.tutorial,
+            },
+          ];
           break;
         case 1:
           ov.img = "";
           ov.text = "Killing Enemies will steal their stats..";
           ov.color = "rgba(0, 0, 0, 0)";
           ov.background = "tut";
-          ov.obj = [{ text: "next", func: this.tutorial }];
+          ov.obj = [
+            {
+              text: "next",
+              func: this.tutorial,
+            },
+          ];
           break;
 
         case 2:
@@ -302,7 +340,12 @@ export default {
         case 4:
           ov.text = "have fun playing";
           ov.img = "enemys/bat";
-          ov.obj = [{ text: "start", func: this.tutorial }];
+          ov.obj = [
+            {
+              text: "start",
+              func: this.tutorial,
+            },
+          ];
           break;
 
         case 5:
@@ -314,13 +357,78 @@ export default {
       }
       this.player.tutorial++;
     },
+    CalculateHighscore(highscore) {
+      let newscore;
+      if (isEmpty(highscore)) {
+        newscore = {};
+        for (let e of this.enemieslist.filter((x) => x.boss)) {
+          newscore[e.id] = -1;
+        }
+      } else if (8 > this.ObjectLength(newscore)) {
+        newscore = highscore;
+        for (let e of this.enemieslist.filter((x) => x.boss)) {
+          newscore[e.id] == undefined && (newscore[e.id] = -1);
+        }
+      }
+      return newscore;
+    },
+    SingleCalculation(obj, player) {
+      for (let gain in obj.gain) {
+        switch (gain) {
+          case "effects":
+            this.addOrCreate(player.effects, obj.gain.effects);
+            break;
+          case "chance":
+            this.addOrCreate(player.chance, obj.gain.chance);
+            break;
+          case "resistance":
+            this.addOrCreate(player.resistance, obj.gain.resistance);
+            break;
+          case "speed":
+            if (obj.gain.speed > 0) {
+              if (player.speed - obj.gain.speed < 110) {
+                player.speed = 110;
+                player.sspeed += player.speed - 110 + obj.gain.speed;
+              } else {
+                player.speed -= obj.gain.speed;
+              }
+            } else {
+              if (player.sspeed - obj.gain.speed * -1 >= 0) {
+                player.sspeed -= obj.gain.speed;
+              } else {
+                player.speed += obj.gain.speed;
+              }
+            }
+            break;
+
+          default:
+            player[gain] += obj.gain[gain];
+            break;
+        }
+      }
+    },
+    addOrCreate(player, obj) {
+      for (let b in obj) {
+        if (player[b] == null) {
+          player[b] = obj[b];
+        } else {
+          player[b] += obj[b];
+        }
+      }
+    },
     displayfinish() {
       let ov = this.$refs.ov.$data,
         player = this.player;
 
       let obj = [
-        { text: "continue", func: this.continue },
-        { text: "prestige", func: this.reset }
+        {
+          text: "continue",
+          func: this.continue,
+        },
+        {
+          text: "prestige",
+          func: this.reset,
+        },
       ];
 
       ov.place = "20%";
@@ -334,7 +442,16 @@ export default {
     hardreset() {
       this.player.skills = [];
       this.player.prestige = -1;
+      this.player.allcount = {};
+      this.player.highscore = {};
       this.reset(this.player);
+      this.overlay = false;
+      this.save();
+    },
+    softreset() {
+      this.player.skills = [];
+      this.reset(this.player);
+      this.player.prestige--;
       this.overlay = false;
       this.save();
     },
@@ -373,7 +490,7 @@ export default {
     setNextEnemy() {
       if (this.player.prestige >= 3) {
         for (let ind of this.player.order) {
-          let e = this.enemieslist.find(e => e.id == ind);
+          let e = this.enemieslist.find((e) => e.id == ind);
           if (
             this.player.counter[e.id] <
             this.getLast(e.max, this.player.prestige)
@@ -383,7 +500,7 @@ export default {
           }
         }
       } else {
-        let last = this.enemieslist.find(e => e.id == this.player.lastEnemy);
+        let last = this.enemieslist.find((e) => e.id == this.player.lastEnemy);
         if (last != undefined) {
           if (
             this.player.counter[last.id] <
@@ -427,89 +544,111 @@ export default {
       var requireImage = require.context("../assets/enemys/", false, /\.png$/);
 
       for (let a of this.enemieslist)
-        this.images.push({ id: a.id, img: requireImage("./" + a.id + ".png") });
+        this.images.push({
+          id: a.id,
+          img: requireImage("./" + a.id + ".png"),
+        });
 
       requireImage = require.context("../assets/skills/", false, /\.png$/);
 
       for (let a of this.tippslist)
-        this.images.push({ id: a.id, img: requireImage("./" + a.id + ".png") });
+        this.images.push({
+          id: a.id,
+          img: requireImage("./" + a.id + ".png"),
+        });
 
       requireImage = require.context("../assets/buffs/", false, /\.png$/);
 
       for (let a of this.bufflist)
-        this.images.push({ id: "b" + a, img: requireImage("./" + a + ".png") });
+        this.images.push({
+          id: "b" + a,
+          img: requireImage("./" + a + ".png"),
+        });
 
-      this.loading = false;
-    }
+      requireImage = require.context("../assets/items/", false, /\.png$/);
+
+      for (let a of this.itemslist)
+        this.images.push({
+          id: a.id,
+          img: requireImage("./" + a.id + ".png"),
+        });
+      this.preloaded = true;
+    },
   },
   mounted() {
-    let el = this;
+    let el = this,
+      kongregate;
     try {
-      kongregateAPI.loadAPI(function() {
-        el.kongregate = kongregateAPI.getAPI();
+      kongregateAPI.loadAPI(function () {
+        kongregate = kongregateAPI.getAPI();
+        el.kongregate = kongregate;
       });
-    } catch (e) {
-      console.log(e);
-    }
-
-    console.log(el.kongregate);
+    } catch {}
 
     this.preloading();
 
-    $.getJSON("https://api.kongregate.com/api/kongpanions/index.json", function(
-      data
-    ) {
-      if (data.success) el.complist = data.kongpanions;
-    }).done(function() {
+    $.getJSON(
+      "https://api.kongregate.com/api/kongpanions/index.json",
+      function (data) {
+        if (data.success) el.complist = data.kongpanions;
+      }
+    ).done(function () {
       null == localStorage.getItem("saveGame")
         ? el.recalculate(el.player)
         : el.recalculate(JSON.parse(localStorage.getItem("saveGame")));
-
-      6 != el.player.tutorial && el.tutorial();
     });
 
-    window.addEventListener("keydown", function() {
-      "17" == event.which && (el.cntrlIsPressed = !0);
-      "16" == event.which && (el.shiftIsPressed = !0);
+    window.addEventListener("keydown", function () {
+      "17" == event.which && (el.cntrlIsPressed = true);
+      "16" == event.which && (el.shiftIsPressed = true);
     });
 
-    window.addEventListener("keyup", function() {
+    window.addEventListener("keyup", function () {
       el.cntrlIsPressed = false;
       el.shiftIsPressed = false;
     });
 
-    if (this.kongregate != undefined) {
-      console.log(this.kongregate.services.getUsername());
-    }
-
     setInterval(() => {
       this.save();
-    }, 15000);
+    }, 60000);
 
     setInterval(() => {
       this.player.time += 1;
     }, 1000);
 
-    this.resetStatus(this.player);
-
     this.htimer = setInterval(() => {
-      if (this.recovery) {
+      if (this.recovery && !this.loading) {
         this.resetStatus(this.player);
-        this.player.clife + this.player.recovery + this.player.regeneration <=
-        this.player.life
-          ? 0 > this.player.clife
-            ? (this.player.clife =
-                this.player.recovery + this.player.regeneration)
-            : (this.player.clife +=
-                this.player.recovery + this.player.regeneration)
-          : ((this.player.clife = this.player.life),
-            this.player.auto && this.setNextEnemy());
+        this.player.cspeed = 0;
+        if (
+          this.player.clife + this.player.recovery + this.player.regeneration <=
+          this.player.life
+        ) {
+          let add = 0;
+          if (this.player.recovery > 0) {
+            add += this.player.recovery;
+          }
+          if (this.player.regeneration > 0) {
+            add += this.player.regeneration;
+          }
+          if (add < 1) {
+            add = 1;
+          }
+          if (0 > this.player.clife) {
+            this.player.clife = add;
+          } else {
+            this.player.clife += add;
+          }
+        } else {
+          this.player.clife = this.player.life;
+          this.player.auto && this.setNextEnemy();
+        }
       }
     }, 1000);
   },
   beforeDestroy() {
     clearInterval(this.htimer);
-  }
+  },
 };
 </script>
 
@@ -525,9 +664,11 @@ export default {
   bottom: 0;
   z-index: 10;
 }
+
 .box {
   padding-top: 54px;
 }
+
 .fixed {
   border: 1px solid black;
   width: 100%;
@@ -537,6 +678,7 @@ export default {
   align-items: center;
   z-index: 2;
 }
+
 .time {
   margin-right: 10px;
   margin-left: auto;
@@ -568,8 +710,30 @@ export default {
   color: white;
   font-stretch: bold;
 }
+
 .status > div > img {
   float: left;
   margin-right: 2px;
+}
+
+.lds-ring {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  animation: lds-ring 1.2s infinite;
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.center {
+  display: block;
+  width: 0%;
+  margin: auto;
 }
 </style>

@@ -1,19 +1,27 @@
 <template>
   <div
     class="rows"
-    :style="{ backgroundImage: 'url(' + require('@/assets/icons/background.png') + ')' }"
+    :style="{
+      backgroundImage: 'url(' + require('@/assets/icons/background.png') + ')',
+    }"
   >
     <div class="row1 box">
-      <h2 class="title">{{item.name}}</h2>
-      <div style="border: 1px solid red" v-show="beta">{{item.status}}</div>
+      <h2 class="title">{{ item.name }}</h2>
+      <div style="border: 1px solid red" v-show="beta">{{ item.status }}</div>
       <br />
       <b>Stats:</b>
       <hr />
       <div class="fleo">
-        <div :key="g" v-for="(n,g) in filtred(item)">
-          <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
-          <div class="fleo" v-if="g=='effects'||g=='chance'||g=='resistance'">
-            <div :key="gi" v-for="(gn,gi) in item[g]">
+        <div :key="g" v-for="(n, g) in filtred(item)">
+          <hr
+            style="width: 200px"
+            v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+          />
+          <div
+            class="fleo"
+            v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+          >
+            <div :key="gi" v-for="(gn, gi) in item[g]">
               <Ability :class="g" :pid="gi" :val="gn" />
             </div>
           </div>
@@ -26,12 +34,15 @@
       <b>Gain:</b>
       <hr />
       <div class="fleo">
-        <div class="fleo" :key="g" v-for="(n,g) in item.gain">
-          <hr style="width:200px;" v-if="g=='effects'||g=='chance'||g=='resistance'" />
-          <div v-if="g!='effects'&&g!='chance'&&g!='resistance'">
+        <div class="fleo" :key="g" v-for="(n, g) in item.gain">
+          <hr
+            style="width: 200px"
+            v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+          />
+          <div v-if="g != 'effects' && g != 'chance' && g != 'resistance'">
             <Ability class="basic" :pid="g" :val="n" />
           </div>
-          <div v-else :key="gi" v-for="(gn,gi) in item.gain[g]">
+          <div v-else :key="gi" v-for="(gn, gi) in item.gain[g]">
             <Ability :class="g" :pid="gi" :val="gn" />
           </div>
         </div>
@@ -42,7 +53,7 @@
         <hr />
         <Ability
           class="basic"
-          style="white-space:normal;width:200px;height:auto;"
+          style="white-space: normal; width: 200px; height: auto"
           :pid="'description'"
           :val="item.description"
         />
@@ -51,11 +62,13 @@
     <div class="row2 middle">
       <div>
         <div class="kasten">
-          <div
-            style="text-align:center;margin:10px"
-          >{{this.$parent.player.counter[item.id]}}/{{getLast(this.item.max,this.$parent.player.prestige)}}</div>
+          <div style="text-align: center; margin: 10px">
+            {{ this.$parent.player.counter[item.id] }}/{{
+              getLast(this.item.max, this.$parent.player.prestige)
+            }}
+          </div>
         </div>
-        <div style="width:200px">
+        <div style="width: 200px">
           <img
             ref="eimage"
             v-if="item.id"
@@ -66,16 +79,22 @@
           />
           <span
             class="dmgind"
-            :style="'color:'+ind.color"
+            :style="'color:' + ind.color"
             :key="k"
-            v-for="(ind,k) in dmgind"
-          >{{ind.text}}</span>
+            v-for="(ind, k) in dmgind"
+            >{{ ind.text }}</span
+          >
         </div>
 
         <div class="flex">
-          <div v-show="value>0" class="kiste" :key="key" v-for="(value, key) in this.item.status">
-            {{value}}
-            <img class="icon" :src="getImgUrl('b'+key)" :alt="key" />
+          <div
+            v-show="value > 0"
+            class="kiste"
+            :key="key"
+            v-for="(value, key) in this.item.status"
+          >
+            {{ value }}
+            <img class="icon" :src="getImgUrl('b' + key)" :alt="key" />
           </div>
         </div>
       </div>
@@ -83,12 +102,85 @@
       <Progressbar :val="item.clife" :max="item.life" />
     </div>
     <div class="row3 box">
-      <div :key="key" v-for="(l,key) in getLog()" v-html="l"></div>
+      <div class="flex">
+        <button
+          :class="{ active: this.smallbox == 'stats' }"
+          @click="chooseSmallBox('stats')"
+          class="btn small"
+        >
+          Stats
+        </button>
+        <button
+          :class="{ active: this.smallbox == 'log' }"
+          @click="chooseSmallBox('log')"
+          class="btn small"
+        >
+          Log
+        </button>
+      </div>
+      <div v-if="this.smallbox == 'stats'">
+        <h2 class="title">{{ $parent.player.name }}</h2>
+        <br />
+        <b>Stats:</b>
+        <hr />
+        <div class="fleo">
+          <div class="fleo" :key="g" v-for="(n, g) in item.gain">
+            <hr
+              style="width: 200px"
+              v-if="g == 'effects' || g == 'chance' || g == 'resistance'"
+            />
+
+            <div v-if="g != 'effects' && g != 'chance' && g != 'resistance'">
+              <Ability class="basic" :pid="g" :val="$parent.player[g]" />
+            </div>
+            <div
+              v-else-if="g == 'effects'"
+              :key="i"
+              v-for="(k, i) in item.gain.effects"
+            >
+              <Ability
+                v-if="$parent.player.effects[i] != undefined"
+                :class="g"
+                :pid="i"
+                :val="$parent.player.effects[i]"
+              />
+            </div>
+            <div
+              v-else-if="g == 'chance'"
+              :key="i"
+              v-for="(k, i) in item.gain.chance"
+            >
+              <Ability
+                v-if="$parent.player.chance[i] != undefined"
+                :class="g"
+                :pid="i"
+                :val="$parent.player.chance[i]"
+              />
+            </div>
+            <div
+              v-else-if="g == 'resistance'"
+              :key="i"
+              v-for="(k, i) in item.gain.resistance"
+            >
+              <Ability
+                v-if="$parent.player.resistance[i] != undefined"
+                :class="g"
+                :pid="i"
+                :val="$parent.player.resistance[i]"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="this.smallbox == 'log'">
+        <Log :mini="true" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Log from "./Log.vue";
 import Progressbar from "./Progressbar.vue";
 import { checkTurn, respawn, getLast } from "./functions.js";
 import Ability from "./Ability.vue";
@@ -98,27 +190,32 @@ import TextToolTip from "./TextToolTip.vue";
 export default {
   components: {
     Progressbar,
-    Ability
+    Ability,
+    Log,
   },
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       timer1: null,
       timer2: null,
-      dmgind: dmgind
+      dmgind: dmgind,
+      smallbox: "stats",
     };
   },
   methods: {
+    chooseSmallBox(v) {
+      this.smallbox = v;
+    },
     getLast(j, p) {
       return getLast(j, p);
     },
     getImgUrl(id) {
-      return this.images.find(x => x.id == id).img;
+      return this.images.find((x) => x.id == id).img;
     },
     filtred(arr) {
       let allowed = [
@@ -131,11 +228,11 @@ export default {
         "status",
         "gain",
         "max",
-        "prestige"
+        "prestige",
       ];
 
       let ob = Object.keys(arr)
-        .filter(key => !allowed.includes(key))
+        .filter((key) => !allowed.includes(key))
         .reduce((obj, key) => {
           obj[key] = arr[key];
 
@@ -143,10 +240,6 @@ export default {
         }, {});
 
       return ob;
-    },
-
-    getLog() {
-      return this.$parent.log.slice(-12).reverse();
     },
     exit() {
       if (
@@ -163,7 +256,7 @@ export default {
       this.$parent.player.go = true;
       this.$parent.player.auto = false;
       this.$parent.displayfinish();
-    }
+    },
   },
   mounted() {
     this.$parent.recovery = false;
@@ -174,15 +267,14 @@ export default {
       classlist = this.$refs.eimage.classList;
 
     player.lastEnemy = this.item.id;
-
     this.timer2 = setInterval(() => {
       checkTurn(
         player,
         this.item,
         this.won,
         this.exit,
-        classlist,
-        this.$parent.kongregate
+        this.$parent.kongregate,
+        this.itemslist
       );
     }, 100);
 
@@ -192,8 +284,8 @@ export default {
         player,
         this.won,
         this.exit,
-        classlist,
-        this.$parent.kongregate
+        this.$parent.kongregate,
+        this.itemslist
       );
     }, 100);
   },
@@ -202,7 +294,7 @@ export default {
     clearInterval(this.timer2);
     this.$parent.recovery = true;
     respawn(this.item);
-  }
+  },
 };
 </script>
 
@@ -215,7 +307,11 @@ export default {
   min-width: 220px;
   min-height: 400px;
 }
-
+.small {
+  padding: 2px;
+  margin: 0px 4px 10px 4px;
+  line-height: normal;
+}
 .kasten {
   box-shadow: inset 0 0 4px grey;
   border: 1px solid black;
@@ -284,6 +380,7 @@ export default {
 .image {
   margin: 0px 10px;
   width: 180px;
+  image-rendering: pixelated;
 }
 
 .animated {

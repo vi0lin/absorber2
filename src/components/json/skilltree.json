@@ -44,7 +44,14 @@
                                                                 "id": "m_crit1",
                                                                 "typ": "m_crit",
                                                                 "parent": "s_megacrit1",
-                                                                "open": []
+                                                                "open": [
+                                                                    {
+                                                                        "id": "s_maxitems1",
+                                                                        "typ": "s_maxitems",
+                                                                        "parent": "s_dmg0",
+                                                                        "open": []
+                                                                    }
+                                                                ]
                                                             }
                                                         ]
                                                     }
@@ -176,7 +183,14 @@
                                         "id": "s_resurrect0",
                                         "typ": "s_resurrect",
                                         "parent": "s_stun1",
-                                        "open": []
+                                        "open": [
+                                            {
+                                                "id": "s_maxitems2",
+                                                "typ": "s_maxitems",
+                                                "parent": "s_resurrect0",
+                                                "open": []
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -323,7 +337,14 @@
                                 "id": "s_double1",
                                 "typ": "s_double",
                                 "parent": "s_speed2",
-                                "open": []
+                                "open": [
+                                    {
+                                        "id": "s_maxitems3",
+                                        "typ": "s_maxitems",
+                                        "parent": "s_double1",
+                                        "open": []
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -442,7 +463,14 @@
                                         "id": "m_regeneration0",
                                         "typ": "m_regeneration",
                                         "parent": "s_recovery1",
-                                        "open": []
+                                        "open": [
+                                            {
+                                                "id": "s_maxitems4",
+                                                "typ": "s_maxitems",
+                                                "parent": "m_regeneration0",
+                                                "open": []
+                                            }
+                                        ]
                                     }
                                 ]
                             },

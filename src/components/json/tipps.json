@@ -25,6 +25,11 @@
         "form": "death = life<=0"
     },
     {
+        "id": "maxitems",
+        "desc": "Maximum amount of activ items",
+        "form": "active items = maxitems"
+    },
+    {
         "id": "regeneration",
         "desc": "Health restored at every turn",
         "form": "health = health + regeneration"
@@ -53,6 +58,11 @@
         "id": "megacrit",
         "desc": "Percentage of a mega-critical attack. Mega-critical attacks increase damage eightfold. Can only occur when super-critical.",
         "form": "dmg = dmg * 8"
+    },
+    {
+        "id": "ultracrit",
+        "desc": "Percentage of a ultra-critical attack. ultra-critical attacks increase damage sixteenfold. Can only occur when mega-critical.",
+        "form": "dmg = dmg * 16"
     },
     {
         "id": "poison",

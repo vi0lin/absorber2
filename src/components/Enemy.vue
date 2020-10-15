@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div style="display:flex">
+    <div style="display: flex">
       <div
+        v-show="this.$parent.hidden || !checkready(value)"
         :class="{ ready: checkready(value) }"
         @click.middle="cheat"
         @click="selectEnemy(value)"
@@ -16,11 +17,16 @@
         :id="value.id"
       >
         <div>
-          <div>{{min}} / {{max}}</div>
+          <div>{{ min }} / {{ max }}</div>
           <br />
-          <img v-if="value.id" class="image" :src="getImage" :alt="value.name" />
+          <img
+            v-if="value.id"
+            class="image"
+            :src="getImage"
+            :alt="value.name"
+          />
           <br />
-          {{value.name}}
+          {{ value.name }}
         </div>
       </div>
       <Tooltip
@@ -41,19 +47,19 @@ export default {
   props: {
     value: {
       type: Object,
-      required: true
+      required: true,
     },
     min: {
       type: Number,
-      required: true
+      required: true,
     },
     max: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    Tooltip
+    Tooltip,
   },
   methods: {
     isDragable() {
@@ -93,6 +99,7 @@ export default {
     cheat() {
       if (this.$parent.$parent.player.name == "showmethemoney" && this.beta) {
         this.$parent.$parent.player.counter[this.value.id] = this.max;
+        this.$parent.$parent.player.allcount[this.value.id] += this.max;
         this.$parent.$parent.recalculate(this.$parent.$parent.player);
       }
     },
@@ -104,13 +111,13 @@ export default {
         this.$parent.$parent.enemy = respawn(t);
         this.$parent.$parent.active = "fight";
       }
-    }
+    },
   },
   computed: {
-    getImage: function() {
-      return this.images.find(x => x.id == this.value.id).img;
-    }
-  }
+    getImage: function () {
+      return this.images.find((x) => x.id == this.value.id).img;
+    },
+  },
 };
 </script>
 
@@ -138,7 +145,7 @@ export default {
 
 .kiste img {
   user-select: none;
-  height: 100%;
+  width: 100%;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -147,11 +154,6 @@ export default {
 
 .kiste * {
   pointer-events: none;
-}
-
-.image {
-  width: 70px;
-  height: auto;
 }
 
 .ready {
